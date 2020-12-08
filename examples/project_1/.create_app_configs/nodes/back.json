@@ -1,0 +1,166 @@
+[
+  {
+    "key": "my_app",
+    "label": "MyApp",
+    "type": "MaterialApp",
+    "icon": {
+      "codePoint": 59232,
+      "fontFamily": "MaterialIcons",
+      "fontPackage": null,
+      "color": "blue"
+    },
+    "expanded": true,
+    "data": {
+      "debugShowCheckedModeBanner": {
+        "label": "Show Debug banner",
+        "value": false,
+        "type": "bool"
+      }
+    },
+    "children": [
+      {
+        "key": "scaffold",
+        "label": "Scaffold",
+        "type": "MaterialScaffold",
+        "icon": {
+          "codePoint": 59355,
+          "fontFamily": "MaterialIcons",
+          "fontPackage": null,
+          "color": null
+        },
+        "expanded": false,
+        "data": null,
+        "children": [
+          {
+            "key": "app_bar",
+            "label": "AppBar",
+            "type": "MaterialAppAppBar",
+            "icon": {
+              "codePoint": 59232,
+              "fontFamily": "MaterialIcons",
+              "fontPackage": null,
+              "color": "blue"
+            },
+            "expanded": true,
+            "data": {
+              "debugShowCheckedModeBanner": {
+                "label": "Show Debug banner",
+                "value": false,
+                "type": "bool"
+              }
+            },
+            "children": [
+              {
+                "key": "appbar",
+                "label": "MaterialScaffoldAppBar",
+                "type": "materialAppBar",
+                "icon": {
+                  "codePoint": 59359,
+                  "fontFamily": "MaterialIcons",
+                  "fontPackage": null,
+                  "color": null
+                },
+                "expanded": false,
+                "data": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "key": "app_body",
+            "label": "Body",
+            "type": "MaterialAppBody",
+            "icon": {
+              "codePoint": 59232,
+              "fontFamily": "MaterialIcons",
+              "fontPackage": null,
+              "color": "blue"
+            },
+            "expanded": true,
+            "data": null,
+            "children": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "MaterialScaffoldBody",
+                "icon": {
+                  "codePoint": 59359,
+                  "fontFamily": "MaterialIcons",
+                  "fontPackage": null,
+                  "color": null
+                },
+                "expanded": false,
+                "data": null,
+                "children": [
+                  {
+                    "key": "center",
+                    "label": "Center",
+                    "type": "center",
+                    "icon": {
+                      "codePoint": 59359,
+                      "fontFamily": "MaterialIcons",
+                      "fontPackage": null,
+                      "color": null
+                    },
+                    "expanded": false,
+                    "data": null,
+                    "children": [
+                      {
+                        "key": "text",
+                        "label": "Text",
+                        "type": "text",
+                        "icon": {
+                          "codePoint": 59359,
+                          "fontFamily": "MaterialIcons",
+                          "fontPackage": null,
+                          "color": null
+                        },
+                        "expanded": false,
+                        "data": {
+                          "text": {
+                            "value": "This is text String",
+                            "type": "String"
+                          }
+                        },
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "floatingActionButton",
+            "label": "FloatingActionButton",
+            "type": "FloatingActionButton",
+            "icon": {
+              "codePoint": 59232,
+              "fontFamily": "MaterialIcons",
+              "fontPackage": null,
+              "color": "blue"
+            },
+            "expanded": true,
+            "data": null,
+            "children": [
+              {
+                "key": "float_btn",
+                "label": "Float Button",
+                "type": "MaterialFloatingButton",
+                "icon": {
+                  "codePoint": 59359,
+                  "fontFamily": "MaterialIcons",
+                  "fontPackage": null,
+                  "color": null
+                },
+                "expanded": true,
+                "data": null,
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

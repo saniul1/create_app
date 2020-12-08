@@ -1,0 +1,74 @@
+[
+  {
+    "key": "my_app",
+    "label": "MyApp",
+    "type": "MaterialApp",
+    "icon": {
+      "codePoint": 59232,
+      "fontFamily": "MaterialIcons",
+      "fontPackage": null,
+      "color": "blue"
+    },
+    "expanded": true,
+    "data": {
+      "debugShowCheckedModeBanner": {
+        "value": false
+      }
+    },
+    "children": [
+      {
+        "key": "scaffold",
+        "label": "Scaffold",
+        "type": "MaterialScaffold",
+        "icon": {
+          "codePoint": 59355,
+          "fontFamily": "MaterialIcons",
+          "fontPackage": null,
+          "color": null
+        },
+        "expanded": false,
+        "children": [
+          {
+            "key": "appbar",
+            "label": "MaterialScaffoldAppBar",
+            "type": "materialAppBar",
+            "icon": {
+              "codePoint": 59359,
+              "fontFamily": "MaterialIcons",
+              "fontPackage": null,
+              "color": null
+            },
+            "expanded": false,
+            "children": []
+          },
+          {
+            "key": "body",
+            "label": "Body",
+            "type": "MaterialScaffoldBody",
+            "icon": {
+              "codePoint": 59359,
+              "fontFamily": "MaterialIcons",
+              "fontPackage": null,
+              "color": null
+            },
+            "expanded": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "key": "float_btn",
+        "label": "Float Button",
+        "type": "MaterialFloatingButton",
+        "icon": {
+          "codePoint": 59359,
+          "fontFamily": "MaterialIcons",
+          "fontPackage": null,
+          "color": null
+        },
+        "expanded": false,
+        "children": []
+      }
+    ]
+  }
+]

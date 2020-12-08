@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "create_app",
+      "request": "launch",
+      "deviceId": "Windows",
+      "type": "dart",
+      "args": ["--no-sound-null-safety"]
+    },
+    {
+      "name": "filepicker_windows",
+      "cwd": "packages\\filepicker_windows",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "flutter_treeview",
+      "cwd": "packages\\flutter_treeview",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "property_view",
+      "cwd": "packages\\property_view",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "create_app (Flutter)",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "deviceId": "Windows",
+      "type": "dart",
+      "args": ["--no-sound-null-safety"]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+[
+  {
+    "key": "my_app",
+    "label": "Container",
+    "type": "Container",
+    "icon": {
+      "codePoint": 59232,
+      "fontFamily": "MaterialIcons",
+      "fontPackage": null,
+      "color": "blue"
+    },
+    "expanded": true,
+    "data": {
+      "color": {
+        "label": "Color",
+        "value": "Colors.red",
+        "type": "color",
+        "inherit": {
+          "from": "Colors",
+          "parent": "material"
+        }
+      }
+    },
+    "children": [
+      {
+        "key": "center",
+        "label": "Center",
+        "type": "Center",
+        "icon": {
+          "codePoint": 59232,
+          "fontFamily": "MaterialIcons",
+          "fontPackage": null,
+          "color": "blue"
+        },
+        "expanded": true,
+        "data": {},
+        "children": [
+          {
+            "key": "text",
+            "label": "Text",
+            "type": "Text",
+            "icon": {
+              "codePoint": 59232,
+              "fontFamily": "MaterialIcons",
+              "fontPackage": null,
+              "color": "blue"
+            },
+            "expanded": true,
+            "data": {
+              "text": {
+                "label": "text",
+                "value": "Hello Worldsss!!!!",
+                "type": "string",
+                "inherit": null
+              }
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]
