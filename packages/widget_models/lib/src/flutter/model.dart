@@ -17,10 +17,13 @@ abstract class ModelWidget {
   /// The parent of the current widget
   ModelWidget parent;
 
+  /// which property of parent it belongs to
+  String group;
+
   /// How the widget fits into the tree
-  /// [NodeType.End] is used for widgets that cannot have children
-  /// [NodeType.SingleChild] and [NodeType.MultipleChildren] are self-explanatory
-  NodeType nodeType;
+  /// [ParentType.End] is used for widgets that cannot have children
+  /// [ParentType.SingleChild] and [ParentType.MultipleChildren] are self-explanatory
+  ParentType parentType;
 
   /// Stores the names of all parameters and input types
   Map<String, PropertyType> paramNameAndTypes = {};
@@ -40,10 +43,10 @@ abstract class ModelWidget {
 
   /// Add child if widget takes children and space is available and return true, else return false
   bool addChild(ModelWidget widget) {
-    if (nodeType == NodeType.SingleChild) {
-      children.add(widget);
+    if (parentType == ParentType.SingleChild) {
+      children = [widget];
       return true;
-    } else if (nodeType == NodeType.MultipleChildren) {
+    } else if (parentType == ParentType.MultipleChildren) {
       children.add(widget);
       return true;
     }

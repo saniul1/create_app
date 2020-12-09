@@ -13,13 +13,6 @@ enum PropertyType {
   boolean,
   scrollPhysics,
   axis,
-  fontStyle
-}
-
-enum GroupType {
-  child,
-  children,
-  appbar,
-  body,
-  floatingActionButton,
+  fontStyle,
+  function
 }

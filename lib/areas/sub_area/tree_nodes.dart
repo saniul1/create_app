@@ -24,6 +24,12 @@ class TreeNodes extends HookWidget {
       onNodeTap: (key) => _treeViewController.selectNode(key),
       // onNodeDoubleTap: (key) => print(key),
       theme: _treeViewTheme.state,
+      buildNodeIcon: (groupe, size) {
+        return Icon(
+          Icons.ac_unit,
+          size: size.width,
+        );
+      },
       buildActionsWidgets: (key, size) {
         return [
           ActionButton(Icons.add, size, () {

@@ -111,38 +111,20 @@ class _TreeNodeState extends State<TreeNode>
     }
   }
 
-  Widget _buildNodeIcon() {
-    TreeView _treeView = TreeView.of(context);
-    assert(_treeView != null, 'TreeView must exist in context');
-    TreeViewTheme _theme = _treeView.theme;
-    return GestureDetector(
-      onTap: () => _handleExpand(),
-      child: Container(
-        width: widget.node.hasIcon ? _kIconSize : 10,
-        child: widget.node.hasIcon
-            ? Icon(
-                widget.node.icon.icon,
-                size: _theme.iconTheme.size,
-                color: widget.node.icon != null &&
-                        widget.node.icon.iconColor != null
-                    ? widget.node.icon.iconColor
-                    : _theme.iconTheme.color,
-              )
-            : null,
-      ),
-    );
-  }
-
   Widget _buildNodeLabel() {
     TreeView _treeView = TreeView.of(context);
     assert(_treeView != null, 'TreeView must exist in context');
     TreeViewTheme _theme = _treeView.theme;
     bool isSelected = _treeView.controller.selectedKey != null &&
         _treeView.controller.selectedKey == widget.node.key;
-    final icon = _buildNodeIcon();
+    final icon = _treeView.buildNodeIcon(
+        widget.node.group, Size(_theme.iconTheme.size, _theme.iconTheme.size));
     return Row(
       children: <Widget>[
-        icon,
+        GestureDetector(
+          onTap: () => _handleExpand(),
+          child: Container(width: 20, child: icon),
+        ),
         Expanded(
           child: Text(
             widget.node.label,

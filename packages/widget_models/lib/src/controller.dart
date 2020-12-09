@@ -61,7 +61,8 @@ class WidgetModelController {
   }
 
   ModelWidget _fromMap(Map<String, dynamic> map) {
-    var _type = map['type'];
+    final _type = map['type'];
+    final _group = map['group'];
     List<ModelWidget> _children = [];
     if (map['children'] != null) {
       List<Map<String, dynamic>> _childrenMap = List.from(map['children']);
@@ -69,8 +70,8 @@ class WidgetModelController {
           .map((Map<String, dynamic> child) => _fromMap(child))
           .toList();
     }
-    final ModelWidget widget = getFlutterWidgetModelFromType(
-        map['key'], EnumToString.fromString(FlutterWidgetType.values, _type));
+    final ModelWidget widget = getFlutterWidgetModelFromType(map['key'], _group,
+        EnumToString.fromString(FlutterWidgetType.values, _type));
     _children.forEach((child) {
       widget.addChild(child);
     });

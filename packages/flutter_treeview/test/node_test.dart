@@ -21,19 +21,16 @@ void main() {
       final Node node = Node.fromLabel('Home');
       expect(node.key.isNotEmpty, true);
       expect(node.label, 'Home');
-      expect(node.icon, null);
       expect(node.expanded, false);
       expect(node.children.length, 0);
     });
     test('copyWith', () {
       final Node node = Node.fromLabel('Home');
       expect(node.label, 'Home');
-      expect(node.icon, null);
       expect(node.expanded, false);
       expect(node.children.length, 0);
       final Node newNode = node.copyWith(label: 'New Home');
       expect(newNode.label, 'New Home');
-      expect(newNode.icon, null);
       expect(newNode.expanded, false);
       expect(newNode.children.length, 0);
     });
@@ -52,7 +49,6 @@ void main() {
       final Node node = Node.fromMap(map);
       expect(node.key, '12345');
       expect(node.label, 'Home');
-      expect(node.icon, null);
       expect(node.expanded, false);
       expect(node.children.length, 0);
       expect(node.isParent, false);
@@ -105,7 +101,6 @@ void main() {
       final Node node = Node.fromMap(map);
       expect(node.key.isNotEmpty, true);
       expect(node.label, 'Home');
-      expect(node.icon.runtimeType, NodeIcon);
       expect(node.expanded, true);
       expect(node.children.length, 2);
       expect(node.isParent, true);

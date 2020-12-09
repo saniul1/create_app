@@ -24,9 +24,6 @@ class Node {
   /// The string value that is displayed on the [TreeNode].
   final String label;
 
-  /// An optional icon that is displayed on the [TreeNode].
-  final NodeIcon icon;
-
   /// The open or closed state of the [TreeNode]. Applicable only if the
   /// node is a parent
   final bool expanded;
@@ -49,8 +46,7 @@ class Node {
     @required this.type,
     this.children: const [],
     this.group = 'child',
-    this.expanded: false,
-    this.icon,
+    this.expanded: true,
     this.data,
   })  : assert(key != null),
         assert(type != null),
@@ -77,13 +73,10 @@ class Node {
     String _label = map['label'];
     var _data = map['data'];
     var _type = map['type'];
-    NodeIcon _icon;
+    var _group = map['group'];
     List<Node> _children = [];
     if (_key == null) {
       _key = Utilities.generateRandom();
-    }
-    if (map['icon'] != null) {
-      _icon = NodeIcon.fromMap(map['icon']);
     }
     if (map['children'] != null) {
       List<Map<String, dynamic>> _childrenMap = List.from(map['children']);
@@ -94,10 +87,9 @@ class Node {
     return Node(
       key: '$_key',
       label: _label,
-      icon: _icon,
       data: _data,
       type: _type,
-      expanded: Utilities.truthful(map['expanded']),
+      group: _group,
       children: _children,
     );
   }
@@ -108,6 +100,7 @@ class Node {
     String key,
     String label,
     String type,
+    String group,
     List<Node> children,
     List actions,
     bool expanded,
@@ -118,17 +111,14 @@ class Node {
         key: key ?? this.key,
         label: label ?? this.label,
         type: type ?? this.type,
-        icon: icon ?? this.icon,
-        expanded: expanded ?? this.expanded,
+        group: group ?? this.group,
         children: children ?? this.children,
         data: data ?? this.data,
+        expanded: expanded ?? this.expanded,
       );
 
   /// Whether this object has children [Node].
   bool get isParent => children.isNotEmpty;
-
-  /// Whether this object has a non-null icon.
-  bool get hasIcon => icon != null && icon.icon != null;
 
   /// Whether this object has data associated with it.
   bool get hasData => data != null;
@@ -139,8 +129,7 @@ class Node {
       "key": key,
       "label": label,
       "type": type,
-      "icon": icon == null ? null : icon.asMap,
-      "expanded": expanded,
+      "group": group,
       "data": data,
       "children": children.map((Node child) => child.asMap).toList(),
     };
@@ -158,9 +147,11 @@ class Node {
     return hashValues(
       key,
       label,
-      icon,
+      type,
+      group,
       expanded,
       children,
+      group,
     );
   }
 
@@ -171,8 +162,8 @@ class Node {
     return other is Node &&
         other.key == key &&
         other.label == label &&
-        other.icon == icon &&
-        other.expanded == expanded &&
+        other.type == type &&
+        other.group == group &&
         other.data.runtimeType == Map &&
         other.children.length == children.length;
   }

@@ -73,6 +73,8 @@ class TreeView extends InheritedWidget {
   /// a single or double tap._
   final bool supportParentDoubleTap;
 
+  final Widget Function(String group, Size size) buildNodeIcon;
+
   final List<Widget> Function(String key, Size size) buildActionsWidgets;
 
   TreeView({
@@ -87,6 +89,7 @@ class TreeView extends InheritedWidget {
     this.shrinkWrap: false,
     this.primary: true,
     TreeViewTheme theme,
+    @required this.buildNodeIcon,
     this.buildActionsWidgets,
   })  : this.theme = theme ?? const TreeViewTheme(),
         super(

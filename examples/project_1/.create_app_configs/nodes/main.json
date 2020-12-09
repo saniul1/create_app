@@ -1,60 +1,84 @@
 [
   {
     "key": "my_app",
-    "label": "Container",
-    "type": "Container",
-    "icon": {
-      "codePoint": 59232,
-      "fontFamily": "MaterialIcons",
-      "fontPackage": null,
-      "color": "blue"
-    },
-    "expanded": true,
+    "label": "MaterialApp",
+    "type": "MaterialApp",
+    "group": "child",
     "data": {
-      "color": {
-        "label": "Color",
-        "value": "Colors.red",
-        "type": "color",
-        "inherit": {
-          "from": "Colors",
-          "parent": "material"
-        }
+      "debugShowCheckedModeBanner": {
+        "label": "debugShowCheckedModeBanner",
+        "value": false,
+        "type": "boolean",
+        "inherit": null
       }
     },
     "children": [
       {
-        "key": "center",
-        "label": "Center",
-        "type": "Center",
-        "icon": {
-          "codePoint": 59232,
-          "fontFamily": "MaterialIcons",
-          "fontPackage": null,
-          "color": "blue"
-        },
-        "expanded": true,
+        "key": "materialScaffold",
+        "label": "MaterialScaffold",
+        "type": "MaterialScaffold",
+        "group": "asd",
         "data": {},
         "children": [
           {
-            "key": "text",
-            "label": "Text",
-            "type": "Text",
-            "icon": {
-              "codePoint": 59232,
-              "fontFamily": "MaterialIcons",
-              "fontPackage": null,
-              "color": "blue"
-            },
-            "expanded": true,
+            "key": "floatingActionButton",
+            "label": "FloatingActionButton",
+            "type": "MaterialFloatingActionButton",
+            "group": "floatingActionButton",
+            "data": {},
+            "children": [
+              {
+                "key": "icon",
+                "label": "Icon",
+                "type": "Icon",
+                "group": "child",
+                "data": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "key": "container",
+            "label": "Container",
+            "type": "Container",
+            "group": "body",
             "data": {
-              "text": {
-                "label": "text",
-                "value": "Hello Worldsss!!!!",
-                "type": "string",
-                "inherit": null
+              "color": {
+                "label": "Color",
+                "value": "Colors.red",
+                "type": "color",
+                "inherit": {
+                  "from": "Colors",
+                  "parent": "material"
+                }
               }
             },
-            "children": []
+            "children": [
+              {
+                "key": "center",
+                "label": "Center",
+                "type": "Center",
+                "group": "child",
+                "data": {},
+                "children": [
+                  {
+                    "key": "text",
+                    "label": "Text",
+                    "type": "Text",
+                    "group": "child",
+                    "data": {
+                      "text": {
+                        "label": "text",
+                        "value": "Hello Worldsss!!!!ss",
+                        "type": "string",
+                        "inherit": null
+                      }
+                    },
+                    "children": []
+                  }
+                ]
+              }
+            ]
           }
         ]
       }

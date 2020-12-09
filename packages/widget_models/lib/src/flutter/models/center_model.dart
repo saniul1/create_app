@@ -7,10 +7,11 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Center] widget
 class CenterModel extends ModelWidget {
-  CenterModel(String key) {
+  CenterModel(String key, String group) {
     this.key = key;
+    this.group = group;
     this.widgetType = FlutterWidgetType.Center;
-    this.nodeType = NodeType.SingleChild;
+    this.parentType = ParentType.SingleChild;
     this.hasProperties = true;
     this.hasChildren = true;
     this.paramNameAndTypes = {
@@ -27,7 +28,12 @@ class CenterModel extends ModelWidget {
   Widget toWidget(wrap) {
     return wrap(
         Center(
-          child: children.length > 0 ? children.first.toWidget(wrap) : null,
+          child: children.length > 0
+              ? children
+                  .map((e) => e.group == 'child' ? e.toWidget(wrap) : null)
+                  .toList()
+                  .first
+              : Container(),
           widthFactor: double.tryParse(params["widthFactor"].toString()),
           heightFactor: double.tryParse(params["heightFactor"].toString()),
         ),
@@ -47,7 +53,7 @@ class CenterModel extends ModelWidget {
     return "Center(\n"
         "${paramToCode(paramName: "widthFactor", currentValue: double.tryParse(params["widthFactor"].toString()), type: PropertyType.double)}"
         "${paramToCode(paramName: "heightFactor", currentValue: double.tryParse(params["heightFactor"].toString()), type: PropertyType.double)}"
-        "    child: ${children.length > 0 ? children.first.toCode() : null},"
+        "    child: ${children.length > 0 ? children.map((e) => e.group == 'child' ? e.toCode() : null).toList().first : 'null'},"
         "\n  )";
   }
 }

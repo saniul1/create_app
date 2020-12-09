@@ -7,10 +7,11 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Container] widget
 class ContainerModel extends ModelWidget {
-  ContainerModel(String key) {
+  ContainerModel(String key, String group) {
     this.key = key;
+    this.group = group;
     this.widgetType = FlutterWidgetType.Container;
-    this.nodeType = NodeType.SingleChild;
+    this.parentType = ParentType.SingleChild;
     this.hasProperties = true;
     this.hasChildren = true;
     this.paramNameAndTypes = {
@@ -20,8 +21,8 @@ class ContainerModel extends ModelWidget {
       "alignment": PropertyType.alignment
     };
     this.params = {
-      "width": "0.0",
-      "height": "0.0",
+      "width": "null",
+      "height": "null",
     };
   }
 
@@ -29,8 +30,12 @@ class ContainerModel extends ModelWidget {
   Widget toWidget(wrap) {
     return wrap(
         Container(
-          child:
-              children.length > 0 ? children.first.toWidget(wrap) : Container(),
+          child: children.length > 0
+              ? children
+                  .map((e) => e.group == 'child' ? e.toWidget(wrap) : null)
+                  .toList()
+                  .first
+              : Container(),
           width: double.tryParse(params["width"]),
           height: double.tryParse(params["height"]),
           alignment: params["alignment"],
@@ -60,7 +65,7 @@ class ContainerModel extends ModelWidget {
         "    decoration: BoxDecoration(\n"
         "${paramToCode(paramName: "color", type: PropertyType.color, currentValue: params["color"])}"
         "    ),"
-        "\n    child: ${children.length > 0 ? children.first.toCode() : 'Container()'},"
+        "\n    child: ${children.length > 0 ? children.map((e) => e.group == 'child' ? e.toCode() : null).toList().first : 'null'},"
         "\n  )";
   }
 }

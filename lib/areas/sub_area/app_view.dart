@@ -20,6 +20,7 @@ class AppView extends HookWidget {
       return;
     }, const []);
     final node = context.read(appViewList).getNodeId(key.value);
+    // print(build.controller.getNode(node)?.toCode());
     return build.controller
             .getNode(node)
             ?.toWidget((child, key) => WidgetWrapper(id: key, child: child)) ??
@@ -66,7 +67,7 @@ class WidgetWrapper extends HookWidget {
           ? SystemMouseCursors.none
           : SystemMouseCursors.basic,
       onTap: () {
-        tree.selectNode(id);
+        if (currentTool.state == ToolType.select) tree.selectNode(id);
       },
       onHover: (value) {
         if (currentTool.state == ToolType.select) isHover.value = value;

@@ -28,6 +28,7 @@ class TreeViewNotifier extends ChangeNotifier {
     _controller = _controller.loadJSON(json: json);
     selectNode(_controller.children.first.key);
     showApp();
+    setPropertyView();
     notifyListeners();
   }
 
