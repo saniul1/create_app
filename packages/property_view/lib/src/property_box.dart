@@ -114,13 +114,14 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (widget.box.type == PropertyType.string)
+            if (widget.box.type.any((type) => type == PropertyType.string))
               TextFieldProperty(
                 label: widget.box.label,
                 value: widget.box.value,
                 onChanged: _handleValueChange,
               )
-            else if (widget.box.type == PropertyType.boolean)
+            else if (widget.box.type
+                .any((type) => type == PropertyType.boolean))
               PropertyBoolWidget(
                 valueKey: widget.box.key,
                 label: widget.box.label,
