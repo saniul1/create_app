@@ -12,7 +12,7 @@ class PropertyBox<T> {
   /// The string value that is displayed on the [TreeNode].
   final String label;
 
-  PropertyType type;
+  List<PropertyType> type;
 
   final T value;
 
@@ -45,7 +45,7 @@ class PropertyBox<T> {
   factory PropertyBox.fromMap(Map<String, dynamic> map) {
     String _key = map['key'];
     String _label = map['label'];
-    PropertyType _type = map['type'];
+    List<PropertyType> _type = map['type'];
     T _value = map['value'];
     return PropertyBox(
       key: _key,

@@ -15,8 +15,8 @@ class IconModel extends ModelWidget {
     this.hasProperties = true;
     this.hasChildren = false;
     this.paramNameAndTypes = {
-      "icon": PropertyType.icon,
-      "size": PropertyType.double,
+      "icon": [PropertyType.icon],
+      "size": [PropertyType.double],
     };
     this.params = {
       "size": "20.0",
@@ -24,10 +24,10 @@ class IconModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap) {
+  Widget toWidget(wrap, isSelectMode) {
     return wrap(
         Icon(
-          params["icon"] ?? Icons.help_outline,
+          params["icon"] ?? null,
           size: double.tryParse(params["size"]) ?? 20.0,
         ),
         key);

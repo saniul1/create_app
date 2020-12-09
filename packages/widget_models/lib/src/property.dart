@@ -8,6 +8,7 @@ enum PropertyType {
   crossAxisAlignment,
   widget,
   color,
+  materialColor,
   alignment,
   boxFit,
   boolean,

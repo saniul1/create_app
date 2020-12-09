@@ -15,10 +15,10 @@ class TextModel extends ModelWidget {
     this.hasProperties = true;
     this.hasChildren = false;
     this.paramNameAndTypes = {
-      "text": PropertyType.string,
-      "fontSize": PropertyType.double,
-      "color": PropertyType.color,
-      "fontStyle": PropertyType.fontStyle
+      "text": [PropertyType.string],
+      "fontSize": [PropertyType.double],
+      "color": [PropertyType.color],
+      "fontStyle": [PropertyType.fontStyle]
     };
     this.params = {
       "text": "",
@@ -29,7 +29,7 @@ class TextModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap) {
+  Widget toWidget(wrap, isSelectMode) {
     return wrap(
         Text(
           params["text"] ?? "",

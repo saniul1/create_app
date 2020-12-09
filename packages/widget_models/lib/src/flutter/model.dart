@@ -26,7 +26,7 @@ abstract class ModelWidget {
   ParentType parentType;
 
   /// Stores the names of all parameters and input types
-  Map<String, PropertyType> paramNameAndTypes = {};
+  Map<String, List<PropertyType>> paramNameAndTypes = {};
 
   /// The parameter values of the widget
   /// Key is the parameter name and value is the value
@@ -39,7 +39,7 @@ abstract class ModelWidget {
   bool hasChildren;
 
   /// This method takes the parameters and returns the actual widget to display
-  Widget toWidget(Widget Function(Widget, String key) wrap);
+  Widget toWidget(Widget Function(Widget, String key) wrap, bool isSelectMode);
 
   /// Add child if widget takes children and space is available and return true, else return false
   bool addChild(ModelWidget widget) {

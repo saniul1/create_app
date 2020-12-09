@@ -15,8 +15,8 @@ class CenterModel extends ModelWidget {
     this.hasProperties = true;
     this.hasChildren = true;
     this.paramNameAndTypes = {
-      "widthFactor": PropertyType.double,
-      "heightFactor": PropertyType.double,
+      "widthFactor": [PropertyType.double],
+      "heightFactor": [PropertyType.double],
     };
     this.params = {
       "widthFactor": "100.0",
@@ -25,12 +25,14 @@ class CenterModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap) {
+  Widget toWidget(wrap, isSelectMode) {
     return wrap(
         Center(
           child: children.length > 0
               ? children
-                  .map((e) => e.group == 'child' ? e.toWidget(wrap) : null)
+                  .map((e) => e.group == 'child'
+                      ? e.toWidget(wrap, isSelectMode)
+                      : null)
                   .toList()
                   .first
               : Container(),

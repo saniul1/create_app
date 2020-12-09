@@ -15,10 +15,10 @@ class ContainerModel extends ModelWidget {
     this.hasProperties = true;
     this.hasChildren = true;
     this.paramNameAndTypes = {
-      "width": PropertyType.double,
-      "height": PropertyType.double,
-      "color": PropertyType.color,
-      "alignment": PropertyType.alignment
+      "width": [PropertyType.double],
+      "height": [PropertyType.double],
+      "color": [PropertyType.color, PropertyType.materialColor],
+      "alignment": [PropertyType.alignment]
     };
     this.params = {
       "width": "null",
@@ -27,12 +27,14 @@ class ContainerModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap) {
+  Widget toWidget(wrap, isSelectMode) {
     return wrap(
         Container(
           child: children.length > 0
               ? children
-                  .map((e) => e.group == 'child' ? e.toWidget(wrap) : null)
+                  .map((e) => e.group == 'child'
+                      ? e.toWidget(wrap, isSelectMode)
+                      : null)
                   .toList()
                   .first
               : Container(),

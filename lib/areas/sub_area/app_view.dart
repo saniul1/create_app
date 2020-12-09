@@ -14,6 +14,7 @@ class AppView extends HookWidget {
   final ValueKey key;
   @override
   Widget build(BuildContext context) {
+    final currentTool = useProvider(selectedTool);
     final _count = useState(0);
     final build = useProvider(appBuildController);
     useEffect(() {
@@ -21,9 +22,9 @@ class AppView extends HookWidget {
     }, const []);
     final node = context.read(appViewList).getNodeId(key.value);
     // print(build.controller.getNode(node)?.toCode());
-    return build.controller
-            .getNode(node)
-            ?.toWidget((child, key) => WidgetWrapper(id: key, child: child)) ??
+    return build.controller.getNode(node)?.toWidget(
+            (child, key) => WidgetWrapper(id: key, child: child),
+            currentTool.state == ToolType.select) ??
         MaterialApp(
           home: Scaffold(
             appBar: AppBar(
@@ -66,12 +67,16 @@ class WidgetWrapper extends HookWidget {
       mouseCursor: currentTool.state == ToolType.select
           ? SystemMouseCursors.none
           : SystemMouseCursors.basic,
-      onTap: () {
-        if (currentTool.state == ToolType.select) tree.selectNode(id);
-      },
-      onHover: (value) {
-        if (currentTool.state == ToolType.select) isHover.value = value;
-      },
+      onTap: currentTool.state == ToolType.select
+          ? () {
+              tree.selectNode(id);
+            }
+          : null,
+      onHover: currentTool.state == ToolType.select
+          ? (value) {
+              isHover.value = value;
+            }
+          : null,
       child: Container(
         decoration: BoxDecoration(
           // color: isHover.value ? Colors.yellow.withOpacity(0.2) : null,

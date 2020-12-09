@@ -4,6 +4,8 @@ import 'flutter/model.dart';
 import 'flutter/types.dart';
 import 'flutter/widgets.dart';
 import 'property.dart';
+import 'property_helpers/colors_helper.dart';
+import 'property_helpers/icons_helper.dart';
 import 'utils/resolve_inherit_data.dart';
 
 /// Defines the insertion mode adding a new [Node] to the [TreeView].
@@ -77,13 +79,28 @@ class WidgetModelController {
     });
     map['data'].forEach((key, values) {
       widget.paramNameAndTypes.entries.forEach((element) {
-        if (element.key == key &&
-            element.value ==
-                EnumToString.fromString(PropertyType.values, values['type'])) {
+        final type =
+            EnumToString.fromString(PropertyType.values, values['type']);
+        if (element.key == key && element.value.contains(type)) {
           // print('${element.key}: ${values['value']}');
-          var value = values['value'];
+          var value;
+          switch (type) {
+            case PropertyType.materialColor:
+              final name = values['value'].split('.').last;
+              value =
+                  colors.firstWhere((icon) => icon.name == name)?.color ?? null;
+              break;
+            case PropertyType.icon:
+              final name = values['value'].split('.').last;
+              value = icons.firstWhere((icon) => icon.name == name)?.iconData ??
+                  null;
+              break;
+            default:
+              value = values['value'];
+          }
           if (values['inherit'] != null)
-            value = getValue(element.value, values['inherit'], values['value']);
+            value = getValue(
+                element.value.first, values['inherit'], values['value']);
           widget.params[element.key] = value;
         }
       });

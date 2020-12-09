@@ -15,7 +15,7 @@ class MaterialAppModel extends ModelWidget {
     this.hasProperties = true;
     this.hasChildren = true;
     this.paramNameAndTypes = {
-      "debugShowCheckedModeBanner": PropertyType.boolean,
+      "debugShowCheckedModeBanner": [PropertyType.boolean],
     };
     this.params = {
       "debugShowCheckedModeBanner": false,
@@ -23,14 +23,16 @@ class MaterialAppModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap) {
+  Widget toWidget(wrap, isSelectMode) {
     final nullValue = Container(child: Center(child: Text('null')));
     return wrap(
         MaterialApp(
           debugShowCheckedModeBanner: params["debugShowCheckedModeBanner"],
           home: children.length > 0
               ? children
-                  .map((e) => e.group == 'home' ? e.toWidget(wrap) : nullValue)
+                  .map((e) => e.group == 'home'
+                      ? e.toWidget(wrap, isSelectMode)
+                      : nullValue)
                   .toList()
                   .first
               : nullValue,

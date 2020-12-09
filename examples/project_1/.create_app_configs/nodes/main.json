@@ -17,7 +17,7 @@
         "key": "materialScaffold",
         "label": "MaterialScaffold",
         "type": "MaterialScaffold",
-        "group": "asd",
+        "group": "home",
         "data": {},
         "children": [
           {
@@ -32,7 +32,14 @@
                 "label": "Icon",
                 "type": "Icon",
                 "group": "child",
-                "data": {},
+                "data": {
+                  "icon": {
+                    "label": "Icon",
+                    "value": "wifi",
+                    "type": "icon",
+                    "inherit": null
+                  }
+                },
                 "children": []
               }
             ]
@@ -45,12 +52,9 @@
             "data": {
               "color": {
                 "label": "Color",
-                "value": "Colors.red",
-                "type": "color",
-                "inherit": {
-                  "from": "Colors",
-                  "parent": "material"
-                }
+                "value": "Colors.green",
+                "type": "materialColor",
+                "inherit": null
               }
             },
             "children": [

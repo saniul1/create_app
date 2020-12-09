@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:widget_models/src/utils/code_utils.dart';
 import 'package:widget_models/src/property.dart';
 
@@ -15,7 +16,7 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
     this.hasProperties = true;
     this.hasChildren = true;
     this.paramNameAndTypes = {
-      'onPressed': PropertyType.function,
+      'onPressed': [PropertyType.function],
     };
     this.params = {
       'onPressed': () {},
@@ -23,13 +24,17 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap) {
+  Widget toWidget(wrap, isSelectMode) {
     return wrap(
         FloatingActionButton(
-          onPressed: () {} ?? params["onPressed"],
+          mouseCursor:
+              isSelectMode ? SystemMouseCursors.none : SystemMouseCursors.basic,
+          onPressed: !isSelectMode ? () {} ?? params["onPressed"] : null,
           child: children.length > 0
               ? children
-                  .map((e) => e.group == 'child' ? e.toWidget(wrap) : null)
+                  .map((e) => e.group == 'child'
+                      ? e.toWidget(wrap, isSelectMode)
+                      : null)
                   .toList()
                   .first
               : null,
