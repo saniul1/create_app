@@ -34,7 +34,9 @@ class TextModel extends ModelWidget {
       text = "";
       list.forEach((txt) {
         if (txt.startsWith(r'$')) {
-          text = text + '${inheritData[txt.substring(1)]}';
+          text = '$text ${inheritData[txt.substring(1)]}';
+        } else {
+          text = '$text $txt';
         }
       });
     }
@@ -42,7 +44,7 @@ class TextModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap, isSelectMode) {
+  Widget toWidget(wrap, isSelectMode, resolveParams) {
     return wrap(
         Text(
           params["text"] != null ? _resolveText(params["text"]) : "",

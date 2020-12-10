@@ -25,7 +25,7 @@ class ColumnModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap, isSelectMode) {
+  Widget toWidget(wrap, isSelectMode, resolveParams) {
     return Column(
       mainAxisAlignment: params["mainAxisAlignment"] == null
           ? MainAxisAlignment.start
@@ -35,8 +35,9 @@ class ColumnModel extends ModelWidget {
           : params["crossAxisAlignment"],
       children: children.isNotEmpty
           ? children
-              .map((e) =>
-                  e.group == 'children' ? e.toWidget(wrap, isSelectMode) : null)
+              .map((e) => e.group == 'children'
+                  ? e.toWidget(wrap, isSelectMode, resolveParams)
+                  : null)
               .toList()
           : [],
     );

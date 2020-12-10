@@ -19,16 +19,20 @@ class MaterialScaffoldModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap, isSelectMode) {
+  Widget toWidget(wrap, isSelectMode, resolveParams) {
     final appBar = children
-        .map((e) => e.group == 'appBar' ? e.toWidget(wrap, isSelectMode) : null)
+        .map((e) => e.group == 'appBar'
+            ? e.toWidget(wrap, isSelectMode, resolveParams)
+            : null)
         .toList();
     final body = children
-        .map((e) => e.group == 'body' ? e.toWidget(wrap, isSelectMode) : null)
+        .map((e) => e.group == 'body'
+            ? e.toWidget(wrap, isSelectMode, resolveParams)
+            : null)
         .toList();
     final float = children
         .map((e) => e.group == 'floatingActionButton'
-            ? e.toWidget(wrap, isSelectMode)
+            ? e.toWidget(wrap, isSelectMode, resolveParams)
             : null)
         .toList();
     appBar.removeWhere((element) => element == null);

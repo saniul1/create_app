@@ -19,21 +19,26 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
       'onPressed': [PropertyType.function],
     };
     this.params = {
-      'onPressed': () {},
+      'onPressed': null,
     };
   }
 
   @override
-  Widget toWidget(wrap, isSelectMode) {
+  Widget toWidget(wrap, isSelectMode, resolveParams) {
     return wrap(
         FloatingActionButton(
           mouseCursor:
               isSelectMode ? SystemMouseCursors.none : SystemMouseCursors.basic,
-          onPressed: !isSelectMode ? () {} ?? params["onPressed"] : null,
+          onPressed: isSelectMode
+              ? null
+              : params["onPressed"] != null
+                  ? resolveParams(
+                      key, paramTypes["onPressed"], params["onPressed"])
+                  : null,
           child: children.length > 0
               ? children
                   .map((e) => e.group == 'child'
-                      ? e.toWidget(wrap, isSelectMode)
+                      ? e.toWidget(wrap, isSelectMode, resolveParams)
                       : null)
                   .toList()
                   .first

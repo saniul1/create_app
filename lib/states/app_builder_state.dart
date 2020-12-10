@@ -31,4 +31,30 @@ class AppBuilderNotifier extends ChangeNotifier {
   }
 
   buildWidgetTree(Node node) {}
+
+  dynamic? resolveWidgetModelPropertyData(
+      String key, PropertyType type, String args) {
+    final tree = _ref.read(treeViewController);
+    final parent = getParentCustomWidget(key);
+    switch (type) {
+      case PropertyType.function:
+        var arg = args.split('+');
+        final data = tree.controller.getNode(parent.key).data;
+        return () {
+          var val = (data[arg.first]['value']);
+          tree.updateNodeData({'${parent.key}.${arg.first}': val++}, val++);
+        };
+      default:
+        return null;
+    }
+  }
+
+  ModelWidget getParentCustomWidget(String key) {
+    final parent = _controller.getParent(key);
+    // print(parent.widgetType);
+    if (parent.widgetType != FlutterWidgetType.CustomWidget)
+      return getParentCustomWidget(parent.key);
+    else
+      return parent;
+  }
 }

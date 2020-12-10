@@ -6,7 +6,6 @@ import 'flutter/widgets.dart';
 import 'property.dart';
 import 'property_helpers/colors_helper.dart';
 import 'property_helpers/icons_helper.dart';
-import 'utils/resolve_inherit_data.dart';
 
 /// Defines the insertion mode adding a new [Node] to the [TreeView].
 enum InsertMode {
@@ -103,6 +102,7 @@ class WidgetModelController {
             EnumToString.fromString(PropertyType.values, values['type']);
         if (element.key == key && element.value.contains(type)) {
           // print('${element.key}: ${values['value']}');
+          widget.paramTypes[key] = type;
           var value;
           switch (type) {
             case PropertyType.materialColor:

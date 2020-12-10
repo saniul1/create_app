@@ -24,7 +24,7 @@ class IconModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap, isSelectMode) {
+  Widget toWidget(wrap, isSelectMode, resolveParams) {
     return wrap(
         Icon(
           params["icon"] ?? null,

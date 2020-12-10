@@ -25,8 +25,11 @@ abstract class ModelWidget {
   /// [ParentType.SingleChild] and [ParentType.MultipleChildren] are self-explanatory
   ParentType parentType;
 
-  /// Stores the names of all parameters and input types
+  /// Stores the names of all parameters and input types accepted
   Map<String, List<PropertyType>> paramNameAndTypes = {};
+
+  /// Stores the names of all parameters and input types of current [params]
+  Map<String, PropertyType> paramTypes = {};
 
   /// The parameter values of the widget
   /// Key is the parameter name and value is the value
@@ -41,7 +44,11 @@ abstract class ModelWidget {
   bool hasChildren;
 
   /// This method takes the parameters and returns the actual widget to display
-  Widget toWidget(Widget Function(Widget, String key) wrap, bool isSelectMode);
+  Widget toWidget(
+    Widget Function(Widget, String key) wrap,
+    bool isSelectMode,
+    dynamic Function(String key, PropertyType type, String args) resolveParams,
+  );
 
   /// Add child if widget takes children and space is available and return true, else return false
   bool addChild(ModelWidget widget) {

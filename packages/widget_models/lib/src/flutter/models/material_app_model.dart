@@ -23,7 +23,7 @@ class MaterialAppModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap, isSelectMode) {
+  Widget toWidget(wrap, isSelectMode, resolveParams) {
     final nullValue = Container(child: Center(child: Text('null')));
     return wrap(
         MaterialApp(
@@ -31,7 +31,7 @@ class MaterialAppModel extends ModelWidget {
           home: children.length > 0
               ? children
                   .map((e) => e.group == 'home'
-                      ? e.toWidget(wrap, isSelectMode)
+                      ? e.toWidget(wrap, isSelectMode, resolveParams)
                       : nullValue)
                   .toList()
                   .first

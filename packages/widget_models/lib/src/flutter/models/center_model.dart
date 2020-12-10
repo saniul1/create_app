@@ -25,13 +25,13 @@ class CenterModel extends ModelWidget {
   }
 
   @override
-  Widget toWidget(wrap, isSelectMode) {
+  Widget toWidget(wrap, isSelectMode, resolveParams) {
     return wrap(
         Center(
           child: children.length > 0
               ? children
                   .map((e) => e.group == 'child'
-                      ? e.toWidget(wrap, isSelectMode)
+                      ? e.toWidget(wrap, isSelectMode, resolveParams)
                       : null)
                   .toList()
                   .first
