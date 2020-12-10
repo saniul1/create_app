@@ -1,5 +1,6 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter/cupertino.dart';
 import 'flutter/model.dart';
 import 'flutter/types.dart';
 import 'flutter/widgets.dart';
@@ -17,9 +18,11 @@ enum InsertMode {
 class WidgetModelController {
   /// The data for the [TreeView].
   final List<ModelWidget> children;
+  final Map<String, Map<String, String>> inheritDataMap;
 
   WidgetModelController({
     this.children: const [],
+    @required this.inheritDataMap,
   });
 
   // {key:{inheritTo: inheritFrom}}
@@ -28,9 +31,10 @@ class WidgetModelController {
   /// Creates a copy of this controller but with the given fields
   /// replaced with the new values.
   WidgetModelController copyWith(
-      {List<ModelWidget> children, String selectedKey}) {
+      {List<ModelWidget> children, String inheritDataMap}) {
     return WidgetModelController(
       children: children ?? this.children,
+      inheritDataMap: inheritDataMap ?? this.inheritDataMap,
     );
   }
 
@@ -59,14 +63,16 @@ class WidgetModelController {
   WidgetModelController loadMap({List<Map<String, dynamic>> list: const []}) {
     List<ModelWidget> treeData =
         list.map((Map<String, dynamic> item) => _fromMap(item)).toList();
-    _resolveInheritData(treeData);
+    _resolveInheritData(treeData, _inheritDataMap);
     return WidgetModelController(
       children: treeData,
+      inheritDataMap: _inheritDataMap,
     );
   }
 
-  _resolveInheritData(List<ModelWidget> treeData) {
-    _inheritDataMap.forEach((key, inherit) {
+  _resolveInheritData(
+      List<ModelWidget> treeData, Map<String, Map<String, String>> inheritMap) {
+    inheritMap.forEach((key, inherit) {
       final to = getNode(key, children: treeData);
       final from = getNode(inherit.values.first, children: treeData);
       to.inheritData[inherit.keys.first] = from.params[inherit.keys.first];
@@ -129,32 +135,6 @@ class WidgetModelController {
     return widget;
   }
 
-  /// Adds a new node to an existing node identified by specified key.
-  /// It returns a new controller with the new node added. This method
-  /// expects the user to properly place this call so that the state is
-  /// updated.
-  ///
-  /// See [WidgetModelController.addNode] for info on optional parameters.
-  ///
-  /// ```dart
-  /// setState((){
-  ///   controller = controller.withAddNode(key, newNode);
-  /// });
-  /// ```
-  WidgetModelController withAddNode(
-    String key,
-    ModelWidget newNode, {
-    ModelWidget parent,
-    InsertMode mode: InsertMode.append,
-    int index,
-  }) {
-    List<ModelWidget> _data =
-        addNode(key, newNode, parent: parent, mode: mode, index: index);
-    return WidgetModelController(
-      children: _data,
-    );
-  }
-
   /// Replaces an existing node identified by specified key with a new node.
   /// It returns a new controller with the updated node replaced. This method
   /// expects the user to properly place this call so that the state is
@@ -172,63 +152,7 @@ class WidgetModelController {
     List<ModelWidget> _data = updateNode(key, newNode, parent: parent);
     return WidgetModelController(
       children: _data,
-    );
-  }
-
-  /// Removes an existing node identified by specified key.
-  /// It returns a new controller with the node removed. This method
-  /// expects the user to properly place this call so that the state is
-  /// updated.
-  ///
-  /// See [WidgetModelController.deleteNode] for info on optional parameters.
-  ///
-  /// ```dart
-  /// setState((){
-  ///   controller = controller.withDeleteNode(key);
-  /// });
-  /// ```
-  WidgetModelController withDeleteNode(String key, {ModelWidget parent}) {
-    List<ModelWidget> _data = deleteNode(key, parent: parent);
-    return WidgetModelController(
-      children: _data,
-    );
-  }
-
-  /// Expands all nodes down to ModelWidget identified by specified key.
-  /// It returns a new controller with the nodes expanded.
-  /// This method expects the user to properly place this call so
-  /// that the state is updated.
-  ///
-  /// Internally uses [WidgetModelController.expandToNode].
-  ///
-  /// ```dart
-  /// setState((){
-  ///   controller = controller.withExpandToNode(key, newNode);
-  /// });
-  /// ```
-  WidgetModelController withExpandToNode(String key, {ModelWidget parent}) {
-    List<ModelWidget> _data = expandToNode(key);
-    return WidgetModelController(
-      children: _data,
-    );
-  }
-
-  /// Collapses all nodes down to ModelWidget identified by specified key.
-  /// It returns a new controller with the nodes collapsed.
-  /// This method expects the user to properly place this call so
-  /// that the state is updated.
-  ///
-  /// Internally uses [WidgetModelController.collapseToNode].
-  ///
-  /// ```dart
-  /// setState((){
-  ///   controller = controller.withCollapseToNode(key, newNode);
-  /// });
-  /// ```
-  WidgetModelController withCollapseToNode(String key, {ModelWidget parent}) {
-    List<ModelWidget> _data = collapseToNode(key);
-    return WidgetModelController(
-      children: _data,
+      inheritDataMap: inheritDataMap,
     );
   }
 
@@ -282,89 +206,43 @@ class WidgetModelController {
     return _found;
   }
 
-  /// Expands a node and all of the node's ancestors so that the node is
-  /// visible without the need to manually expand each node.
-  List<ModelWidget> expandToNode(String key) {
-    List<String> _ancestors = [];
-    String _currentKey = key;
-
-    _ancestors.add(_currentKey);
-
-    ModelWidget _parent = this.getParent(_currentKey);
-    while (_parent.key != _currentKey) {
-      _currentKey = _parent.key;
-      _ancestors.add(_currentKey);
-      _parent = this.getParent(_currentKey);
-    }
-    WidgetModelController _this = this;
-    _ancestors.forEach((String k) {
-      ModelWidget _widget = _this.getNode(k);
-      ModelWidget _updated = _widget.copyWith(expanded: true);
-      _this = _this.withUpdateNode(k, _updated);
-    });
-    return _this.children;
-  }
-
-  /// Collapses a node and all of the node's ancestors without the need to
-  /// manually collapse each node.
-  List<ModelWidget> collapseToNode(String key) {
-    List<String> _ancestors = [];
-    String _currentKey = key;
-
-    _ancestors.add(_currentKey);
-
-    ModelWidget _parent = this.getParent(_currentKey);
-    while (_parent.key != _currentKey) {
-      _currentKey = _parent.key;
-      _ancestors.add(_currentKey);
-      _parent = this.getParent(_currentKey);
-    }
-    WidgetModelController _this = this;
-    _ancestors.forEach((String k) {
-      ModelWidget _widget = _this.getNode(k);
-      ModelWidget _updated = _widget.copyWith(expanded: false);
-      _this = _this.withUpdateNode(k, _updated);
-    });
-    return _this.children;
-  }
-
   /// Adds a new node to an existing node identified by specified key. It optionally
-  /// accepts an [InsertMode] and index. If no [InsertMode] is specified,
-  /// it appends the new node as a child at the end. This method returns
-  /// a new list with the added node.
-  List<ModelWidget> addNode(
-    String key,
-    ModelWidget newNode, {
-    ModelWidget parent,
-    InsertMode mode: InsertMode.append,
-    int index,
-  }) {
-    List<ModelWidget> _children =
-        parent == null ? this.children : parent.children;
-    return _children.map((ModelWidget child) {
-      if (child.key == key) {
-        List<ModelWidget> _children = child.children.toList(growable: true);
-        if (mode == InsertMode.prepend) {
-          _children.insert(0, newNode);
-        } else if (mode == InsertMode.insert) {
-          _children.insert(index ?? _children.length, newNode);
-        } else {
-          _children.add(newNode);
-        }
-        return child.copyWith(children: _children);
-      } else {
-        return child.copyWith(
-          children: addNode(
-            key,
-            newNode,
-            parent: child,
-            mode: mode,
-            index: index,
-          ),
-        );
-      }
-    }).toList();
-  }
+  // /// accepts an [InsertMode] and index. If no [InsertMode] is specified,
+  // /// it appends the new node as a child at the end. This method returns
+  // /// a new list with the added node.
+  // List<ModelWidget> addNode(
+  //   String key,
+  //   ModelWidget newNode, {
+  //   ModelWidget parent,
+  //   InsertMode mode: InsertMode.append,
+  //   int index,
+  // }) {
+  //   List<ModelWidget> _children =
+  //       parent == null ? this.children : parent.children;
+  //   return _children.map((ModelWidget child) {
+  //     if (child.key == key) {
+  //       List<ModelWidget> _children = child.children.toList(growable: true);
+  //       if (mode == InsertMode.prepend) {
+  //         _children.insert(0, newNode);
+  //       } else if (mode == InsertMode.insert) {
+  //         _children.insert(index ?? _children.length, newNode);
+  //       } else {
+  //         _children.add(newNode);
+  //       }
+  //       return child.copyWith(children: _children);
+  //     } else {
+  //       return child.copyWith(
+  //         children: addNode(
+  //           key,
+  //           newNode,
+  //           parent: child,
+  //           mode: mode,
+  //           index: index,
+  //         ),
+  //       );
+  //     }
+  //   }).toList();
+  // }
 
   /// Updates an existing node identified by specified key. This method
   /// returns a new list with the updated node.
@@ -372,45 +250,48 @@ class WidgetModelController {
       {ModelWidget parent}) {
     List<ModelWidget> _children =
         parent == null ? this.children : parent.children;
-    return _children.map((ModelWidget child) {
-      if (child.key == key) {
-        return newNode;
-      } else {
-        if (child.isParent) {
-          return child.copyWith(
-            children: updateNode(
-              key,
-              newNode,
-              parent: child,
-            ),
-          );
-        }
-        return child;
-      }
+    final treeData = _children.map((ModelWidget child) {
+      return newNode;
+      // if (child.key == key) {
+      //   return newNode;
+      // } else {
+      //   if (child.isParent) {
+      //     return child.copyWith(
+      //       children: updateNode(
+      //         key,
+      //         newNode,
+      //         parent: child,
+      //       ),
+      //     );
+      //   }
+      //   return child;
+      // }
     }).toList();
+    _resolveInheritData(treeData, inheritDataMap);
+    return treeData;
   }
 
-  /// Deletes an existing node identified by specified key. This method
-  /// returns a new list with the specified node removed.
-  List<ModelWidget> deleteNode(String key, {ModelWidget parent}) {
-    List<ModelWidget> _children =
-        parent == null ? this.children : parent.children;
-    List<ModelWidget> _filteredChildren = [];
-    Iterator iter = _children.iterator;
-    while (iter.moveNext()) {
-      ModelWidget child = iter.current;
-      if (child.key != key) {
-        if (child.isParent) {
-          _filteredChildren.add(child.copyWith(
-            children: deleteNode(key, parent: child),
-          ));
-        } else {
-          _filteredChildren.add(child);
-        }
-      }
-    }
-    return _filteredChildren;
-  }
+  // /// Deletes an existing node identified by specified key. This method
+  // /// returns a new list with the specified node removed.
+  // List<ModelWidget> deleteNode(String key, {ModelWidget parent}) {
+  //   List<ModelWidget> _children =
+  //       parent == null ? this.children : parent.children;
+  //   List<ModelWidget> _filteredChildren = [];
+  //   Iterator iter = _children.iterator;
+  //   while (iter.moveNext()) {
+  //     ModelWidget child = iter.current;
+  //     if (child.key != key) {
+  //       if (child.isParent) {
+  //         _filteredChildren.add(child.copyWith(
+  //           children: deleteNode(key, parent: child),
+  //         ));
+  //       } else {
+  //         _filteredChildren.add(child);
+  //       }
+  //     }
+  //   }
+  //   return _filteredChildren;
+  // }
 
   // /// Map representation of this object
   // List<Map<String, dynamic>> get asMap {

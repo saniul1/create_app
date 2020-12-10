@@ -63,16 +63,10 @@ abstract class ModelWidget {
     return false;
   }
 
-  copyWith({
-    String key,
-    String label,
-    String type,
-    List<ModelWidget> children,
-    List actions,
-    bool expanded,
-    Map data,
-  }) {
-    // assert();
+  ModelWidget copyWith({List<ModelWidget> children}) {
+    this.children = children;
+    print(this.children);
+    return null;
   }
 
   /// Get current values of all parameters of the widget model

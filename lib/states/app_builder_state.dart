@@ -30,23 +30,31 @@ class AppBuilderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  buildWidgetTree(Node node) {}
-
   dynamic? resolveWidgetModelPropertyData(
       String key, PropertyType type, String args) {
-    final tree = _ref.read(treeViewController);
     final parent = getParentCustomWidget(key);
     switch (type) {
       case PropertyType.function:
         var arg = args.split('+');
-        final data = tree.controller.getNode(parent.key).data;
         return () {
-          var val = (data[arg.first]['value']);
-          tree.updateNodeData({'${parent.key}.${arg.first}': val++}, val++);
+          var val = (parent.params[arg.first]);
+          updateNodeData('${parent.key}.${arg.first}', val + 1);
         };
       default:
         return null;
     }
+  }
+
+  void updateNodeData(String keys, value) {
+    final k = keys.split('.');
+    final node = _controller.getNode(k.first);
+    node.params[k.last] = value;
+    _controller = WidgetModelController(
+      children: _controller.updateNode(k.first, node),
+      inheritDataMap: _controller.inheritDataMap,
+    );
+    // print(_controller.children.first.params);
+    notifyListeners();
   }
 
   ModelWidget getParentCustomWidget(String key) {
