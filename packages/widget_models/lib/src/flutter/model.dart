@@ -32,6 +32,8 @@ abstract class ModelWidget {
   /// Key is the parameter name and value is the value
   Map params = {};
 
+  Map inheritData = {};
+
   /// Denotes if the widget has any properties
   bool hasProperties;
 

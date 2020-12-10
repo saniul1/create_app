@@ -28,11 +28,24 @@ class TextModel extends ModelWidget {
     };
   }
 
+  String _resolveText(String text) {
+    if (text.contains(r'$')) {
+      final list = text.split(" ");
+      text = "";
+      list.forEach((txt) {
+        if (txt.startsWith(r'$')) {
+          text = text + '${inheritData[txt.substring(1)]}';
+        }
+      });
+    }
+    return text;
+  }
+
   @override
   Widget toWidget(wrap, isSelectMode) {
     return wrap(
         Text(
-          params["text"] ?? "",
+          params["text"] != null ? _resolveText(params["text"]) : "",
           style: TextStyle(
               fontSize: double.tryParse(params["fontSize"]) ?? 14.0,
               color: params["color"] ?? Colors.black,

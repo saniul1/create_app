@@ -9,8 +9,10 @@ enum FlutterWidgetType {
   Icon,
   Text,
   Center,
+  Column,
   Container,
   MaterialApp,
   MaterialScaffold,
   MaterialFloatingActionButton,
+  CustomWidget,
 }

@@ -62,7 +62,7 @@ class PropertyBox<T> {
       key: {
         "label": label,
         "value": value.toString(),
-        "type": EnumToString.convertToString(type),
+        "type": EnumToString.convertToString(type.first), //? todo
       }
     };
     return _map;

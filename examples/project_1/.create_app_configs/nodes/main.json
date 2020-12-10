@@ -1,84 +1,130 @@
 [
   {
     "key": "my_app",
-    "label": "MaterialApp",
-    "type": "MaterialApp",
+    "label": "My App",
+    "type": "CustomWidget",
     "group": "child",
     "data": {
-      "debugShowCheckedModeBanner": {
-        "label": "debugShowCheckedModeBanner",
-        "value": false,
-        "type": "boolean",
+      "count": {
+        "label": "Count",
+        "value": 0,
+        "type": "integer",
         "inherit": null
       }
     },
     "children": [
       {
-        "key": "materialScaffold",
-        "label": "MaterialScaffold",
-        "type": "MaterialScaffold",
-        "group": "home",
-        "data": {},
+        "key": "materialApp",
+        "label": "MaterialApp",
+        "type": "MaterialApp",
+        "group": "child",
+        "data": {
+          "debugShowCheckedModeBanner": {
+            "label": "debugShowCheckedModeBanner",
+            "value": false,
+            "type": "boolean",
+            "inherit": null
+          }
+        },
         "children": [
           {
-            "key": "floatingActionButton",
-            "label": "FloatingActionButton",
-            "type": "MaterialFloatingActionButton",
-            "group": "floatingActionButton",
+            "key": "materialScaffold",
+            "label": "MaterialScaffold",
+            "type": "MaterialScaffold",
+            "group": "home",
             "data": {},
             "children": [
               {
-                "key": "icon",
-                "label": "Icon",
-                "type": "Icon",
-                "group": "child",
-                "data": {
-                  "icon": {
-                    "label": "Icon",
-                    "value": "wifi",
-                    "type": "icon",
-                    "inherit": null
-                  }
-                },
-                "children": []
-              }
-            ]
-          },
-          {
-            "key": "container",
-            "label": "Container",
-            "type": "Container",
-            "group": "body",
-            "data": {
-              "color": {
-                "label": "Color",
-                "value": "Colors.green",
-                "type": "materialColor",
-                "inherit": null
-              }
-            },
-            "children": [
-              {
-                "key": "center",
-                "label": "Center",
-                "type": "Center",
-                "group": "child",
+                "key": "floatingActionButton",
+                "label": "FloatingActionButton",
+                "type": "MaterialFloatingActionButton",
+                "group": "floatingActionButton",
                 "data": {},
                 "children": [
                   {
-                    "key": "text",
-                    "label": "Text",
-                    "type": "Text",
+                    "key": "icon",
+                    "label": "Icon",
+                    "type": "Icon",
                     "group": "child",
                     "data": {
-                      "text": {
-                        "label": "text",
-                        "value": "Hello Worldsss!!!!ss",
-                        "type": "string",
+                      "icon": {
+                        "label": "Icon",
+                        "value": "add",
+                        "type": "icon",
                         "inherit": null
                       }
                     },
                     "children": []
+                  }
+                ]
+              },
+              {
+                "key": "container",
+                "label": "Container",
+                "type": "Container",
+                "group": "body",
+                "data": {
+                  "color": {
+                    "label": "Color",
+                    "value": "Colors.green",
+                    "type": "materialColor",
+                    "inherit": null
+                  }
+                },
+                "children": [
+                  {
+                    "key": "center",
+                    "label": "Center",
+                    "type": "Center",
+                    "group": "child",
+                    "data": {},
+                    "children": [
+                      {
+                        "key": "column",
+                        "label": "Column",
+                        "type": "Column",
+                        "group": "child",
+                        "data": {},
+                        "children": [
+                          {
+                            "key": "text",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "Hello World!!",
+                                "type": "string",
+                                "inherit": null
+                              }
+                            },
+                            "children": []
+                          },
+                          {
+                            "key": "text_count",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "$count",
+                                "type": "string",
+                                "inherit": null
+                              },
+                              "count": {
+                                "label": "text",
+                                "value": "$count",
+                                "type": "string",
+                                "inherit": "my_app"
+                              }
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ]
               }

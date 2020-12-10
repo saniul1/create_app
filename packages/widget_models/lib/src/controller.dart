@@ -23,6 +23,9 @@ class WidgetModelController {
     this.children: const [],
   });
 
+  // {key:{inheritTo: inheritFrom}}
+  final Map<String, Map<String, String>> _inheritDataMap = {};
+
   /// Creates a copy of this controller but with the given fields
   /// replaced with the new values.
   WidgetModelController copyWith(
@@ -57,9 +60,18 @@ class WidgetModelController {
   WidgetModelController loadMap({List<Map<String, dynamic>> list: const []}) {
     List<ModelWidget> treeData =
         list.map((Map<String, dynamic> item) => _fromMap(item)).toList();
+    _resolveInheritData(treeData);
     return WidgetModelController(
       children: treeData,
     );
+  }
+
+  _resolveInheritData(List<ModelWidget> treeData) {
+    _inheritDataMap.forEach((key, inherit) {
+      final to = getNode(key, children: treeData);
+      final from = getNode(inherit.values.first, children: treeData);
+      to.inheritData[inherit.keys.first] = from.params[inherit.keys.first];
+    });
   }
 
   ModelWidget _fromMap(Map<String, dynamic> map) {
@@ -74,6 +86,14 @@ class WidgetModelController {
     }
     final ModelWidget widget = getFlutterWidgetModelFromType(map['key'], _group,
         EnumToString.fromString(FlutterWidgetType.values, _type));
+    if (widget.widgetType == FlutterWidgetType.CustomWidget) {
+      // print(map['data']);
+      map['data'].forEach((key, values) {
+        widget.paramNameAndTypes[key] = [
+          EnumToString.fromString(PropertyType.values, values['type'])
+        ];
+      });
+    }
     _children.forEach((child) {
       widget.addChild(child);
     });
@@ -98,14 +118,14 @@ class WidgetModelController {
             default:
               value = values['value'];
           }
-          if (values['inherit'] != null)
-            value = getValue(
-                element.value.first, values['inherit'], values['value']);
           widget.params[element.key] = value;
+        }
+        if (values['inherit'] != null) {
+          _inheritDataMap[map['key']] = {key: values['inherit']};
         }
       });
     });
-    widget.paramNameAndTypes.forEach((key, value) {});
+    // widget.paramNameAndTypes.forEach((key, value) {});
     return widget;
   }
 
@@ -213,10 +233,14 @@ class WidgetModelController {
   }
 
   /// Gets the node that has a key value equal to the specified key.
-  ModelWidget getNode(String key, {ModelWidget parent}) {
+  ModelWidget getNode(String key,
+      {ModelWidget parent, List<ModelWidget> children}) {
     ModelWidget _found;
-    List<ModelWidget> _children =
-        parent == null ? this.children : parent.children;
+    List<ModelWidget> _children = children == null
+        ? parent == null
+            ? this.children
+            : parent.children
+        : children;
     Iterator iter = _children.iterator;
     while (iter.moveNext()) {
       ModelWidget child = iter.current;
