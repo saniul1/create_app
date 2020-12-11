@@ -37,6 +37,8 @@ abstract class ModelWidget {
 
   Map inheritData = {};
 
+  Map modifiers = {};
+
   /// Denotes if the widget has any properties
   bool hasProperties;
 
@@ -47,7 +49,7 @@ abstract class ModelWidget {
   Widget toWidget(
     Widget Function(Widget, String key) wrap,
     bool isSelectMode,
-    dynamic Function(String key, PropertyType type, String args) resolveParams,
+    void Function(String key, PropertyType type, dynamic args) resolveParams,
   );
 
   /// Add child if widget takes children and space is available and return true, else return false

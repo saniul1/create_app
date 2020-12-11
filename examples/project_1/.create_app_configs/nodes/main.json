@@ -1,1 +1,162 @@
-[{"key":"my_app","label":"My App","type":"CustomWidget","group":"child","data":{"count":{"label":"Count","value":0,"type":"integer","inherit":null}},"children":[{"key":"materialApp","label":"MaterialApp","type":"MaterialApp","group":"child","data":{"debugShowCheckedModeBanner":{"label":"debugShowCheckedModeBanner","value":false,"type":"boolean","inherit":null}},"children":[{"key":"materialScaffold","label":"MaterialScaffold","type":"MaterialScaffold","group":"home","data":{},"children":[{"key":"floatingActionButton","label":"FloatingActionButton","type":"MaterialFloatingActionButton","group":"floatingActionButton","data":{"onPressed":{"label":"onPressed","value":"count++","type":"function","inherit":null}},"children":[{"key":"icon","label":"Icon","type":"Icon","group":"child","data":{"icon":{"label":"Icon","value":"add","type":"icon","inherit":null}},"children":[]}]},{"key":"container","label":"Container","type":"Container","group":"body","data":{"color":{"label":"Color","value":"Colors.green","type":"materialColor","inherit":null}},"children":[{"key":"center","label":"Center","type":"Center","group":"child","data":{},"children":[{"key":"column","label":"Column","type":"Column","group":"child","data":{},"children":[{"key":"text","label":"Text","type":"Text","group":"children","data":{"text":{"label":"text","value":"Hello World!!","type":"string","inherit":null}},"children":[]},{"key":"text_count","label":"Text","type":"Text","group":"children","data":{"text":{"label":"text","value":"Your count is $count","type":"string","inherit":null},"count":{"label":"text","value":"$count","type":"string","inherit":"my_app"}},"children":[]}]}]}]}]}]}]}]
+[
+  {
+    "key": "my_app",
+    "label": "My App",
+    "type": "CustomWidget",
+    "group": "child",
+    "data": {
+      "count": {
+        "label": "Count",
+        "value": 0,
+        "type": "integer",
+        "inherit": null,
+        "isFinal": false
+      }
+    },
+    "children": [
+      {
+        "key": "materialApp",
+        "label": "MaterialApp",
+        "type": "MaterialApp",
+        "group": "child",
+        "data": {
+          "debugShowCheckedModeBanner": {
+            "label": "debugShowCheckedModeBanner",
+            "value": false,
+            "type": "boolean",
+            "inherit": null,
+            "isFinal": true
+          }
+        },
+        "children": [
+          {
+            "key": "materialScaffold",
+            "label": "MaterialScaffold",
+            "type": "MaterialScaffold",
+            "group": "home",
+            "data": {},
+            "children": [
+              {
+                "key": "floatingActionButton",
+                "label": "FloatingActionButton",
+                "type": "MaterialFloatingActionButton",
+                "group": "floatingActionButton",
+                "data": {
+                  "onPressed": {
+                    "label": "onPressed",
+                    "value": [
+                      {
+                        "my_app": {
+                          "count": {
+                            "action": "addition",
+                            "value": 1,
+                            "condition": null
+                          }
+                        }
+                      }
+                    ],
+                    "type": "function",
+                    "inherit": null,
+                    "isFinal": true
+                  }
+                },
+                "children": [
+                  {
+                    "key": "icon",
+                    "label": "Icon",
+                    "type": "Icon",
+                    "group": "child",
+                    "data": {
+                      "icon": {
+                        "label": "Icon",
+                        "value": "add",
+                        "type": "icon",
+                        "inherit": null,
+                        "isFinal": true
+                      }
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "key": "container",
+                "label": "Container",
+                "type": "Container",
+                "group": "body",
+                "data": {
+                  "color": {
+                    "label": "Color",
+                    "value": "Colors.green",
+                    "type": "materialColor",
+                    "inherit": null,
+                    "isFinal": true
+                  }
+                },
+                "children": [
+                  {
+                    "key": "center",
+                    "label": "Center",
+                    "type": "Center",
+                    "group": "child",
+                    "data": {},
+                    "children": [
+                      {
+                        "key": "column",
+                        "label": "Column",
+                        "type": "Column",
+                        "group": "child",
+                        "data": {},
+                        "children": [
+                          {
+                            "key": "text",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "Hello World!!",
+                                "type": "string",
+                                "inherit": null,
+                                "isFinal": true
+                              }
+                            },
+                            "children": []
+                          },
+                          {
+                            "key": "text_count",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "Your count is $count",
+                                "type": "string",
+                                "inherit": null,
+                                "isFinal": true
+                              },
+                              "count": {
+                                "label": "text",
+                                "value": "$count",
+                                "type": "string",
+                                "inherit": "my_app",
+                                "isFinal": true
+                              }
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

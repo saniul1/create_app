@@ -32,7 +32,7 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
           onPressed: isSelectMode
               ? null
               : params["onPressed"] != null
-                  ? resolveParams(
+                  ? () => resolveParams(
                       key, paramTypes["onPressed"], params["onPressed"])
                   : null,
           child: children.length > 0

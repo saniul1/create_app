@@ -1,6 +1,7 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:widget_models/src/property_helpers/property_modifiers.dart';
 import 'flutter/model.dart';
 import 'flutter/types.dart';
 import 'flutter/widgets.dart';
@@ -125,6 +126,11 @@ class WidgetModelController {
               value = values['value'];
           }
           widget.params[element.key] = value;
+          if (widget.widgetType == FlutterWidgetType.CustomWidget) {
+            if (!values['isFinal']) {
+              attachModifiers(widget, key);
+            }
+          }
         }
         if (values['inherit'] != null) {
           _inheritDataMap[map['key']] = {key: values['inherit']};

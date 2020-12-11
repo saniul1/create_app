@@ -17,7 +17,7 @@ final appBuildController = ChangeNotifierProvider<AppBuilderNotifier>(
 class AppBuilderNotifier extends ChangeNotifier {
   final ProviderReference _ref;
   AppBuilderNotifier(ref) : _ref = ref;
-  WidgetModelController _controller = WidgetModelController();
+  WidgetModelController _controller = WidgetModelController(inheritDataMap: {});
   WidgetModelController get controller => _controller;
 
   buildApps() {
@@ -30,27 +30,26 @@ class AppBuilderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  dynamic? resolveWidgetModelPropertyData(
-      String key, PropertyType type, String args) {
-    final parent = getParentCustomWidget(key);
-    switch (type) {
-      case PropertyType.function:
-        var arg = args.split('+');
-        return () {
-          var val = (parent.params[arg.first]);
-          updateNodeData('${parent.key}.${arg.first}', val + 1);
-        };
-      default:
-        return null;
+  void resolveWidgetModelPropertyData(
+      String key, PropertyType type, dynamic args) {
+    if (args.runtimeType.toString() == 'List<dynamic>') {
+      for (var arg in args) {
+        final map = Map<String, dynamic>.from(arg);
+        final parent = getParentCustomWidget(map.keys.first);
+        parent.modifiers[map.values.first.keys.first]
+                [map.values.first.values.first['action']](
+            map.values.first.values.first['value'],
+            map.values.first.values.first['condition']);
+        // do it once by checking the hight parent
+        updateNodeData(map.keys.first);
+      }
     }
   }
 
-  void updateNodeData(String keys, value) {
-    final k = keys.split('.');
-    final node = _controller.getNode(k.first);
-    node.params[k.last] = value;
+  void updateNodeData(String key) {
+    final node = _controller.getNode(key);
     _controller = WidgetModelController(
-      children: _controller.updateNode(k.first, node),
+      children: _controller.updateNode(key, node),
       inheritDataMap: _controller.inheritDataMap,
     );
     // print(_controller.children.first.params);
