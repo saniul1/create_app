@@ -37,7 +37,7 @@ class MaterialScaffoldModel extends ModelWidget {
     body.removeWhere((element) => element == null);
     float.removeWhere((element) => element == null);
     PreferredSizeWidget? _appbar =
-        appBar.first.runtimeType == PreferredSizeWidget
+        appBar.length > 0 && appBar.first.runtimeType == PreferredSizeWidget
             ? appBar.first as PreferredSizeWidget
             : null;
     return wrap(

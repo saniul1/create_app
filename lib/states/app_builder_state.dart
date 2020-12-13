@@ -61,7 +61,7 @@ class AppBuilderNotifier extends ChangeNotifier {
   ModelWidget? getParentCustomWidget(String key) {
     final parent = _controller.getParent(key);
     // print(parent.widgetType);
-    if (parent != null && parent?.widgetType != FlutterWidgetType.CustomWidget)
+    if (parent != null && parent.widgetType != FlutterWidgetType.CustomWidget)
       return getParentCustomWidget(parent.key);
     else
       return parent;

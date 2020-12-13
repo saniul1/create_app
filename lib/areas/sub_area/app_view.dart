@@ -8,7 +8,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:widget_models/widget_models.dart';
 
 class AppView extends HookWidget {
   AppView({required this.key}) : super(key: key);
@@ -27,8 +26,7 @@ class AppView extends HookWidget {
     return build.controller.getNode(node)?.toWidget(
             (child, key) => WidgetWrapper(id: key, child: child),
             currentTool.state == ToolType.select,
-            build.resolveWidgetModelPropertyData as void Function(
-                dynamic, PropertyType, dynamic)) ??
+            build.resolveWidgetModelPropertyData) ??
         MaterialApp(
           home: Scaffold(
             appBar: AppBar(

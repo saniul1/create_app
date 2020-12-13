@@ -115,13 +115,15 @@ class WidgetModelController {
           switch (type) {
             case PropertyType.materialColor:
               final name = values['value'].split('.').last;
-              value =
-                  colors.firstWhere((icon) => icon.name == name)?.color ?? null;
+              final ColorInfo? info =
+                  colors.firstWhere((icon) => icon.name == name);
+              value = info?.color ?? null;
               break;
             case PropertyType.icon:
               final name = values['value'].split('.').last;
-              value = icons.firstWhere((icon) => icon.name == name)?.iconData ??
-                  null;
+              final IconInfo? info =
+                  icons.firstWhere((icon) => icon.name == name);
+              value = info?.iconData ?? null;
               break;
             default:
               value = values['value'];
