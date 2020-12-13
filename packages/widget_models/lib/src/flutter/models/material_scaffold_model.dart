@@ -12,8 +12,6 @@ class MaterialScaffoldModel extends ModelWidget {
     this.group = group;
     this.widgetType = FlutterWidgetType.MaterialScaffold;
     this.parentType = ParentType.MultipleChildren;
-    this.hasProperties = true;
-    this.hasChildren = true;
     this.paramNameAndTypes = {};
     this.params = {};
   }
@@ -38,9 +36,13 @@ class MaterialScaffoldModel extends ModelWidget {
     appBar.removeWhere((element) => element == null);
     body.removeWhere((element) => element == null);
     float.removeWhere((element) => element == null);
+    PreferredSizeWidget? _appbar =
+        appBar.first.runtimeType == PreferredSizeWidget
+            ? appBar.first as PreferredSizeWidget
+            : null;
     return wrap(
         Scaffold(
-          appBar: appBar.length > 0 ? appBar.first : null,
+          appBar: _appbar,
           body: body.length > 0 ? body.first : null,
           floatingActionButton: float.length > 0 ? float.first : null,
         ),

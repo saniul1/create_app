@@ -4,10 +4,10 @@ import 'package:widget_models/src/property_helpers/colors_helper.dart';
 
 /// Converts parameters to string values for converting to code
 String paramToCode(
-    {String paramName,
-    @required PropertyType type,
-    currentValue,
-    String defaultValue,
+    {String? paramName,
+    required PropertyType type,
+    dynamic? currentValue,
+    String? defaultValue,
     bool isNamed = true}) {
   String result = "";
 
@@ -67,6 +67,12 @@ String paramToCode(
       break;
     case PropertyType.fontStyle:
       result = result + currentValue.toString();
+      break;
+    case PropertyType.materialColor:
+      // TODO: Handle this case.
+      break;
+    case PropertyType.function:
+      // TODO: Handle this case.
       break;
   }
 

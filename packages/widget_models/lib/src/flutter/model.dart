@@ -4,26 +4,26 @@ import './types.dart';
 
 /// Model Widget class
 abstract class ModelWidget {
-  String key;
+  late String key;
 
   /// Type of widget ([Text], [Center], [Column], etc)
-  FlutterWidgetType widgetType;
+  late FlutterWidgetType widgetType;
 
   /// Children of the widget
-  List<ModelWidget> children = [];
+  late List<ModelWidget> children = [];
 
   bool get isParent => children.isNotEmpty;
 
   /// The parent of the current widget
-  ModelWidget parent;
+  late ModelWidget parent;
 
   /// which property of parent it belongs to
-  String group;
+  late String group;
 
   /// How the widget fits into the tree
   /// [ParentType.End] is used for widgets that cannot have children
   /// [ParentType.SingleChild] and [ParentType.MultipleChildren] are self-explanatory
-  ParentType parentType;
+  late ParentType parentType;
 
   /// Stores the names of all parameters and input types accepted
   Map<String, List<PropertyType>> paramNameAndTypes = {};
@@ -38,12 +38,6 @@ abstract class ModelWidget {
   Map inheritData = {};
 
   Map modifiers = {};
-
-  /// Denotes if the widget has any properties
-  bool hasProperties;
-
-  /// Denotes if the widget has any children
-  bool hasChildren;
 
   /// This method takes the parameters and returns the actual widget to display
   Widget toWidget(
@@ -65,9 +59,9 @@ abstract class ModelWidget {
     return false;
   }
 
-  ModelWidget copyWith({List<ModelWidget> children}) {
+  ModelWidget? copyWith({required List<ModelWidget> children}) {
     this.children = children;
-    print(this.children);
+    // print(this.children);
     return null;
   }
 

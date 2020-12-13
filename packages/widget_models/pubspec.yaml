@@ -7,7 +7,7 @@ homepage:
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -18,6 +18,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  better_print:
+    path: ../better_print/
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

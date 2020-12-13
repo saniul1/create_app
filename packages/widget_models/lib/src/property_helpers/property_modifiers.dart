@@ -6,24 +6,24 @@ attachModifiers(ModelWidget widget, String paramKey) {
   widget.modifiers[paramKey] = {};
   switch (type) {
     case PropertyType.integer:
-      widget.modifiers[paramKey]['addition'] = (int i, [String condition]) {
+      widget.modifiers[paramKey]['addition'] = (int i, [String? condition]) {
         if (_numConditionCheck(widget, condition, widget.params[paramKey]))
           widget.params[paramKey] += i;
       };
-      widget.modifiers[paramKey]['subtraction'] = (int i, [String condition]) {
+      widget.modifiers[paramKey]['subtraction'] = (int i, [String? condition]) {
         if (_numConditionCheck(widget, condition, widget.params[paramKey]))
           widget.params[paramKey] -= i;
       };
       widget.modifiers[paramKey]['multiplication'] =
-          (int i, [String condition]) {
+          (int i, [String? condition]) {
         if (_numConditionCheck(widget, condition, widget.params[paramKey]))
           widget.params[paramKey] *= i;
       };
-      widget.modifiers[paramKey]['division'] = (int i, [String condition]) {
+      widget.modifiers[paramKey]['division'] = (int i, [String? condition]) {
         if (_numConditionCheck(widget, condition, widget.params[paramKey]))
           widget.params[paramKey] *= i;
       };
-      widget.modifiers[paramKey]['set'] = (int i, [String condition]) {
+      widget.modifiers[paramKey]['set'] = (int i, [String? condition]) {
         if (_numConditionCheck(widget, condition, widget.params[paramKey]))
           widget.params[paramKey] = i;
       };
@@ -32,7 +32,7 @@ attachModifiers(ModelWidget widget, String paramKey) {
   }
 }
 
-bool _numConditionCheck(ModelWidget widget, String statement, num value) {
+bool _numConditionCheck(ModelWidget widget, String? statement, num value) {
   if (statement == null) return true;
   final conditions = statement.split(',');
   bool result = false;
@@ -42,7 +42,7 @@ bool _numConditionCheck(ModelWidget widget, String statement, num value) {
         ? widget.params[condition.substring(condition.indexOf('\$') + 1).trim()]
         : double.tryParse(
             condition.substring(condition.indexOf(' ') + 1).trim());
-    print(v);
+    // print(v);
     if (condition.contains('>')) {
       result = value > v;
     }

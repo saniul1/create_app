@@ -10,8 +10,6 @@ class ColumnModel extends ModelWidget {
   ColumnModel(String key, String group) {
     this.key = key;
     this.group = group;
-    this.hasProperties = true;
-    this.hasChildren = true;
     this.widgetType = FlutterWidgetType.Column;
     this.parentType = ParentType.MultipleChildren;
     this.paramNameAndTypes = {
@@ -26,6 +24,11 @@ class ColumnModel extends ModelWidget {
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
+    final _children = children
+        .map((e) => e.group == 'children'
+            ? e.toWidget(wrap, isSelectMode, resolveParams)
+            : SizedBox())
+        .toList();
     return Column(
       mainAxisAlignment: params["mainAxisAlignment"] == null
           ? MainAxisAlignment.start
@@ -33,13 +36,7 @@ class ColumnModel extends ModelWidget {
       crossAxisAlignment: params["crossAxisAlignment"] == null
           ? CrossAxisAlignment.start
           : params["crossAxisAlignment"],
-      children: children.isNotEmpty
-          ? children
-              .map((e) => e.group == 'children'
-                  ? e.toWidget(wrap, isSelectMode, resolveParams)
-                  : null)
-              .toList()
-          : [],
+      children: _children,
     );
   }
 

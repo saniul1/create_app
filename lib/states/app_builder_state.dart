@@ -36,10 +36,11 @@ class AppBuilderNotifier extends ChangeNotifier {
       for (var arg in args) {
         final map = Map<String, dynamic>.from(arg);
         final parent = getParentCustomWidget(map.keys.first);
-        parent.modifiers[map.values.first.keys.first]
-                [map.values.first.values.first['action']](
-            map.values.first.values.first['value'],
-            map.values.first.values.first['condition']);
+        if (parent != null)
+          parent.modifiers[map.values.first.keys.first]
+                  [map.values.first.values.first['action']](
+              map.values.first.values.first['value'],
+              map.values.first.values.first['condition']);
         // do it once by checking the hight parent
         updateNodeData(map.keys.first);
       }
@@ -48,18 +49,19 @@ class AppBuilderNotifier extends ChangeNotifier {
 
   void updateNodeData(String key) {
     final node = _controller.getNode(key);
-    _controller = WidgetModelController(
-      children: _controller.updateNode(key, node),
-      inheritDataMap: _controller.inheritDataMap,
-    );
+    if (node != null)
+      _controller = WidgetModelController(
+        children: _controller.updateNode(key, node),
+        inheritDataMap: _controller.inheritDataMap,
+      );
     // print(_controller.children.first.params);
     notifyListeners();
   }
 
-  ModelWidget getParentCustomWidget(String key) {
+  ModelWidget? getParentCustomWidget(String key) {
     final parent = _controller.getParent(key);
     // print(parent.widgetType);
-    if (parent.widgetType != FlutterWidgetType.CustomWidget)
+    if (parent != null && parent?.widgetType != FlutterWidgetType.CustomWidget)
       return getParentCustomWidget(parent.key);
     else
       return parent;

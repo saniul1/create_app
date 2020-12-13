@@ -64,13 +64,13 @@ class PropertyViewTheme {
   /// Creates a copy of this theme but with the given fields replaced with
   /// the new values.
   PropertyViewTheme copyWith({
-    ColorScheme colorScheme,
-    IconThemeData iconTheme,
+    ColorScheme? colorScheme,
+    IconThemeData? iconTheme,
     // ExpanderThemeData expanderTheme,
-    TextStyle labelStyle,
-    TextStyle parentLabelStyle,
-    bool dense,
-    double levelPadding,
+    TextStyle? labelStyle,
+    TextStyle? parentLabelStyle,
+    bool? dense,
+    double? levelPadding,
   }) {
     return PropertyViewTheme(
       colorScheme: colorScheme ?? this.colorScheme,

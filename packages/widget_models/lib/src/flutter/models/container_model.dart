@@ -12,8 +12,6 @@ class ContainerModel extends ModelWidget {
     this.group = group;
     this.widgetType = FlutterWidgetType.Container;
     this.parentType = ParentType.SingleChild;
-    this.hasProperties = true;
-    this.hasChildren = true;
     this.paramNameAndTypes = {
       "width": [PropertyType.double],
       "height": [PropertyType.double],

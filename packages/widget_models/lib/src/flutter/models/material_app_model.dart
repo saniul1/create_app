@@ -12,8 +12,6 @@ class MaterialAppModel extends ModelWidget {
     this.group = group;
     this.widgetType = FlutterWidgetType.MaterialApp;
     this.parentType = ParentType.SingleChild;
-    this.hasProperties = true;
-    this.hasChildren = true;
     this.paramNameAndTypes = {
       "debugShowCheckedModeBanner": [PropertyType.boolean],
     };

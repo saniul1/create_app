@@ -12,8 +12,6 @@ class IconModel extends ModelWidget {
     this.group = group;
     this.widgetType = FlutterWidgetType.Icon;
     this.parentType = ParentType.End;
-    this.hasProperties = true;
-    this.hasChildren = false;
     this.paramNameAndTypes = {
       "icon": [PropertyType.icon],
       "size": [PropertyType.double],

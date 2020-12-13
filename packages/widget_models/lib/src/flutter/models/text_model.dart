@@ -12,8 +12,6 @@ class TextModel extends ModelWidget {
     this.group = group;
     this.widgetType = FlutterWidgetType.Text;
     this.parentType = ParentType.End;
-    this.hasProperties = true;
-    this.hasChildren = false;
     this.paramNameAndTypes = {
       "text": [PropertyType.string],
       "fontSize": [PropertyType.double],

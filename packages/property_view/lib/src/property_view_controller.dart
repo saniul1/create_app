@@ -49,8 +49,8 @@ class PropertyViewController {
     }).toList();
   }
 
-  PropertyBox getPropertyBox(String key) {
-    PropertyBox _property;
+  PropertyBox? getPropertyBox(String key) {
+    PropertyBox? _property;
     Iterator iter = children.iterator;
     while (iter.moveNext()) {
       PropertyBox child = iter.current;
@@ -64,7 +64,8 @@ class PropertyViewController {
 
   /// Creates a copy of this controller but with the given fields
   /// replaced with the new values.
-  PropertyViewController copyWith({List<PropertyBox> children}) {
+  // ? why ?? refactor
+  PropertyViewController copyWith({List<PropertyBox>? children}) {
     return PropertyViewController(
       children: children ?? this.children,
     );

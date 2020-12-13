@@ -1,35 +1,19 @@
 import 'dart:math' show pi;
-
 import 'package:flutter/material.dart';
 import 'package:property_view/src/property_view.dart';
 import 'package:property_view/src/property_view_theme.dart';
 import 'package:widget_models/widget_models.dart';
 // import 'package:flutter_treeview/tree_view.dart';
+import 'package:better_print/better_print.dart';
 
-// import 'expander_theme_data.dart';
 import 'models/property_box.dart';
 import 'widgets/property_bool.dart';
 import 'widgets/text_field_property.dart';
 
-// const int _kExpander180Speed = 200;
-// const int _kExpander90Speed = 125;
-// const double _kBorderWidth = 0.75;
-
-/// Defines the [PropertyBoxItem] widget.
-///
-/// This widget is used to display a tree node and its children. It requires
-/// a single [PropertyBox] value. It uses this node to display the state of the
-/// widget. It uses the [PropertyViewTheme] to handle the appearance and the
-/// [PropertyView] properties to handle to user actions.
-///
-/// __This class should not be used directly!__
-/// The [PropertyView] and [PropertyViewController] handlers the data and rendering
-/// of the nodes.
 class PropertyBoxItem extends StatefulWidget {
-  /// The node object used to display the widget state
   final PropertyBox box;
 
-  const PropertyBoxItem({Key key, @required this.box}) : super(key: key);
+  const PropertyBoxItem({Key? key, required this.box}) : super(key: key);
 
   @override
   _PropertyBoxItemState createState() => _PropertyBoxItemState();
@@ -42,7 +26,7 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
   static Duration _kExpand = Duration(milliseconds: 200);
   // static double _kIconSize = 28;
 
-  AnimationController _controller;
+  AnimationController? _controller;
   // Animation<double> _heightFactor;
   bool _isExpanded = false;
   // bool _isOnHover = false;
@@ -52,12 +36,12 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
     super.initState();
     _controller = AnimationController(duration: _kExpand, vsync: this);
     // _heightFactor = _controller.drive(_easeInTween);
-    if (_isExpanded) _controller.value = 1.0;
+    if (_isExpanded) _controller?.value = 1.0;
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -88,11 +72,10 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
   // }
 
   void _handleValueChange(dynamic value) {
-    PropertyView _propertyView = PropertyView.of(context);
+    PropertyView? _propertyView = PropertyView.of(context);
     assert(_propertyView != null, 'PropertyView must exist in context');
-    if (_propertyView.onPropertyActionComplete != null) {
-      _propertyView.onPropertyActionComplete(widget.box.key, value);
-    }
+    final call = _propertyView?.onPropertyActionComplete;
+    if (call != null) call(widget.box.key, value);
   }
 
   // void _handleActionSteps(dynamic value) {
@@ -105,30 +88,36 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
 
   @override
   Widget build(BuildContext context) {
-    PropertyView _propertyView = PropertyView.of(context);
+    PropertyView? _propertyView = PropertyView.of(context);
     assert(_propertyView != null, 'PropertyView must exist in context');
+    // Console.print(widget.box.acceptedTypes).show();
+    Widget? box;
+    switch (widget.box.type) {
+      case PropertyType.string:
+        box = TextFieldProperty(
+          label: widget.box.label,
+          value: widget.box.value,
+          onChanged: _handleValueChange,
+        );
+        break;
+      case PropertyType.boolean:
+        box = PropertyBoolWidget(
+          valueKey: widget.box.key,
+          label: widget.box.label,
+          value: widget.box.value,
+          onChanged: _handleValueChange,
+        );
+        break;
+      default:
+        box = null;
+    }
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            if (widget.box.type.any((type) => type == PropertyType.string))
-              TextFieldProperty(
-                label: widget.box.label,
-                value: widget.box.value,
-                onChanged: _handleValueChange,
-              )
-            else if (widget.box.type
-                .any((type) => type == PropertyType.boolean))
-              PropertyBoolWidget(
-                valueKey: widget.box.key,
-                label: widget.box.label,
-                value: widget.box.value,
-                onChanged: _handleValueChange,
-              ),
-          ],
+          children: [box ?? SizedBox()],
         ),
       ),
     );

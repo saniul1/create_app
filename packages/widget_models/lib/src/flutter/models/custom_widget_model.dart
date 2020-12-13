@@ -12,8 +12,6 @@ class CustomModel extends ModelWidget {
     this.group = group;
     this.widgetType = FlutterWidgetType.CustomWidget;
     this.parentType = ParentType.SingleChild;
-    this.hasProperties = true;
-    this.hasChildren = true;
     this.paramNameAndTypes = {};
     this.params = {};
   }

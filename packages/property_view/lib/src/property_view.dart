@@ -33,14 +33,14 @@ class PropertyView extends InheritedWidget {
   final Function(String, dynamic) onPropertyActionComplete;
 
   /// This action gets called on every step when changing a value.
-  final Function(String, dynamic) onEachActionStep;
+  final Function(String, dynamic)? onEachActionStep;
 
   /// The expand/collapse handler for a node. Passes the node key and the
   /// expansion state.
-  final Function(String, bool) onExpansionChanged;
+  final Function(String, bool)? onExpansionChanged;
 
   /// The theme for [PropertyView].
-  final PropertyViewTheme theme;
+  final PropertyViewTheme? theme;
 
   /// Determines whether the user can select a parent node. If false,
   /// tapping the parent will expand or collapse the node. If true, the node
@@ -49,7 +49,7 @@ class PropertyView extends InheritedWidget {
   final bool allowParentSelect;
 
   /// How the [PropertyView] should respond to user input.
-  final ScrollPhysics physics;
+  final ScrollPhysics? physics;
 
   /// Whether the extent of the [PropertyView] should be determined by the contents
   /// being viewed.
@@ -73,12 +73,12 @@ class PropertyView extends InheritedWidget {
   /// a single or double tap._
   final bool supportParentDoubleTap;
 
-  final String idleMessage;
+  final String? idleMessage;
 
   PropertyView({
-    Key key,
-    @required this.controller,
-    this.onPropertyActionComplete,
+    Key? key,
+    required this.controller,
+    required this.onPropertyActionComplete,
     this.onEachActionStep,
     this.physics,
     this.onExpansionChanged,
@@ -86,7 +86,7 @@ class PropertyView extends InheritedWidget {
     this.supportParentDoubleTap: false,
     this.shrinkWrap: false,
     this.primary: true,
-    PropertyViewTheme theme,
+    PropertyViewTheme? theme,
     this.idleMessage,
   })  : this.theme = theme ?? const PropertyViewTheme(),
         super(
@@ -100,7 +100,7 @@ class PropertyView extends InheritedWidget {
           ),
         );
 
-  static PropertyView of(BuildContext context) =>
+  static PropertyView? of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType(aspect: PropertyView);
 
   @override
@@ -119,11 +119,14 @@ class _PropertyViewData extends StatelessWidget {
   final PropertyViewController _controller;
   final bool shrinkWrap;
   final bool primary;
-  final ScrollPhysics physics;
-  final String idleMsg;
+  final ScrollPhysics? physics;
+  final String? idleMsg;
 
   const _PropertyViewData(this._controller,
-      {this.shrinkWrap, this.primary, this.physics, this.idleMsg});
+      {this.shrinkWrap = false,
+      this.primary = true,
+      this.physics,
+      this.idleMsg});
 
   @override
   Widget build(BuildContext context) {
@@ -142,12 +145,12 @@ class _PropertyViewData extends StatelessWidget {
             )
           : Text(
               idleMsg ?? '',
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
+              style: Theme.of(context).textTheme.bodyText1?.copyWith(
                   color: Theme.of(context)
                       .textTheme
                       .bodyText1
-                      .color
-                      .withOpacity(0.6)),
+                      ?.color
+                      ?.withOpacity(0.6)),
             ),
     );
   }

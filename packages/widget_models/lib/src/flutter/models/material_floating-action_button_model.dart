@@ -13,8 +13,6 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
     this.group = group;
     this.widgetType = FlutterWidgetType.MaterialFloatingActionButton;
     this.parentType = ParentType.SingleChild;
-    this.hasProperties = true;
-    this.hasChildren = true;
     this.paramNameAndTypes = {
       'onPressed': [PropertyType.function],
     };
@@ -32,8 +30,8 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
           onPressed: isSelectMode
               ? null
               : params["onPressed"] != null
-                  ? () => resolveParams(
-                      key, paramTypes["onPressed"], params["onPressed"])
+                  ? () => resolveParams(key, paramTypes["onPressed"]!,
+                      params["onPressed"]) // ? todo better func
                   : null,
           child: children.length > 0
               ? children

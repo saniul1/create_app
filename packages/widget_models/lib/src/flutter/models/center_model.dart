@@ -12,8 +12,6 @@ class CenterModel extends ModelWidget {
     this.group = group;
     this.widgetType = FlutterWidgetType.Center;
     this.parentType = ParentType.SingleChild;
-    this.hasProperties = true;
-    this.hasChildren = true;
     this.paramNameAndTypes = {
       "widthFactor": [PropertyType.double],
       "heightFactor": [PropertyType.double],
