@@ -35,7 +35,7 @@ class AppBuilderNotifier extends ChangeNotifier {
     if (args.runtimeType.toString() == 'List<dynamic>') {
       for (var arg in args) {
         final map = Map<String, dynamic>.from(arg);
-        final parent = getParentCustomWidget(map.keys.first);
+        final parent = _controller.getModel(map.keys.first);
         if (parent != null)
           parent.modifiers[map.values.first.keys.first]
                   [map.values.first.values.first['action']](
@@ -48,22 +48,13 @@ class AppBuilderNotifier extends ChangeNotifier {
   }
 
   void updateNodeData(String key) {
-    final node = _controller.getNode(key);
+    final node = _controller.getModel(key);
     if (node != null)
       _controller = WidgetModelController(
-        children: _controller.updateNode(key, node),
+        children: _controller.updateModel(key, node),
         inheritDataMap: _controller.inheritDataMap,
       );
-    // print(_controller.children.first.params);
+    // print(_controller.children.first.key);
     notifyListeners();
-  }
-
-  ModelWidget? getParentCustomWidget(String key) {
-    final parent = _controller.getParent(key);
-    // print(parent.widgetType);
-    if (parent != null && parent.widgetType != FlutterWidgetType.CustomWidget)
-      return getParentCustomWidget(parent.key);
-    else
-      return parent;
   }
 }

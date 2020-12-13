@@ -41,14 +41,6 @@ class CenterModel extends ModelWidget {
   }
 
   @override
-  Map getParamValuesMap() {
-    return {
-      "widthFactor": params["widthFactor"],
-      "heightFactor": params["heightFactor"],
-    };
-  }
-
-  @override
   String toCode() {
     return "Center(\n"
         "${paramToCode(paramName: "widthFactor", currentValue: double.tryParse(params["widthFactor"].toString()), type: PropertyType.double)}"

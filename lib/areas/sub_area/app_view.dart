@@ -23,7 +23,7 @@ class AppView extends HookWidget {
     final node = context.read(appViewList).getNodeId(key.value);
     // print(build.controller.children.first.params);
     // print(build.controller.getNode(node)?.toCode());
-    return build.controller.getNode(node)?.toWidget(
+    return build.controller.getModel(node)?.toWidget(
             (child, key) => WidgetWrapper(id: key, child: child),
             currentTool.state == ToolType.select,
             build.resolveWidgetModelPropertyData) ??

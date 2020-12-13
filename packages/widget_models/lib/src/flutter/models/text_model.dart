@@ -55,16 +55,6 @@ class TextModel extends ModelWidget {
   }
 
   @override
-  Map getParamValuesMap() {
-    return {
-      "text": params["text"],
-      "fontSize": params["fontSize"],
-      "color": params["color"],
-      "fontStyle": params["fontStyle"]
-    };
-  }
-
-  @override
   String toCode() {
     return "Text(\n"
         "${paramToCode(isNamed: false, type: PropertyType.string, currentValue: params["text"], defaultValue: "")}"

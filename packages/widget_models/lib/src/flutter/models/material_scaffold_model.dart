@@ -50,11 +50,6 @@ class MaterialScaffoldModel extends ModelWidget {
   }
 
   @override
-  Map getParamValuesMap() {
-    return {};
-  }
-
-  @override
   String toCode() {
     return "Scaffold(\n"
         "\n    appBar: ${children.length > 0 ? children.map((e) => e.group == 'appBar' ? e.toCode() : null).toList().first : 'null'},"

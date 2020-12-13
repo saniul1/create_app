@@ -32,14 +32,6 @@ class IconModel extends ModelWidget {
   }
 
   @override
-  Map getParamValuesMap() {
-    return {
-      "icon": params["icon"],
-      "size": params["size"],
-    };
-  }
-
-  @override
   String toCode() {
     return "Icon(\n"
         "${paramToCode(paramName: "icon", isNamed: false, currentValue: params["icon"].toString(), defaultValue: "Icons.help_outline", type: PropertyType.icon)}"

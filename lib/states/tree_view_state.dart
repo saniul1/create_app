@@ -45,7 +45,7 @@ class TreeViewNotifier extends ChangeNotifier {
         AppViewModel(
           id: 'app-2',
           offset: Offset(0, 0),
-          node: 'my_app',
+          node: 'my_test', // ! here
         ),
       ],
     );

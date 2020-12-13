@@ -33,11 +33,6 @@ class CustomModel extends ModelWidget {
   }
 
   @override
-  Map getParamValuesMap() {
-    return {};
-  }
-
-  @override
   String toCode() {
     return "Container(\n"
         "${paramToCode(paramName: "width", currentValue: double.tryParse(params["width"]), type: PropertyType.double)}"

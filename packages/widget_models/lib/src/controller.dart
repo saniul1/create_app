@@ -1,6 +1,6 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:better_print/better_print.dart';
 import 'package:widget_models/src/property_helpers/property_modifiers.dart';
 import 'flutter/model.dart';
 import 'flutter/types.dart';
@@ -9,7 +9,7 @@ import 'property.dart';
 import 'property_helpers/colors_helper.dart';
 import 'property_helpers/icons_helper.dart';
 
-/// Defines the insertion mode adding a new [Node] to the [TreeView].
+/// Defines the insertion mode adding a new [Model] to the [TreeView].
 enum InsertMode {
   prepend,
   append,
@@ -42,12 +42,6 @@ class WidgetModelController {
 
   /// Loads this controller with data from a JSON String
   /// This method expects the user to properly update the state
-  ///
-  /// ```dart
-  /// setState((){
-  ///   controller = controller.loadJSON(json: jsonString);
-  /// });
-  /// ```
   WidgetModelController loadJSON({String json: '[]'}) {
     List jsonList = jsonDecode(json);
     List<Map<String, dynamic>> list = List<Map<String, dynamic>>.from(jsonList);
@@ -56,27 +50,21 @@ class WidgetModelController {
 
   /// Loads this controller with data from a Map.
   /// This method expects the user to properly update the state
-  ///
-  /// ```dart
-  /// setState((){
-  ///   controller = controller.loadMap(map: dataMap);
-  /// });
-  /// ```
   WidgetModelController loadMap({List<Map<String, dynamic>> list: const []}) {
-    List<ModelWidget> treeData =
+    List<ModelWidget> widgetTreeData =
         list.map((Map<String, dynamic> item) => _fromMap(item)!).toList();
-    _resolveInheritData(treeData, _inheritDataMap);
+    _resolveInheritData(widgetTreeData, _inheritDataMap);
     return WidgetModelController(
-      children: treeData,
+      children: widgetTreeData,
       inheritDataMap: _inheritDataMap,
     );
   }
 
-  _resolveInheritData(
-      List<ModelWidget> treeData, Map<String, Map<String, String>> inheritMap) {
+  _resolveInheritData(List<ModelWidget> widgetTreeData,
+      Map<String, Map<String, String>> inheritMap) {
     inheritMap.forEach((key, inherit) {
-      final to = getNode(key, children: treeData);
-      final from = getNode(inherit.values.first, children: treeData);
+      final to = getModel(key, children: widgetTreeData);
+      final from = getModel(inherit.values.first, children: widgetTreeData);
       to?.inheritData[inherit.keys.first] = from?.params[inherit.keys.first];
     });
   }
@@ -144,8 +132,8 @@ class WidgetModelController {
     return widget;
   }
 
-  /// Gets the node that has a key value equal to the specified key.
-  ModelWidget? getNode(String key,
+  /// Gets the Model that has a key value equal to the specified key.
+  ModelWidget? getModel(String key,
       {ModelWidget? parent, List<ModelWidget>? children}) {
     ModelWidget? _found;
     List<ModelWidget> _children = children == null
@@ -161,7 +149,7 @@ class WidgetModelController {
         break;
       } else {
         if (child.isParent) {
-          _found = this.getNode(key, parent: child);
+          _found = this.getModel(key, parent: child);
           if (_found != null) {
             break;
           }
@@ -171,7 +159,7 @@ class WidgetModelController {
     return _found;
   }
 
-  /// Gets the parent of the node identified by specified key.
+  /// Gets the parent of the Model identified by specified key.
   ModelWidget? getParent(String key, {ModelWidget? parent}) {
     ModelWidget? _found;
     List<ModelWidget> _children =
@@ -192,30 +180,29 @@ class WidgetModelController {
     return _found;
   }
 
-  /// Updates an existing node identified by specified key. This method
-  /// returns a new list with the updated node.
-  /// ? todo
-  List<ModelWidget> updateNode(String key, ModelWidget newNode,
+  /// Updates an existing Model identified by specified key. This method
+  /// returns a new list with the updated Model.
+  List<ModelWidget> updateModel(String key, ModelWidget newModel,
       {ModelWidget? parent}) {
     List<ModelWidget> _children = parent?.children ?? this.children;
-    final treeData = _children.map((ModelWidget child) {
-      return newNode;
-      // if (child.key == key) {
-      //   return newNode;
-      // } else {
-      //   if (child.isParent) {
-      //     return child.copyWith(
-      //       children: updateNode(
-      //         key,
-      //         newNode,
-      //         parent: child,
-      //       ),
-      //     );
-      //   }
-      //   return child;
-      // }
+    final widgetTreeData = _children.map((ModelWidget child) {
+      if (child.key == key) {
+        return newModel;
+      } else {
+        // Console.print(key).show();
+        if (child.isParent) {
+          return child.copyWith(
+            children: updateModel(
+              key,
+              newModel,
+              parent: child,
+            ),
+          );
+        }
+        return child;
+      }
     }).toList();
-    _resolveInheritData(treeData, inheritDataMap);
-    return treeData;
+    _resolveInheritData(widgetTreeData, inheritDataMap);
+    return widgetTreeData;
   }
 }

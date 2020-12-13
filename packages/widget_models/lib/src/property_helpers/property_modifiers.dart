@@ -42,7 +42,6 @@ bool _numConditionCheck(ModelWidget widget, String? statement, num value) {
         ? widget.params[condition.substring(condition.indexOf('\$') + 1).trim()]
         : double.tryParse(
             condition.substring(condition.indexOf(' ') + 1).trim());
-    // print(v);
     if (condition.contains('>')) {
       result = value > v;
     }

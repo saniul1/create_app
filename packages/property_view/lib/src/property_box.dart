@@ -108,6 +108,7 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
           onChanged: _handleValueChange,
         );
         break;
+      // comment below two lines to check all types are implemented are not
       default:
         box = null;
     }

@@ -39,13 +39,6 @@ class MaterialAppModel extends ModelWidget {
   }
 
   @override
-  Map getParamValuesMap() {
-    return {
-      "debugShowCheckedModeBanner": params["debugShowCheckedModeBanner"],
-    };
-  }
-
-  @override
   String toCode() {
     return "MaterialApp(\n"
         "${paramToCode(paramName: "debugShowCheckedModeBanner", currentValue: params["debugShowCheckedModeBanner"], type: PropertyType.boolean)}"

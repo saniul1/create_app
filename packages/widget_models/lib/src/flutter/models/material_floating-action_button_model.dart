@@ -46,11 +46,6 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
   }
 
   @override
-  Map getParamValuesMap() {
-    return {};
-  }
-
-  @override
   String toCode() {
     return "FloatingActionButton(\n"
         "\n    child: ${children.length > 0 ? children.map((e) => e.group == 'child' ? e.toCode() : null).toList().first : 'null'},"

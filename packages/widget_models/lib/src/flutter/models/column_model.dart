@@ -41,14 +41,6 @@ class ColumnModel extends ModelWidget {
   }
 
   @override
-  Map getParamValuesMap() {
-    return {
-      "mainAxisAlignment": params["mainAxisAlignment"],
-      "crossAxisAlignment": params["crossAxisAlignment"],
-    };
-  }
-
-  @override
   String toCode() {
     return "Column(\n"
         "${paramToCode(paramName: "mainAxisAlignment", type: PropertyType.mainAxisAlignment, currentValue: params["mainAxisAlignment"])}"

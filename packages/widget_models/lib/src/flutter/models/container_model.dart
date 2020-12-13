@@ -47,16 +47,6 @@ class ContainerModel extends ModelWidget {
   }
 
   @override
-  Map getParamValuesMap() {
-    return {
-      "width": params["width"],
-      "height": params["height"],
-      "color": params["color"],
-      "alignment": params["alignment"],
-    };
-  }
-
-  @override
   String toCode() {
     return "Container(\n"
         "${paramToCode(paramName: "width", currentValue: double.tryParse(params["width"]), type: PropertyType.double)}"

@@ -14,9 +14,6 @@ abstract class ModelWidget {
 
   bool get isParent => children.isNotEmpty;
 
-  /// The parent of the current widget
-  late ModelWidget parent;
-
   /// which property of parent it belongs to
   late String group;
 
@@ -59,14 +56,10 @@ abstract class ModelWidget {
     return false;
   }
 
-  ModelWidget? copyWith({required List<ModelWidget> children}) {
+  ModelWidget copyWith({required List<ModelWidget> children}) {
     this.children = children;
-    // print(this.children);
-    return null;
+    return this;
   }
-
-  /// Get current values of all parameters of the widget model
-  Map getParamValuesMap();
 
   /// Converts current widget to code and returns as string
   String toCode();
