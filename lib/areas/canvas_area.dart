@@ -1,4 +1,5 @@
 import 'package:create_app/_helper/functions.dart';
+import 'package:create_app/areas/sub_area/keyboard_shortcuts.dart';
 import 'package:create_app/components/blend_mask.dart';
 import 'package:create_app/components/mouse_pointer.dart';
 import 'package:create_app/models/app_view_model.dart';
@@ -49,7 +50,7 @@ class CanvasArea extends HookWidget {
               ? ToolType.select
               : ToolType.none,
       helpLabel: "Go to Second Page",
-      child: KeyBoardShortcuts(
+      child: KeyShortCuts(
         child: Listener(
           onPointerMove: currentTool.state == ToolType.select
               ? (event) {

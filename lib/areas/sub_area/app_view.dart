@@ -1,5 +1,6 @@
 import 'package:create_app/states/app_builder_state.dart';
 import 'package:create_app/states/app_view_state.dart';
+import 'package:create_app/states/key_states.dart';
 import 'package:create_app/states/tools_state.dart';
 import 'package:create_app/states/tree_view_state.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:better_print/better_print.dart';
 
 class AppView extends HookWidget {
   AppView({required this.key}) : super(key: key);
@@ -65,13 +67,37 @@ class WidgetWrapper extends HookWidget {
     final currentTool = useProvider(selectedTool);
     final tree = useProvider(treeViewController);
     final isHover = useState(false);
+    final _isControlPressed = useProvider(isControlPressed);
+    final _isShiftPressed = useProvider(isShiftPressed);
+    final _isAltPressed = useProvider(isAltPressed);
     return InkWell(
       mouseCursor: currentTool.state == ToolType.select
           ? SystemMouseCursors.none
           : SystemMouseCursors.basic,
       onTap: currentTool.state == ToolType.select
           ? () {
-              tree.selectNode(id);
+              final parentKey = tree.controller.getParent(tree.selectedKey).key;
+              final children = tree.controller.getNode(parentKey).children;
+              final i = children
+                  .indexWhere((element) => element.key == tree.selectedKey);
+              if (_isAltPressed.state &&
+                  _isShiftPressed.state &&
+                  children.isNotEmpty) {
+                if (i < children.length - 1)
+                  tree.selectNode(children[i + 1].key);
+              } else if (_isAltPressed.state &&
+                  _isControlPressed.state &&
+                  children.isNotEmpty) {
+                if (i > 0) tree.selectNode(children[i - 1].key);
+              } else if (_isControlPressed.state) {
+                tree.selectNode(parentKey);
+              } else if (_isShiftPressed.state) {
+                final directChildren = tree.controller.selectedNode.children;
+                if (directChildren.isNotEmpty)
+                  tree.selectNode(directChildren.first.key);
+              } else {
+                tree.selectNode(id);
+              }
             }
           : null,
       onHover: currentTool.state == ToolType.select
