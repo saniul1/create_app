@@ -32,6 +32,9 @@ class TreeView extends InheritedWidget {
   /// The tap handler for a node. Passes the node key.
   final Function(String) onNodeTap;
 
+  /// The hover handler for a node. Passes the node key.
+  final Function(String) onHover;
+
   /// The double tap handler for a node. Passes the node key.
   final Function(String) onNodeDoubleTap;
 
@@ -81,6 +84,7 @@ class TreeView extends InheritedWidget {
     Key key,
     @required this.controller,
     this.onNodeTap,
+    this.onHover,
     this.onNodeDoubleTap,
     this.physics,
     this.onExpansionChanged,

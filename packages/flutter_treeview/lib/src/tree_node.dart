@@ -196,6 +196,11 @@ class _TreeNodeState extends State<TreeNode>
     }
     return MouseRegion(
       onEnter: (_) {
+        TreeView _treeView = TreeView.of(context);
+        assert(_treeView != null, 'TreeView must exist in context');
+        if (_treeView.onHover != null) {
+          _treeView.onHover(widget.node.key);
+        }
         setState(() {
           _isOnHover = true;
         });
