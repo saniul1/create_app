@@ -5,6 +5,8 @@ enum ParentType {
   End,
 }
 
+enum ChildType { widget, preferredSizeWidget }
+
 enum FlutterWidgetType {
   Icon,
   Text,

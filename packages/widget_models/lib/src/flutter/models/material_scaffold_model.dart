@@ -9,52 +9,66 @@ import '../types.dart';
 class MaterialScaffoldModel extends ModelWidget {
   MaterialScaffoldModel(String key, String group) {
     this.key = key;
-    this.group = group;
-    this.widgetType = FlutterWidgetType.MaterialScaffold;
+    this.parentGroup = group;
+    this.type = FlutterWidgetType.MaterialScaffold;
     this.parentType = ParentType.MultipleChildren;
+    this.widgetType = Scaffold();
+    this.childGroups = [
+      ChildGroup(
+        childCount: 1,
+        type: ChildType.preferredSizeWidget,
+        name: 'appBar',
+      ),
+      ChildGroup(
+        childCount: 1,
+        type: ChildType.widget,
+        name: 'body',
+      ),
+      ChildGroup(
+        childCount: 1,
+        type: ChildType.widget,
+        name: 'floatingActionButton',
+      )
+    ];
     this.paramNameAndTypes = {};
     this.params = {};
   }
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
-    final appBar = children
-        .map((e) => e.group == 'appBar'
-            ? e.toWidget(wrap, isSelectMode, resolveParams)
-            : null)
-        .toList();
-    final body = children
-        .map((e) => e.group == 'body'
-            ? e.toWidget(wrap, isSelectMode, resolveParams)
-            : null)
-        .toList();
-    final float = children
-        .map((e) => e.group == 'floatingActionButton'
-            ? e.toWidget(wrap, isSelectMode, resolveParams)
-            : null)
-        .toList();
-    appBar.removeWhere((element) => element == null);
-    body.removeWhere((element) => element == null);
-    float.removeWhere((element) => element == null);
-    PreferredSizeWidget? _appbar =
-        appBar.length > 0 && appBar.first.runtimeType == PreferredSizeWidget
-            ? appBar.first as PreferredSizeWidget
-            : null;
+    final groups = resolveChildren(wrap, isSelectMode, resolveParams);
+    final appBar = groups
+        .where((group) => group.name == 'appBar')
+        .toList()
+        .firstOrNull
+        ?.child;
+    final body = groups
+        .where((group) => group.name == 'body')
+        .toList()
+        .firstOrNull
+        ?.child;
+    final float = groups
+        .where((group) => group.name == 'floatingActionButton')
+        .toList()
+        .firstOrNull
+        ?.child;
     return wrap(
         Scaffold(
-          appBar: _appbar,
-          body: body.length > 0 ? body.first : null,
-          floatingActionButton: float.length > 0 ? float.first : null,
+          appBar: appBar,
+          body: body,
+          floatingActionButton: float,
         ),
         key);
   }
 
   @override
   String toCode() {
-    return "Scaffold(\n"
-        "\n    appBar: ${children.length > 0 ? children.map((e) => e.group == 'appBar' ? e.toCode() : null).toList().first : 'null'},"
-        "\n    body: ${children.length > 0 ? children.map((e) => e.group == 'body' ? e.toCode() : null).toList().first : 'null'},"
-        "\n    floatingActionButton: ${children.length > 0 ? children.map((e) => e.group == 'floatingActionButton' ? e.toCode() : null).toList().first : 'null'},"
-        "\n  )";
+    return '''
+Scaffold(
+  appBar: ${children.length > 0 ? children.map((e) => e.parentGroup == 'appBar' ? e.toCode() : null).toList().first : 'null'},
+  body: ${children.length > 0 ? children.map((e) => e.parentGroup == 'body' ? e.toCode() : null).toList().first : 'null'},
+  floatingActionButton: ${children.length > 0 ? children.map((e) => e.parentGroup == 'floatingActionButton' ? e.toCode() : null).toList().first : 'null'},
+)
+''';
   }
 }

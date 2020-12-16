@@ -10,9 +10,19 @@ import '../types.dart';
 class MaterialFloatingActionButtonModel extends ModelWidget {
   MaterialFloatingActionButtonModel(String key, String group) {
     this.key = key;
-    this.group = group;
-    this.widgetType = FlutterWidgetType.MaterialFloatingActionButton;
+    this.parentGroup = group;
+    this.type = FlutterWidgetType.MaterialFloatingActionButton;
     this.parentType = ParentType.SingleChild;
+    this.widgetType = FloatingActionButton(
+      onPressed: null,
+    );
+    this.childGroups = [
+      ChildGroup(
+        childCount: 1,
+        type: ChildType.widget,
+        name: 'child',
+      )
+    ];
     this.paramNameAndTypes = {
       'onPressed': [PropertyType.function],
     };
@@ -23,6 +33,12 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
+    final groups = resolveChildren(wrap, isSelectMode, resolveParams);
+    final child = groups
+        .where((group) => group.name == 'child')
+        .toList()
+        .firstOrNull
+        ?.child;
     return wrap(
         FloatingActionButton(
           mouseCursor:
@@ -33,14 +49,7 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
                   ? () => resolveParams(key, paramTypes["onPressed"]!,
                       params["onPressed"]) // ? todo better func
                   : null,
-          child: children.length > 0
-              ? children
-                  .map((e) => e.group == 'child'
-                      ? e.toWidget(wrap, isSelectMode, resolveParams)
-                      : null)
-                  .toList()
-                  .first
-              : null,
+          child: child,
         ),
         key);
   }
@@ -48,7 +57,7 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
   @override
   String toCode() {
     return "FloatingActionButton(\n"
-        "\n    child: ${children.length > 0 ? children.map((e) => e.group == 'child' ? e.toCode() : null).toList().first : 'null'},"
+        "\n    child: ${children.length > 0 ? children.map((e) => e.parentGroup == 'child' ? e.toCode() : null).toList().first : 'null'},"
         "\n  )";
   }
 }

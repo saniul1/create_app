@@ -9,9 +9,11 @@ import '../types.dart';
 class IconModel extends ModelWidget {
   IconModel(String key, String group) {
     this.key = key;
-    this.group = group;
-    this.widgetType = FlutterWidgetType.Icon;
+    this.parentGroup = group;
+    this.type = FlutterWidgetType.Icon;
     this.parentType = ParentType.End;
+    this.widgetType = Icon(null);
+    this.childGroups = [];
     this.paramNameAndTypes = {
       "icon": [PropertyType.icon],
       "size": [PropertyType.double],

@@ -1,21 +1,72 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_hooks/flutter_hooks.dart' show HookWidget;
 import '../property.dart';
 import './types.dart';
+
+extension MyList<T> on List<T> {
+  T? get firstOrNull => this.isEmpty ? null : this.first;
+}
+
+class StateLessCustom extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class HookCustom extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class StateFullCustom extends StatefulWidget {
+  @override
+  _StateFullCustomState createState() => _StateFullCustomState();
+}
+
+class _StateFullCustomState extends State<StateFullCustom> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class ChildGroup {
+  final String name;
+  final ChildType type;
+
+  /// uses -1 as infinity
+  final int childCount;
+
+  final dynamic? child;
+  ChildGroup({
+    required this.name,
+    required this.type,
+    required this.childCount,
+    this.child,
+  });
+}
 
 /// Model Widget class
 abstract class ModelWidget {
   late String key;
 
   /// Type of widget ([Text], [Center], [Column], etc)
-  late FlutterWidgetType widgetType;
+  late FlutterWidgetType type;
+
+  late Object widgetType;
 
   /// Children of the widget
   late List<ModelWidget> children = [];
 
+  late List<ChildGroup> childGroups = [];
+
   bool get isParent => children.isNotEmpty;
 
   /// which property of parent it belongs to
-  late String group;
+  late String parentGroup;
 
   /// How the widget fits into the tree
   /// [ParentType.End] is used for widgets that cannot have children
@@ -54,6 +105,51 @@ abstract class ModelWidget {
     }
 
     return false;
+  }
+
+  List<ChildGroup> resolveChildren(
+      Widget Function(Widget, String key) wrap,
+      bool isSelectMode,
+      void Function(String key, PropertyType type, dynamic args)
+          resolveParams) {
+    List<ChildGroup> _newGroup = [];
+    childGroups.forEach((group) {
+      final childs =
+          children.where((child) => child.parentGroup == group.name).toList();
+      if (childs.length == group.childCount || group.childCount < 0) {
+        final isTypeOk = childs.every((child) {
+          if (group.type == ChildType.widget)
+            return child.widgetType is Widget;
+          else if (group.type == ChildType.preferredSizeWidget)
+            return child.widgetType is PreferredSizeWidget;
+          else
+            return false;
+        });
+        if (isTypeOk) {
+          if (group.childCount == 1 && childs.length == 1) {
+            _newGroup.add(ChildGroup(
+              type: group.type,
+              name: group.name,
+              childCount: 1,
+              child: childs.first.toWidget(wrap, isSelectMode, resolveParams),
+            ));
+          }
+          if (group.childCount < 0) {
+            _newGroup.add(
+              ChildGroup(
+                type: group.type,
+                name: group.name,
+                childCount: -1,
+                child: childs
+                    .map((e) => e.toWidget(wrap, isSelectMode, resolveParams))
+                    .toList(),
+              ),
+            );
+          }
+        }
+      }
+    });
+    return _newGroup;
   }
 
   ModelWidget copyWith({required List<ModelWidget> children}) {

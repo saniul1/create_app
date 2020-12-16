@@ -9,9 +9,17 @@ import '../types.dart';
 class ContainerModel extends ModelWidget {
   ContainerModel(String key, String group) {
     this.key = key;
-    this.group = group;
-    this.widgetType = FlutterWidgetType.Container;
+    this.parentGroup = group;
+    this.type = FlutterWidgetType.Container;
     this.parentType = ParentType.SingleChild;
+    this.widgetType = Container();
+    this.childGroups = [
+      ChildGroup(
+        childCount: 1,
+        type: ChildType.widget,
+        name: 'child',
+      )
+    ];
     this.paramNameAndTypes = {
       "width": [PropertyType.double],
       "height": [PropertyType.double],
@@ -26,16 +34,15 @@ class ContainerModel extends ModelWidget {
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
+    final groups = resolveChildren(wrap, isSelectMode, resolveParams);
+    final child = groups
+        .where((group) => group.name == 'child')
+        .toList()
+        .firstOrNull
+        ?.child;
     return wrap(
         Container(
-          child: children.length > 0
-              ? children
-                  .map((e) => e.group == 'child'
-                      ? e.toWidget(wrap, isSelectMode, resolveParams)
-                      : null)
-                  .toList()
-                  .first
-              : Container(),
+          child: child,
           width: double.tryParse(params["width"]),
           height: double.tryParse(params["height"]),
           alignment: params["alignment"],
@@ -55,7 +62,7 @@ class ContainerModel extends ModelWidget {
         "    decoration: BoxDecoration(\n"
         "${paramToCode(paramName: "color", type: PropertyType.color, currentValue: params["color"])}"
         "    ),"
-        "\n    child: ${children.length > 0 ? children.map((e) => e.group == 'child' ? e.toCode() : null).toList().first : 'null'},"
+        "\n    child: ${children.length > 0 ? children.map((e) => e.parentGroup == 'child' ? e.toCode() : null).toList().first : 'null'},"
         "\n  )";
   }
 }

@@ -9,9 +9,17 @@ import '../types.dart';
 class CenterModel extends ModelWidget {
   CenterModel(String key, String group) {
     this.key = key;
-    this.group = group;
-    this.widgetType = FlutterWidgetType.Center;
+    this.parentGroup = group;
+    this.type = FlutterWidgetType.Center;
     this.parentType = ParentType.SingleChild;
+    this.widgetType = Center();
+    this.childGroups = [
+      ChildGroup(
+        childCount: 1,
+        type: ChildType.widget,
+        name: 'child',
+      )
+    ];
     this.paramNameAndTypes = {
       "widthFactor": [PropertyType.double],
       "heightFactor": [PropertyType.double],
@@ -24,16 +32,15 @@ class CenterModel extends ModelWidget {
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
+    final groups = resolveChildren(wrap, isSelectMode, resolveParams);
+    final child = groups
+        .where((group) => group.name == 'child')
+        .toList()
+        .firstOrNull
+        ?.child;
     return wrap(
         Center(
-          child: children.length > 0
-              ? children
-                  .map((e) => e.group == 'child'
-                      ? e.toWidget(wrap, isSelectMode, resolveParams)
-                      : null)
-                  .toList()
-                  .first
-              : Container(),
+          child: child,
           widthFactor: double.tryParse(params["widthFactor"].toString()),
           heightFactor: double.tryParse(params["heightFactor"].toString()),
         ),
@@ -45,7 +52,7 @@ class CenterModel extends ModelWidget {
     return "Center(\n"
         "${paramToCode(paramName: "widthFactor", currentValue: double.tryParse(params["widthFactor"].toString()), type: PropertyType.double)}"
         "${paramToCode(paramName: "heightFactor", currentValue: double.tryParse(params["heightFactor"].toString()), type: PropertyType.double)}"
-        "    child: ${children.length > 0 ? children.map((e) => e.group == 'child' ? e.toCode() : null).toList().first : 'null'},"
+        "    child: ${children.length > 0 ? children.map((e) => e.parentGroup == 'child' ? e.toCode() : null).toList().first : 'null'},"
         "\n  )";
   }
 }

@@ -5,6 +5,7 @@
     "Pubspec",
     "Relayout",
     "appbar",
+    "childs",
     "filepicker",
     "prefs",
     "prepend",

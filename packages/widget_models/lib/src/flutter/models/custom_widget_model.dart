@@ -9,25 +9,32 @@ import '../types.dart';
 class CustomModel extends ModelWidget {
   CustomModel(String key, String group) {
     this.key = key;
-    this.group = group;
-    this.widgetType = FlutterWidgetType.CustomWidget;
+    this.parentGroup = group;
+    this.type = FlutterWidgetType.CustomWidget;
     this.parentType = ParentType.SingleChild;
+    this.widgetType = StateFullCustom();
+    this.childGroups = [
+      ChildGroup(
+        childCount: 1,
+        type: ChildType.widget,
+        name: 'child',
+      )
+    ];
     this.paramNameAndTypes = {};
     this.params = {};
   }
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
+    final groups = resolveChildren(wrap, isSelectMode, resolveParams);
+    final child = groups
+        .where((group) => group.name == 'child')
+        .toList()
+        .firstOrNull
+        ?.child;
     return wrap(
         Container(
-          child: children.length > 0
-              ? children
-                  .map((e) => e.group == 'child'
-                      ? e.toWidget(wrap, isSelectMode, resolveParams)
-                      : null)
-                  .toList()
-                  .first
-              : Container(),
+          child: child,
         ),
         key);
   }
@@ -41,7 +48,7 @@ class CustomModel extends ModelWidget {
         "    decoration: BoxDecoration(\n"
         "${paramToCode(paramName: "color", type: PropertyType.color, currentValue: params["color"])}"
         "    ),"
-        "\n    child: ${children.length > 0 ? children.map((e) => e.group == 'child' ? e.toCode() : null).toList().first : 'null'},"
+        "\n    child: ${children.length > 0 ? children.map((e) => e.parentGroup == 'child' ? e.toCode() : null).toList().first : 'null'},"
         "\n  )";
   }
 }

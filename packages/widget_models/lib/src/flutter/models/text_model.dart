@@ -9,9 +9,11 @@ import '../types.dart';
 class TextModel extends ModelWidget {
   TextModel(String key, String group) {
     this.key = key;
-    this.group = group;
-    this.widgetType = FlutterWidgetType.Text;
+    this.parentGroup = group;
+    this.type = FlutterWidgetType.Text;
     this.parentType = ParentType.End;
+    this.widgetType = Text('');
+    this.childGroups = [];
     this.paramNameAndTypes = {
       "text": [PropertyType.string],
       "fontSize": [PropertyType.double],

@@ -81,7 +81,7 @@ class WidgetModelController {
     }
     final ModelWidget? widget = getFlutterWidgetModelFromType(map['key'],
         _group, EnumToString.fromString(FlutterWidgetType.values, _type));
-    if (widget?.widgetType == FlutterWidgetType.CustomWidget) {
+    if (widget?.type == FlutterWidgetType.CustomWidget) {
       // print(map['data']);
       map['data'].forEach((key, values) {
         widget?.paramNameAndTypes[key] = [
@@ -117,7 +117,7 @@ class WidgetModelController {
               value = values['value'];
           }
           widget.params[element.key] = value;
-          if (widget.widgetType == FlutterWidgetType.CustomWidget) {
+          if (widget.type == FlutterWidgetType.CustomWidget) {
             if (!values['isFinal']) {
               attachModifiers(widget, key);
             }

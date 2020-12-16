@@ -9,9 +9,17 @@ import '../types.dart';
 class ColumnModel extends ModelWidget {
   ColumnModel(String key, String group) {
     this.key = key;
-    this.group = group;
-    this.widgetType = FlutterWidgetType.Column;
+    this.parentGroup = group;
+    this.type = FlutterWidgetType.Column;
     this.parentType = ParentType.MultipleChildren;
+    this.widgetType = Column();
+    this.childGroups = [
+      ChildGroup(
+        childCount: -1,
+        type: ChildType.widget,
+        name: 'children',
+      )
+    ];
     this.paramNameAndTypes = {
       "mainAxisAlignment": [PropertyType.mainAxisAlignment],
       "crossAxisAlignment": [PropertyType.crossAxisAlignment]
@@ -24,11 +32,12 @@ class ColumnModel extends ModelWidget {
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
-    final _children = children
-        .map((e) => e.group == 'children'
-            ? e.toWidget(wrap, isSelectMode, resolveParams)
-            : SizedBox())
-        .toList();
+    final groups = resolveChildren(wrap, isSelectMode, resolveParams);
+    final children = groups
+        .where((group) => group.name == 'children')
+        .toList()
+        .firstOrNull
+        ?.child;
     return Column(
       mainAxisAlignment: params["mainAxisAlignment"] == null
           ? MainAxisAlignment.start
@@ -36,7 +45,7 @@ class ColumnModel extends ModelWidget {
       crossAxisAlignment: params["crossAxisAlignment"] == null
           ? CrossAxisAlignment.start
           : params["crossAxisAlignment"],
-      children: _children,
+      children: children ?? [],
     );
   }
 
