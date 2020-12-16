@@ -42,7 +42,7 @@ class CanvasArea extends HookWidget {
     return KeyBoardShortcuts(
       keysToPress: {
         LogicalKeyboardKey.controlLeft,
-        LogicalKeyboardKey.shiftLeft,
+        // LogicalKeyboardKey.shiftLeft,
         LogicalKeyboardKey.keyV
       },
       onKeysPressed: () => currentTool.state =

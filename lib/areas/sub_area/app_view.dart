@@ -90,12 +90,12 @@ class WidgetWrapper extends HookWidget {
               } else if (_isAltPressed.state &&
                   _isShiftPressed.state &&
                   children.isNotEmpty) {
-                if (i < children.length - 1)
-                  tree.selectNode(children[i + 1].key);
+                if (i > 0) tree.selectNode(children[i - 1].key);
               } else if (_isAltPressed.state &&
                   _isControlPressed.state &&
                   children.isNotEmpty) {
-                if (i > 0) tree.selectNode(children[i - 1].key);
+                if (i < children.length - 1)
+                  tree.selectNode(children[i + 1].key);
               } else if (_isShiftPressed.state) {
                 tree.selectNode(parentKey);
               } else if (_isControlPressed.state) {
