@@ -80,7 +80,14 @@ class WidgetWrapper extends HookWidget {
               final children = tree.controller.getNode(parentKey).children;
               final i = children
                   .indexWhere((element) => element.key == tree.selectedKey);
-              if (_isAltPressed.state &&
+              if (_isControlPressed.state &&
+                  _isShiftPressed.state &&
+                  children.isNotEmpty) {
+                if (i >= 0) {
+                  final j = i < children.length - 1 ? i + 1 : 0;
+                  tree.selectNode(children[j].key);
+                }
+              } else if (_isAltPressed.state &&
                   _isShiftPressed.state &&
                   children.isNotEmpty) {
                 if (i < children.length - 1)
@@ -89,9 +96,9 @@ class WidgetWrapper extends HookWidget {
                   _isControlPressed.state &&
                   children.isNotEmpty) {
                 if (i > 0) tree.selectNode(children[i - 1].key);
-              } else if (_isControlPressed.state) {
-                tree.selectNode(parentKey);
               } else if (_isShiftPressed.state) {
+                tree.selectNode(parentKey);
+              } else if (_isControlPressed.state) {
                 final directChildren = tree.controller.selectedNode.children;
                 if (directChildren.isNotEmpty)
                   tree.selectNode(directChildren.first.key);

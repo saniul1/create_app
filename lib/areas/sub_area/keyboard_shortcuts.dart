@@ -27,9 +27,9 @@ class KeyShortCuts extends HookWidget {
         if (event.isMetaPressed != context.read(isMetaPressed).state) {
           context.read(isMetaPressed).state = event.isMetaPressed;
         }
-        // final _ctrl = context.read(isControlPressed).state;
-        // final _shift = context.read(isShiftPressed).state;
-        // final _alt = context.read(isAltPressed).state;
+        final _ctrl = context.read(isControlPressed).state;
+        final _shift = context.read(isShiftPressed).state;
+        final _alt = context.read(isAltPressed).state;
         // print('C:$_ctrl, S:$_shift, A:$_alt');
 
         // print(event.logicalKey.debugName);
