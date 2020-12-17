@@ -31,13 +31,22 @@ class TextModel extends ModelWidget {
     };
   }
 
+  // for inheriting key needs to start with '$'
+  // to pass more than one key use \(escape) ex: '$count\$count'
+  // to use normal character alongside data use \(escape) ex: '$count\!!'
+  //to sue both ex: '$count\!!\$count'
   String _resolveText(String text) {
     if (text.contains(r'$')) {
       final list = text.split(" ");
       text = "";
       list.forEach((txt) {
-        if (txt.startsWith(r'$')) {
-          text = '$text ${inheritData[txt.substring(1)]}';
+        if (txt.contains(r'$')) {
+          final tx = txt.split('\\');
+          var t = '';
+          tx.forEach((e) {
+            t = '$t${e.startsWith(r'$') ? inheritData[e.substring(1)] : e}';
+          });
+          text = '$text $t';
         } else {
           text = '$text $txt';
         }

@@ -108,6 +108,7 @@ class ModalWidget extends HookWidget {
   Widget build(BuildContext context) {
     final _modalKey = useProvider(currentModalKey);
     return Container(
+      color: _modalKey.id != null ? Colors.grey.withOpacity(0.05) : null,
       child: _modalKey.id != null
           ? GestureDetector(
               behavior: HitTestBehavior.translucent,

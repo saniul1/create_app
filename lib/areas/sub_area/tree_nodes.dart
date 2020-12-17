@@ -15,6 +15,7 @@ import 'package:widget_models/widget_models.dart';
 
 class TreeNodes extends HookWidget {
   final addKey = GlobalKey();
+  final replaceKey = GlobalKey();
   final deleteKey = GlobalKey();
   final moreKey = GlobalKey();
   @override
@@ -55,10 +56,18 @@ class TreeNodes extends HookWidget {
       },
       buildActionsWidgets: (key, size) {
         return [
-          // if (_isAddable.value)
-          ActionButton(addKey, Icons.add, size, () {
+          if (_isAddable.value)
+            ActionButton(addKey, Icons.add, size, () {
+              _shadowKey.value = key;
+              _currentModalKey.setKey(AddWidgetModal.id, addKey, () {
+                _shadowKey.value = null;
+                _currentModalKey.setKey(null, GlobalKey(), () {});
+              }, {'key': key, 'group': 'children'});
+              // _treeViewController.addNode(key, '', '');
+            }),
+          ActionButton(replaceKey, Icons.find_replace, size, () {
             _shadowKey.value = key;
-            _currentModalKey.setKey(AddWidgetModal.id, addKey, () {
+            _currentModalKey.setKey(AddWidgetModal.id, replaceKey, () {
               _shadowKey.value = null;
               _currentModalKey.setKey(null, GlobalKey(), () {});
             }, {'key': key, 'group': 'children'});
