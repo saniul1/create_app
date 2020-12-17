@@ -24,10 +24,11 @@ class CenterModel extends ModelWidget {
       "widthFactor": [PropertyType.double],
       "heightFactor": [PropertyType.double],
     };
-    this.params = {
-      "widthFactor": "100.0",
+    this.defaultParamsValues = {
       "heightFactor": "100.0",
+      "widthFactor": "100.0",
     };
+    this.params = {};
   }
 
   @override
@@ -41,8 +42,12 @@ class CenterModel extends ModelWidget {
     return wrap(
         Center(
           child: child,
-          widthFactor: double.tryParse(params["widthFactor"].toString()),
-          heightFactor: double.tryParse(params["heightFactor"].toString()),
+          widthFactor: params["widthFactor"] != null
+              ? double.tryParse(params["widthFactor"].toString())
+              : null,
+          heightFactor: params["heightFactor"] != null
+              ? double.tryParse(params["heightFactor"].toString())
+              : null,
         ),
         key);
   }

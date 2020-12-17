@@ -21,6 +21,7 @@ class CustomModel extends ModelWidget {
       )
     ];
     this.paramNameAndTypes = {};
+    this.defaultParamsValues = {};
     this.params = {};
   }
 

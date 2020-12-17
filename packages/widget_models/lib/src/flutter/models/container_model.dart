@@ -26,10 +26,11 @@ class ContainerModel extends ModelWidget {
       "color": [PropertyType.color, PropertyType.materialColor],
       "alignment": [PropertyType.alignment]
     };
-    this.params = {
-      "width": "null",
-      "height": "null",
+    this.defaultParamsValues = {
+      "height": null,
+      "width": null,
     };
+    this.params = {};
   }
 
   @override
@@ -43,8 +44,11 @@ class ContainerModel extends ModelWidget {
     return wrap(
         Container(
           child: child,
-          width: double.tryParse(params["width"]),
-          height: double.tryParse(params["height"]),
+          width:
+              params["width"] != null ? double.tryParse(params["width"]) : null,
+          height: params["height"] != null
+              ? double.tryParse(params["height"])
+              : null,
           alignment: params["alignment"],
           decoration: BoxDecoration(
             color: params["color"],

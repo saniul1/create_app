@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart' show HookWidget;
 import '../property.dart';
@@ -81,7 +84,9 @@ abstract class ModelWidget {
 
   /// The parameter values of the widget
   /// Key is the parameter name and value is the value
-  Map params = {};
+  Map<String, dynamic> params = {};
+
+  Map<String, dynamic> defaultParamsValues = {};
 
   Map inheritData = {};
 
@@ -159,4 +164,43 @@ abstract class ModelWidget {
 
   /// Converts current widget to code and returns as string
   String toCode();
+
+  // {
+  //   "text": {
+  //     "label": "text",
+  //     "value": "Hello World!!",
+  //     "type": "string",
+  //     "inherit": null,
+  //     "isFinal": true
+  // }
+  Map get dataAsMap {
+    Map _map = {};
+    params.forEach((key, value) {
+      _map[key] = {
+        "label": key,
+        "value": value,
+        "type": value.runtimeType.toString(),
+        "inherit": inheritData.keys.contains(key) ? key : null,
+        "isFinal": !modifiers.keys.contains(key),
+      };
+    });
+    return _map;
+  }
+
+  // "key": "text",
+  // "label": "Text",
+  // "type": "Text",
+  // "group": "children",
+  // "data": {},
+  // "children": []
+  Map<String, dynamic> get asMap => {
+        "key": key,
+        "label": EnumToString.convertToString(type),
+        "type": EnumToString.convertToString(type),
+        "group": parentGroup,
+        "data": dataAsMap,
+        "children": children.map((child) => child.asMap).toList(),
+      };
+
+  String get asString => JsonEncoder().convert(asMap);
 }

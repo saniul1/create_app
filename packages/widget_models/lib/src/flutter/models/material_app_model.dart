@@ -24,9 +24,10 @@ class MaterialAppModel extends ModelWidget {
     this.paramNameAndTypes = {
       "debugShowCheckedModeBanner": [PropertyType.boolean],
     };
-    this.params = {
+    this.defaultParamsValues = {
       "debugShowCheckedModeBanner": false,
     };
+    this.params = {};
   }
 
   @override
@@ -39,7 +40,8 @@ class MaterialAppModel extends ModelWidget {
         ?.child;
     return wrap(
         MaterialApp(
-          debugShowCheckedModeBanner: params["debugShowCheckedModeBanner"],
+          debugShowCheckedModeBanner:
+              params["debugShowCheckedModeBanner"] ?? true,
           home: child ?? NullWidget(),
         ),
         key);

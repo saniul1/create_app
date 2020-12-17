@@ -4,8 +4,8 @@ import 'package:create_app/_utils/handle_keys.dart';
 import 'package:create_app/modals/add_widget_modal.dart';
 import 'package:create_app/modals/main_menu_modal.dart';
 
-Widget handleModals(
-    String? id, GlobalKey key, void Function() onActionComplete) {
+Widget handleModals(String? id, GlobalKey key, void Function() onActionComplete,
+    Map<String, dynamic>? data) {
   if (id != null) {
     final pos = getPositionFromKey(key);
     final size = getSizeFromKey(key);
@@ -16,7 +16,11 @@ Widget handleModals(
           return MainMenuModal(
               offset + Offset(0, size.height + 8), onActionComplete);
         case AddWidgetModal.id:
-          return AddWidgetModal(offset, onActionComplete);
+          if (data != null)
+            return AddWidgetModal(offset, onActionComplete, data);
+          else
+            Future.delayed(Duration(milliseconds: 0))
+                .then((value) => onActionComplete());
       }
     }
   }

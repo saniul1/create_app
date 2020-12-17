@@ -18,9 +18,10 @@ class IconModel extends ModelWidget {
       "icon": [PropertyType.icon],
       "size": [PropertyType.double],
     };
-    this.params = {
+    this.defaultParamsValues = {
       "size": "20.0",
     };
+    this.params = {};
   }
 
   @override
@@ -28,7 +29,7 @@ class IconModel extends ModelWidget {
     return wrap(
         Icon(
           params["icon"] ?? null,
-          size: double.tryParse(params["size"]) ?? 20.0,
+          size: params["size"] != null ? double.tryParse(params["size"]) : null,
         ),
         key);
   }

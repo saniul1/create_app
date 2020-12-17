@@ -122,7 +122,7 @@ class ModalWidget extends HookWidget {
                 child: Stack(
                   children: [
                     handleModals(_modalKey.id, _modalKey.key,
-                        _modalKey.onActionComplete),
+                        _modalKey.onActionComplete, _modalKey.data),
                   ],
                 ),
               ),

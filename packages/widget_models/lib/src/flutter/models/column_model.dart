@@ -24,10 +24,11 @@ class ColumnModel extends ModelWidget {
       "mainAxisAlignment": [PropertyType.mainAxisAlignment],
       "crossAxisAlignment": [PropertyType.crossAxisAlignment]
     };
-    this.params = {
+    this.defaultParamsValues = {
       "mainAxisAlignment": MainAxisAlignment.center,
       "crossAxisAlignment": CrossAxisAlignment.center,
     };
+    this.params = {};
   }
 
   @override

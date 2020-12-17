@@ -26,9 +26,10 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
     this.paramNameAndTypes = {
       'onPressed': [PropertyType.function],
     };
-    this.params = {
+    this.defaultParamsValues = {
       'onPressed': null,
     };
+    this.params = {};
   }
 
   @override

@@ -61,7 +61,7 @@ class TreeNodes extends HookWidget {
             _currentModalKey.setKey(AddWidgetModal.id, addKey, () {
               _shadowKey.value = null;
               _currentModalKey.setKey(null, GlobalKey(), () {});
-            });
+            }, {'key': key, 'group': 'children'});
             // _treeViewController.addNode(key, '', '');
           }),
           ActionButton(deleteKey, Icons.delete, size, () {

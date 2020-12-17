@@ -10,7 +10,7 @@ import 'package:flutter_treeview/tree_view.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:better_print/better_print.dart';
 import 'file_storage_state.dart';
 
 final treeViewController =
@@ -54,6 +54,7 @@ class TreeViewNotifier extends ChangeNotifier {
   void updateNodeData(Map<String, dynamic> data, value) {
     final keys = data.keys.first.split('.');
     final node = _controller.getNode(keys.first);
+    Console.print(node.data[keys.last]).show();
     node.data[keys.last]['value'] = value;
     _controller = TreeViewController(
       selectedKey: _selectedKey,
@@ -69,12 +70,11 @@ class TreeViewNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addNode(String key, String label, String type) {
-    final no = Random().nextInt(100);
+  void addNode(String key, Map<String, dynamic> map) {
+    final node = Node.fromMap(map);
+    Console.print(node).show();
     _controller = TreeViewController(
-        selectedKey: _selectedKey,
-        children: _controller.addNode(
-            key, Node(key: '$key$no', label: '$key$no', type: '')));
+        selectedKey: _selectedKey, children: _controller.addNode(key, node));
     expandNode(key);
   }
 

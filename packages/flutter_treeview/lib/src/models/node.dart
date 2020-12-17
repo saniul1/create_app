@@ -47,7 +47,7 @@ class Node {
     this.children: const [],
     this.group = 'child',
     this.expanded: true,
-    this.data,
+    this.data = const {},
   })  : assert(key != null),
         assert(type != null),
         assert(label != null);

@@ -6,10 +6,13 @@ class ModalKey extends ChangeNotifier {
   String? id;
   late GlobalKey key;
   late void Function() onActionComplete;
-  void setKey(String? i, GlobalKey k, void Function() onActComplete) {
+  Map<String, dynamic>? data;
+  void setKey(String? i, GlobalKey k, void Function() onActComplete,
+      [Map<String, dynamic>? _data]) {
     id = i;
     key = k;
     onActionComplete = onActComplete;
+    data = _data;
     notifyListeners();
   }
 }
