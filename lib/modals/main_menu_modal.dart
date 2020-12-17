@@ -10,11 +10,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'snack_bars.dart';
 
 class MainMenuModal extends HookWidget {
-  MainMenuModal(this.offset);
+  static const id = 'main-menu';
+  MainMenuModal(this.offset, this.onActionComplete);
+  final void Function() onActionComplete;
   final Offset offset;
   @override
   Widget build(BuildContext context) {
-    final _modalKey = useProvider(currentModalKey);
     return Transform.translate(
       offset: offset,
       child: Container(
@@ -36,7 +37,7 @@ class MainMenuModal extends HookWidget {
             ListTile(
               title: Text('New Project'),
               onTap: () async {
-                _modalKey.setKey('', null);
+                onActionComplete();
                 final result = await context.read(fileStorage).createProject();
                 ScaffoldMessenger.of(context).showSnackBar(showResultMessage(
                     result ? 'Successfully created.' : 'folder is not empty.'));
@@ -45,7 +46,7 @@ class MainMenuModal extends HookWidget {
             ListTile(
               title: Text('Open Project'),
               onTap: () async {
-                _modalKey.setKey('', null);
+                onActionComplete();
                 final result = await context.read(fileStorage).selectProject();
                 ScaffoldMessenger.of(context).showSnackBar(showResultMessage(
                     result ? 'Successfully opened.' : 'not a flutter project'));
@@ -54,7 +55,7 @@ class MainMenuModal extends HookWidget {
             ListTile(
               title: Text('Save'),
               onTap: () async {
-                _modalKey.setKey('', null);
+                onActionComplete();
                 final result =
                     await context.read(fileStorage).saveCurrentFile();
               },
@@ -62,7 +63,7 @@ class MainMenuModal extends HookWidget {
             ListTile(
               title: Text('App Settings'),
               onTap: () {
-                _modalKey.setKey('', null);
+                onActionComplete();
                 showDialog(
                     context: context, builder: (_) => AppSettingsDialog());
               },
@@ -70,7 +71,7 @@ class MainMenuModal extends HookWidget {
             ListTile(
               title: Text('Exit'),
               onTap: () {
-                _modalKey.setKey('', null);
+                onActionComplete();
               },
             ),
           ],

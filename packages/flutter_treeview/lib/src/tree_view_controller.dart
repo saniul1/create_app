@@ -367,7 +367,8 @@ class TreeViewController {
 
   /// Deletes an existing node identified by specified key. This method
   /// returns a new list with the specified node removed.
-  List<Node> deleteNode(String key, {Node parent}) {
+  List<Node> deleteNode(String key,
+      {Node parent, bool deleteChildren = false}) {
     List<Node> _children = parent == null ? this.children : parent.children;
     List<Node> _filteredChildren = [];
     Iterator iter = _children.iterator;
@@ -380,6 +381,16 @@ class TreeViewController {
           ));
         } else {
           _filteredChildren.add(child);
+        }
+      } else {
+        if (!deleteChildren) {
+          final children = getNode(key).children;
+          // print(_filteredChildren);
+          children.forEach((child) {
+            _filteredChildren.add(child.copyWith(
+              children: deleteNode(key, parent: child),
+            ));
+          });
         }
       }
     }

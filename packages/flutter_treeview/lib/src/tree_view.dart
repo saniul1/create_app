@@ -80,6 +80,8 @@ class TreeView extends InheritedWidget {
 
   final List<Widget> Function(String key, Size size) buildActionsWidgets;
 
+  final String shadowKey;
+
   TreeView({
     Key key,
     @required this.controller,
@@ -95,6 +97,7 @@ class TreeView extends InheritedWidget {
     TreeViewTheme theme,
     @required this.buildNodeIcon,
     this.buildActionsWidgets,
+    this.shadowKey,
   })  : this.theme = theme ?? const TreeViewTheme(),
         super(
           key: key,

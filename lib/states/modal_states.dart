@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ModalKey extends ChangeNotifier {
-  late String id;
-  GlobalKey? key;
-  void setKey(String i, GlobalKey? k) {
+  String? id;
+  late GlobalKey key;
+  late void Function() onActionComplete;
+  void setKey(String? i, GlobalKey k, void Function() onActComplete) {
     id = i;
     key = k;
+    onActionComplete = onActComplete;
     notifyListeners();
   }
 }

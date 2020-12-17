@@ -21,6 +21,7 @@ import 'package:create_app/modals/handle_modals.dart';
 import 'package:create_app/states/modal_states.dart';
 
 class Editor extends HookWidget {
+  static const paddingTop = 30.0;
   static final routeName = '/editor';
   final treeAreaKey = GlobalKey();
   final canvasAreaKey = GlobalKey();
@@ -64,7 +65,7 @@ class Editor extends HookWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 30.0),
+            padding: const EdgeInsets.only(top: paddingTop),
             child: Container(
               color: Colors.grey.shade100,
               width: MediaQuery.of(context).size.width,
@@ -80,7 +81,7 @@ class Editor extends HookWidget {
             ),
           ),
           Container(
-            height: 30,
+            height: paddingTop,
             color: Colors.white,
             child: MoveWindow(),
           ),
@@ -107,10 +108,12 @@ class ModalWidget extends HookWidget {
   Widget build(BuildContext context) {
     final _modalKey = useProvider(currentModalKey);
     return Container(
-      child: _modalKey.key != null
+      child: _modalKey.id != null
           ? GestureDetector(
+              behavior: HitTestBehavior.translucent,
               onTap: () {
-                _modalKey.setKey('', null);
+                _modalKey.onActionComplete();
+                _modalKey.setKey(null, GlobalKey(), () {});
               },
               child: Container(
                 width: double.infinity,
@@ -118,7 +121,8 @@ class ModalWidget extends HookWidget {
                 color: Colors.transparent,
                 child: Stack(
                   children: [
-                    handleModals(_modalKey.id, _modalKey.key)!,
+                    handleModals(_modalKey.id, _modalKey.key,
+                        _modalKey.onActionComplete),
                   ],
                 ),
               ),

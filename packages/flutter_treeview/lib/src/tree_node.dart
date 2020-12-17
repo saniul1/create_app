@@ -215,9 +215,11 @@ class _TreeNodeState extends State<TreeNode>
           vertical: _theme.density,
           horizontal: 0,
         ),
-        color: isSelected || _isOnHover
+        color: isSelected
             ? _theme.colorScheme.primary
-            : _theme.colorScheme.background,
+            : _isOnHover || _treeView.shadowKey == widget.node.key
+                ? _theme.colorScheme.primary.withOpacity(0.5)
+                : _theme.colorScheme.background,
         child: Stack(
           children: [
             Row(

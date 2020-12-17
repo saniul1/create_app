@@ -1,3 +1,4 @@
+import 'package:create_app/modals/main_menu_modal.dart';
 import 'package:create_app/states/tools_state.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -14,7 +15,6 @@ import 'package:create_app/states/sizes.dart';
 import 'package:create_app/states/modal_states.dart';
 
 class MenuBar extends HookWidget {
-  static final id = 'main-menu';
   final _menuBtnKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,9 @@ class MenuBar extends HookWidget {
               icon: Entypo.menu,
               size: iconSize + 4,
               onClick: () {
-                _currentModalKey.setKey(id, _menuBtnKey);
+                _currentModalKey.setKey(MainMenuModal.id, _menuBtnKey, () {
+                  _currentModalKey.setKey(null, GlobalKey(), () {});
+                });
               },
             ),
             AppIconButton(
