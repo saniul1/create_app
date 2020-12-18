@@ -106,24 +106,20 @@ class Editor extends HookWidget {
 class ModalWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final _modalKey = useProvider(currentModalKey);
+    final _modalKey = useProvider(currentModalNotifier);
     return Container(
-      color: _modalKey.id != null ? Colors.grey.withOpacity(0.05) : null,
-      child: _modalKey.id != null
+      color: _modalKey.widget != null ? Colors.grey.withOpacity(0.05) : null,
+      child: _modalKey.widget != null
           ? GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: () {
-                _modalKey.onActionComplete();
-                _modalKey.setKey(null, GlobalKey(), () {});
-              },
+              onTap: () => _modalKey.setModal(null),
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 color: Colors.transparent,
                 child: Stack(
                   children: [
-                    handleModals(_modalKey.id, _modalKey.key,
-                        _modalKey.onActionComplete, _modalKey.data),
+                    _modalKey.widget ?? SizedBox(),
                   ],
                 ),
               ),

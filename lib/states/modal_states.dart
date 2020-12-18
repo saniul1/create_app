@@ -2,19 +2,14 @@ import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ModalKey extends ChangeNotifier {
-  String? id;
-  late GlobalKey key;
-  late void Function() onActionComplete;
-  Map<String, dynamic>? data;
-  void setKey(String? i, GlobalKey k, void Function() onActComplete,
-      [Map<String, dynamic>? _data]) {
-    id = i;
-    key = k;
-    onActionComplete = onActComplete;
-    data = _data;
+final currentModalNotifier =
+    ChangeNotifierProvider((ref) => ModalWidgetNotifier());
+
+class ModalWidgetNotifier extends ChangeNotifier {
+  Widget? _widget;
+  Widget? get widget => _widget;
+  void setModal(Widget? widget) {
+    _widget = widget;
     notifyListeners();
   }
 }
-
-final currentModalKey = ChangeNotifierProvider((ref) => ModalKey());

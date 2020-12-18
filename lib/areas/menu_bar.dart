@@ -1,3 +1,4 @@
+import 'package:create_app/modals/handle_modals.dart';
 import 'package:create_app/modals/main_menu_modal.dart';
 import 'package:create_app/states/tools_state.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class MenuBar extends HookWidget {
   Widget build(BuildContext context) {
     final iconSize = context.read(iconButtonSize);
     final selectTool = useProvider(selectedTool);
-    final _currentModalKey = useProvider(currentModalKey);
+    final _currentModal = useProvider(currentModalNotifier);
     return Container(
       constraints: BoxConstraints(minWidth: 80),
       decoration: BoxDecoration(
@@ -44,9 +45,8 @@ class MenuBar extends HookWidget {
               icon: Entypo.menu,
               size: iconSize + 4,
               onClick: () {
-                _currentModalKey.setKey(MainMenuModal.id, _menuBtnKey, () {
-                  _currentModalKey.setKey(null, GlobalKey(), () {});
-                });
+                _currentModal.setModal(handleModals(MainMenuModal.id,
+                    _menuBtnKey, (_) => _currentModal.setModal(null)));
               },
             ),
             AppIconButton(

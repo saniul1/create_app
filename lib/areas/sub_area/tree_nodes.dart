@@ -1,5 +1,8 @@
 import 'package:create_app/modals/add_widget_modal.dart';
+import 'package:create_app/modals/handle_modals.dart';
+import 'package:create_app/modals/options_modal.dart';
 import 'package:create_app/states/app_builder_state.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -8,6 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_treeview/tree_view.dart';
 import 'package:create_app/states/modal_states.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:create_app/themes/tree_view_theme.dart';
 import 'package:create_app/states/tree_view_state.dart';
@@ -18,11 +22,12 @@ class TreeNodes extends HookWidget {
   final replaceKey = GlobalKey();
   final deleteKey = GlobalKey();
   final moreKey = GlobalKey();
+  final uuid = Uuid();
   @override
   Widget build(BuildContext context) {
     final _treeViewController = useProvider(treeViewController);
     final _treeViewTheme = useProvider(treeViewTheme);
-    final _currentModalKey = useProvider(currentModalKey);
+    final _currentModal = useProvider(currentModalNotifier);
     final _isAddable = useState(false);
     final _shadowKey = useState<String?>(null);
     return TreeView(
@@ -59,28 +64,45 @@ class TreeNodes extends HookWidget {
           if (_isAddable.value)
             ActionButton(addKey, Icons.add, size, () {
               _shadowKey.value = key;
-              _currentModalKey.setKey(AddWidgetModal.id, addKey, () {
+              _currentModal.setModal(
+                  handleModals(AddWidgetModal.id, addKey, (String type) {
+                Map<String, dynamic>? model = getFlutterWidgetModelFromType(
+                        uuid.v1(),
+                        'children',
+                        EnumToString.fromString(FlutterWidgetType.values, type))
+                    ?.asMap;
+                // Console.print(model?['data']['text']['value'].runtimeType)
+                //     .show();
+                context.read(treeViewController).addNode(key, model!);
                 _shadowKey.value = null;
-                _currentModalKey.setKey(null, GlobalKey(), () {});
-              }, {'key': key, 'group': 'children'});
-              // _treeViewController.addNode(key, '', '');
+                _currentModal.setModal(null);
+              }));
             }),
           ActionButton(replaceKey, Icons.find_replace, size, () {
             _shadowKey.value = key;
-            _currentModalKey.setKey(AddWidgetModal.id, replaceKey, () {
+            _currentModal.setModal(
+                handleModals(AddWidgetModal.id, replaceKey, (String type) {
+              Map<String, dynamic>? model = getFlutterWidgetModelFromType(
+                      uuid.v1(),
+                      'children',
+                      EnumToString.fromString(FlutterWidgetType.values, type))
+                  ?.asMap;
               _shadowKey.value = null;
-              _currentModalKey.setKey(null, GlobalKey(), () {});
-            }, {'key': key, 'group': 'children'});
-            // _treeViewController.addNode(key, '', '');
+              _currentModal.setModal(null);
+            }));
           }),
           ActionButton(deleteKey, Icons.delete, size, () {
             _treeViewController.deleteNode(key);
           }),
-          ActionButton(
-            moreKey,
-            Icons.more_vert,
-            size,
-          ),
+          ActionButton(moreKey, Icons.more_vert, size, () {
+            _shadowKey.value = key;
+            _currentModal
+                .setModal(handleModals(OptionsModal.id, moreKey, (String opt) {
+              print(opt);
+              _shadowKey.value = null;
+              _currentModal.setModal(null);
+            }, ["hello", 'bye']));
+          }),
         ];
       },
     );
