@@ -3,11 +3,7 @@ import 'dart:convert' show jsonDecode, jsonEncode;
 import 'models/node.dart';
 
 /// Defines the insertion mode adding a new [Node] to the [TreeView].
-enum InsertMode {
-  prepend,
-  append,
-  insert,
-}
+enum InsertMode { prepend, append, insert, replace }
 
 /// Defines the controller needed to display the [TreeView].
 ///
@@ -318,6 +314,10 @@ class TreeViewController {
           _children.insert(0, newNode);
         } else if (mode == InsertMode.insert) {
           _children.insert(index ?? _children.length, newNode);
+        } else if (mode == InsertMode.replace) {
+          final children = _addChildrenFrom(_children[index ?? 0].key);
+          _children.removeAt(index ?? 0);
+          _children.insert(index ?? 0, newNode.copyWith(children: children));
         } else {
           _children.add(newNode);
         }
@@ -334,6 +334,17 @@ class TreeViewController {
         );
       }
     }).toList();
+  }
+
+  List<Node> _addChildrenFrom(String key) {
+    List<Node> _children = [];
+    final children = getNode(key).children;
+    children.forEach((child) {
+      _children.add(child.copyWith(
+        children: deleteNode(key, parent: child),
+      ));
+    });
+    return _children;
   }
 
   /// Updates an existing node identified by specified key. This method
@@ -385,7 +396,6 @@ class TreeViewController {
       } else {
         if (!deleteChildren) {
           final children = getNode(key).children;
-          // print(_filteredChildren);
           children.forEach((child) {
             _filteredChildren.add(child.copyWith(
               children: deleteNode(key, parent: child),

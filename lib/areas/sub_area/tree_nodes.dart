@@ -15,7 +15,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:create_app/themes/tree_view_theme.dart';
 import 'package:create_app/states/tree_view_state.dart';
-import 'package:widget_models/widget_models.dart';
+import 'package:widget_models/widget_models.dart' hide InsertMode;
 
 class TreeNodes extends HookWidget {
   final addKey = GlobalKey();
@@ -84,9 +84,10 @@ class TreeNodes extends HookWidget {
                 handleModals(AddWidgetModal.id, replaceKey, (String type) {
               Map<String, dynamic>? model = getFlutterWidgetModelFromType(
                       uuid.v1(),
-                      'children',
+                      'child',
                       EnumToString.fromString(FlutterWidgetType.values, type))
                   ?.asMap;
+              context.read(treeViewController).replaceNode(key, model!);
               _shadowKey.value = null;
               _currentModal.setModal(null);
             }));
