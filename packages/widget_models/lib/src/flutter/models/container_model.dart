@@ -9,6 +9,7 @@ import '../types.dart';
 class ContainerModel extends ModelWidget {
   ContainerModel(String key, String group) {
     this.key = key;
+    this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.Container;
     this.parentType = ParentType.SingleChild;
@@ -43,6 +44,7 @@ class ContainerModel extends ModelWidget {
         ?.child;
     return wrap(
         Container(
+          key: globalKey,
           child: child,
           width:
               params["width"] != null ? double.tryParse(params["width"]) : null,

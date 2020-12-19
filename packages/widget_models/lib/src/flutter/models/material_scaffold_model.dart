@@ -9,6 +9,7 @@ import '../types.dart';
 class MaterialScaffoldModel extends ModelWidget {
   MaterialScaffoldModel(String key, String group) {
     this.key = key;
+    this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.MaterialScaffold;
     this.parentType = ParentType.MultipleChildren;
@@ -55,6 +56,7 @@ class MaterialScaffoldModel extends ModelWidget {
         ?.child;
     return wrap(
         Scaffold(
+          key: globalKey,
           appBar: appBar,
           body: body,
           floatingActionButton: float,

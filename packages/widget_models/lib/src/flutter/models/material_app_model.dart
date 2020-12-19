@@ -10,6 +10,7 @@ import '../types.dart';
 class MaterialAppModel extends ModelWidget {
   MaterialAppModel(String key, String group) {
     this.key = key;
+    this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.MaterialApp;
     this.parentType = ParentType.SingleChild;
@@ -40,6 +41,7 @@ class MaterialAppModel extends ModelWidget {
         ?.child;
     return wrap(
         MaterialApp(
+          key: globalKey,
           debugShowCheckedModeBanner:
               params["debugShowCheckedModeBanner"] ?? true,
           home: child ?? NullWidget(),

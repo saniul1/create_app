@@ -9,6 +9,7 @@ import '../types.dart';
 class IconModel extends ModelWidget {
   IconModel(String key, String group) {
     this.key = key;
+    this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.Icon;
     this.parentType = ParentType.End;
@@ -29,6 +30,7 @@ class IconModel extends ModelWidget {
     return wrap(
         Icon(
           params["icon"] ?? null,
+          key: globalKey,
           size: params["size"] != null ? double.tryParse(params["size"]) : null,
         ),
         key);

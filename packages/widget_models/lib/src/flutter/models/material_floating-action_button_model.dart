@@ -10,6 +10,7 @@ import '../types.dart';
 class MaterialFloatingActionButtonModel extends ModelWidget {
   MaterialFloatingActionButtonModel(String key, String group) {
     this.key = key;
+    this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.MaterialFloatingActionButton;
     this.parentType = ParentType.SingleChild;
@@ -42,6 +43,7 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
         ?.child;
     return wrap(
         FloatingActionButton(
+          key: globalKey,
           mouseCursor:
               isSelectMode ? SystemMouseCursors.none : SystemMouseCursors.basic,
           onPressed: isSelectMode

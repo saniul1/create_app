@@ -1,8 +1,10 @@
+import 'package:create_app/_utils/handle_keys.dart';
 import 'package:create_app/states/app_builder_state.dart';
 import 'package:create_app/states/app_view_state.dart';
 import 'package:create_app/states/key_states.dart';
 import 'package:create_app/states/tools_state.dart';
 import 'package:create_app/states/tree_view_state.dart';
+import 'package:create_app/views/editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -66,16 +68,15 @@ class WidgetWrapper extends HookWidget {
   Widget build(BuildContext context) {
     final currentTool = useProvider(selectedTool);
     final tree = useProvider(treeViewController);
-    final isHover = useState(false);
     final _isControlPressed = useProvider(isControlPressed);
     final _isShiftPressed = useProvider(isShiftPressed);
     final _isAltPressed = useProvider(isAltPressed);
-    return InkWell(
-      mouseCursor: currentTool.state == ToolType.select
-          ? SystemMouseCursors.none
-          : SystemMouseCursors.basic,
-      onTap: currentTool.state == ToolType.select
-          ? () {
+    return currentTool.state == ToolType.select
+        ? InkWell(
+            mouseCursor: currentTool.state == ToolType.select
+                ? SystemMouseCursors.none
+                : SystemMouseCursors.basic,
+            onTap: () {
               final parentKey = tree.controller.getParent(tree.selectedKey).key;
               final children = tree.controller.getNode(parentKey).children;
               final i = children
@@ -105,24 +106,36 @@ class WidgetWrapper extends HookWidget {
               } else {
                 tree.selectNode(id);
               }
-            }
-          : null,
-      onHover: currentTool.state == ToolType.select
-          ? (value) {
-              isHover.value = value;
-            }
-          : null,
-      child: Container(
-        decoration: BoxDecoration(
-          // color: isHover.value ? Colors.yellow.withOpacity(0.2) : null,
-          border:
-              currentTool.state == ToolType.select && tree.selectedKey == id ||
-                      isHover.value
-                  ? Border.all(width: 1, color: Colors.deepOrange)
-                  : null,
-        ),
-        child: child,
-      ),
-    );
+            },
+            onHover: (value) {
+              if (value)
+                Future.delayed(Duration(milliseconds: 0)).then((value) {
+                  final key = context
+                      .read(appBuildController)
+                      .controller
+                      .getModel(id)
+                      ?.globalKey;
+                  if (key != null) {
+                    context.read(selectedWidgetList).state = [];
+                    final _pos = PosNSize(
+                        id, getPositionFromKey(key), getSizeFromKey(key));
+                    context.read(selectedWidgetList).state.add(_pos);
+                  }
+                });
+              else
+                context.read(selectedWidgetList).state = [];
+            },
+            child: child,
+          )
+        : child;
   }
 }
+
+class PosNSize {
+  final Offset? offset;
+  final Size? size;
+  final String id;
+  PosNSize(this.id, this.offset, this.size);
+}
+
+final selectedWidgetList = StateProvider<List<PosNSize>>((ref) => []);

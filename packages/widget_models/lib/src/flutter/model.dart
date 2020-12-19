@@ -56,6 +56,8 @@ class ChildGroup {
 abstract class ModelWidget {
   late String key;
 
+  GlobalKey? globalKey;
+
   /// Type of widget ([Text], [Center], [Column], etc)
   late FlutterWidgetType type;
 

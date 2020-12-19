@@ -9,6 +9,7 @@ import '../types.dart';
 class CustomModel extends ModelWidget {
   CustomModel(String key, String group) {
     this.key = key;
+    this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.CustomWidget;
     this.parentType = ParentType.SingleChild;
@@ -35,6 +36,7 @@ class CustomModel extends ModelWidget {
         ?.child;
     return wrap(
         Container(
+          key: globalKey,
           child: child,
         ),
         key);

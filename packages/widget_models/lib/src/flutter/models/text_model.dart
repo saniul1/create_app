@@ -9,6 +9,7 @@ import '../types.dart';
 class TextModel extends ModelWidget {
   TextModel(String key, String group) {
     this.key = key;
+    this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.Text;
     this.parentType = ParentType.End;
@@ -60,6 +61,7 @@ class TextModel extends ModelWidget {
     return wrap(
         Text(
           params["text"] != null ? _resolveText(params["text"]) : "",
+          key: globalKey,
           style: TextStyle(
               fontSize: params["fontSize"] != null
                   ? double.tryParse(params["fontSize"])

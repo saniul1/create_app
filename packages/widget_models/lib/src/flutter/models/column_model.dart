@@ -9,6 +9,7 @@ import '../types.dart';
 class ColumnModel extends ModelWidget {
   ColumnModel(String key, String group) {
     this.key = key;
+    this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.Column;
     this.parentType = ParentType.MultipleChildren;
@@ -40,6 +41,7 @@ class ColumnModel extends ModelWidget {
         .firstOrNull
         ?.child;
     return Column(
+      key: globalKey,
       mainAxisAlignment: params["mainAxisAlignment"] == null
           ? MainAxisAlignment.start
           : params["mainAxisAlignment"],

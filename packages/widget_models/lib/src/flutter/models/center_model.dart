@@ -9,6 +9,7 @@ import '../types.dart';
 class CenterModel extends ModelWidget {
   CenterModel(String key, String group) {
     this.key = key;
+    this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.Center;
     this.parentType = ParentType.SingleChild;
@@ -41,6 +42,7 @@ class CenterModel extends ModelWidget {
         ?.child;
     return wrap(
         Center(
+          key: globalKey,
           child: child,
           widthFactor: params["widthFactor"] != null
               ? double.tryParse(params["widthFactor"].toString())

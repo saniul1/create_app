@@ -1,17 +1,22 @@
 import 'package:create_app/_helper/functions.dart';
+import 'package:create_app/_utils/handle_keys.dart';
 import 'package:create_app/areas/sub_area/keyboard_shortcuts.dart';
 import 'package:create_app/components/blend_mask.dart';
 import 'package:create_app/components/mouse_pointer.dart';
 import 'package:create_app/models/app_view_model.dart';
+import 'package:create_app/states/app_builder_state.dart';
 import 'package:create_app/states/editor_view_states.dart';
 import 'package:create_app/states/screenshot_state.dart';
 import 'package:create_app/states/tools_state.dart';
+import 'package:create_app/states/tree_view_state.dart';
+import 'package:create_app/views/editor.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_treeview/tree_view.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:hooks_riverpod/hooks_riverpod.dart' hide Listener;
 import 'package:create_app/states/app_view_state.dart';
@@ -34,6 +39,7 @@ class CanvasArea extends HookWidget {
     final appList = useProvider(appViewList);
     final _selectedApps = useProvider(selectedApps);
     final selectedAppId = useState<String?>(null);
+    final list = useProvider(selectedWidgetList);
     useEffect(() {
       Future.delayed(Duration(milliseconds: 0)).then((value) => offset.state =
           Offset(resetCanvasToCenter(context, overlayKey).dx, 0));
@@ -155,6 +161,30 @@ class CanvasArea extends HookWidget {
                       ),
                     ),
                   ),
+                  if (currentTool.state == ToolType.select)
+                    Stack(
+                      children: [
+                        // SelectedBox(),
+                        ...list.state
+                            .map(
+                              (e) => Transform.translate(
+                                offset: e.offset != null
+                                    ? e.offset! - Offset(0, Editor.paddingTop)
+                                    : Offset.zero,
+                                child: Container(
+                                  width: e.size?.width,
+                                  height: e.size?.height,
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    border: Border.all(
+                                        width: 1, color: Colors.deepOrange),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList()
+                      ],
+                    ),
                   if (currentTool.state == ToolType.select &&
                       mousePos.state != Offset.zero)
                     GestureDetector(
@@ -181,5 +211,40 @@ class CanvasArea extends HookWidget {
         ),
       ),
     );
+  }
+}
+
+class SelectedBox extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final controller = useProvider(appBuildController).controller;
+    final treeController = useProvider(treeViewController).controller;
+    final key = controller.getModel(treeController.selectedKey)?.globalKey!;
+    if (key != null) {
+      return FutureBuilder(
+        future: Future.delayed(Duration(seconds: 0)),
+        builder: (c, s) {
+          if (s.connectionState == ConnectionState.done) {
+            final size = getSizeFromKey(key);
+            final pos = getPositionFromKey(key);
+            return Transform.translate(
+              offset: pos != null
+                  ? pos - Offset(0, Editor.paddingTop)
+                  : Offset.zero,
+              child: Container(
+                width: size?.width,
+                height: size?.height,
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  border: Border.all(width: 1, color: Colors.deepOrange),
+                ),
+              ),
+            );
+          } else
+            return SizedBox();
+        },
+      );
+    } else
+      return SizedBox();
   }
 }
