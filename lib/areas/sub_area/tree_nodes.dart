@@ -19,6 +19,7 @@ import 'package:widget_models/widget_models.dart' hide InsertMode;
 
 class TreeNodes extends HookWidget {
   final addKey = GlobalKey();
+  final addParentKey = GlobalKey();
   final replaceKey = GlobalKey();
   final deleteKey = GlobalKey();
   final moreKey = GlobalKey();
@@ -30,6 +31,24 @@ class TreeNodes extends HookWidget {
     final _currentModal = useProvider(currentModalNotifier);
     final _isAddable = useState(false);
     final _shadowKey = useState<String?>(null);
+    void _showWidgetModelOption(String key, GlobalKey gKey,
+        [InsertMode mode = InsertMode.insert, int? index]) {
+      _shadowKey.value = key;
+      _currentModal
+          .setModal(handleModals(AddWidgetModal.id, gKey, (String type) {
+        Map<String, dynamic>? model = getFlutterWidgetModelFromType(
+                uuid.v1(),
+                'children',
+                EnumToString.fromString(FlutterWidgetType.values, type))
+            ?.asMap;
+        // Console.print(model?['data']['text']['value'].runtimeType)
+        //     .show();
+        context.read(treeViewController).addNode(key, model!, mode, index);
+        _shadowKey.value = null;
+        _currentModal.setModal(null);
+      }));
+    }
+
     return TreeView(
       controller: _treeViewController.controller,
       shadowKey: _shadowKey.value,
@@ -63,21 +82,24 @@ class TreeNodes extends HookWidget {
         return [
           if (_isAddable.value)
             ActionButton(addKey, Icons.add, size, () {
-              _shadowKey.value = key;
-              _currentModal.setModal(
-                  handleModals(AddWidgetModal.id, addKey, (String type) {
-                Map<String, dynamic>? model = getFlutterWidgetModelFromType(
-                        uuid.v1(),
-                        'children',
-                        EnumToString.fromString(FlutterWidgetType.values, type))
-                    ?.asMap;
-                // Console.print(model?['data']['text']['value'].runtimeType)
-                //     .show();
-                context.read(treeViewController).addNode(key, model!);
-                _shadowKey.value = null;
-                _currentModal.setModal(null);
-              }));
+              _showWidgetModelOption(key, addKey);
             }),
+          ActionButton(addParentKey, Icons.add_to_photos, size, () {
+            _shadowKey.value = key;
+            _currentModal.setModal(
+                handleModals(AddWidgetModal.id, addParentKey, (String type) {
+              Map<String, dynamic>? model = getFlutterWidgetModelFromType(
+                      uuid.v1(),
+                      'children',
+                      EnumToString.fromString(FlutterWidgetType.values, type))
+                  ?.asMap;
+              // Console.print(model?['data']['text']['value'].runtimeType)
+              //     .show();
+              // context.read(treeViewController).addNode(key, model!);
+              _shadowKey.value = null;
+              _currentModal.setModal(null);
+            }));
+          }),
           ActionButton(replaceKey, Icons.find_replace, size, () {
             _shadowKey.value = key;
             _currentModal.setModal(
@@ -97,12 +119,31 @@ class TreeNodes extends HookWidget {
           }),
           ActionButton(moreKey, Icons.more_vert, size, () {
             _shadowKey.value = key;
-            _currentModal
-                .setModal(handleModals(OptionsModal.id, moreKey, (String opt) {
-              print(opt);
-              _shadowKey.value = null;
-              _currentModal.setModal(null);
-            }, ["hello", 'bye']));
+            _currentModal.setModal(handleModals(OptionsModal.id, moreKey,
+                (String opt) {
+              final i = context.read(treeViewController).getChildNodeIndex(key);
+              final parentKey = context
+                  .read(treeViewController)
+                  .controller
+                  .getParent(key)
+                  .key;
+              if (opt == 'Insert Above') {
+                _showWidgetModelOption(
+                    parentKey, moreKey, InsertMode.prepend, i);
+              } else if (opt == 'Insert below') {
+                _showWidgetModelOption(
+                    parentKey, moreKey, InsertMode.append, i);
+              } else if (opt == 'Insert at Start') {
+                _showWidgetModelOption(parentKey, moreKey, InsertMode.prepend);
+              } else if (opt == 'Insert at End') {
+                _showWidgetModelOption(parentKey, moreKey, InsertMode.append);
+              }
+            }, [
+              'Insert at Start',
+              'Insert Above',
+              'Insert below',
+              'Insert at End'
+            ]));
           }),
         ];
       },

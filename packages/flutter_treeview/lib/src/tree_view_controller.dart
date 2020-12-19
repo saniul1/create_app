@@ -311,9 +311,10 @@ class TreeViewController {
       if (child.key == key) {
         List<Node> _children = child.children.toList(growable: true);
         if (mode == InsertMode.prepend) {
-          _children.insert(0, newNode);
-        } else if (mode == InsertMode.insert) {
-          _children.insert(index ?? _children.length, newNode);
+          _children.insert(index ?? 0, newNode);
+        } else if (mode == InsertMode.append) {
+          _children.insert(
+              index != null ? index + 1 : _children.length, newNode);
         } else if (mode == InsertMode.replace) {
           final children = _addChildrenFrom(_children[index ?? 0].key);
           _children.removeAt(index ?? 0);

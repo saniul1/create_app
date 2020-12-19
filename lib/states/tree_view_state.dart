@@ -70,16 +70,23 @@ class TreeViewNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  int getChildNodeIndex(
+    String key,
+  ) {
+    final parent = _controller.getParent(key);
+    return parent.children.indexWhere((element) => element.key == key);
+  }
+
   void replaceNode(String key, Map<String, dynamic> map) {
     final parent = _controller.getParent(key);
-    final i = parent.children.indexWhere((element) => element.key == key);
+    final i = getChildNodeIndex(key);
     addNode(parent.key, map, InsertMode.replace, i);
   }
 
   void addNode(String key, Map<String, dynamic> map,
-      [InsertMode mode = InsertMode.append, int? index]) {
+      [InsertMode mode = InsertMode.insert, int? index]) {
     final node = Node.fromMap(map);
-    Console.print(node).show();
+    // Console.print(node).show();
     _controller = TreeViewController(
         selectedKey: _selectedKey,
         children: _controller.addNode(key, node, mode: mode, index: index));

@@ -6,19 +6,24 @@ import 'package:create_app/_utils/handle_keys.dart';
 import 'package:create_app/modals/add_widget_modal.dart';
 import 'package:create_app/modals/main_menu_modal.dart';
 
+Offset? pos;
+Size? size;
+
 Widget? handleModals(
     String? id, GlobalKey key, void Function(String key) onActionComplete,
     [List<String> options = const []]) {
   Widget? _modal;
   if (id != null) {
-    final pos = getPositionFromKey(key);
-    final size = getSizeFromKey(key);
+    if (key.currentWidget != null) {
+      pos = getPositionFromKey(key);
+      size = getSizeFromKey(key);
+    }
     if (pos != null && size != null) {
-      final offset = Offset(pos.dx, pos.dy - Editor.paddingTop);
+      final offset = Offset(pos!.dx, pos!.dy - Editor.paddingTop);
       switch (id) {
         case MainMenuModal.id:
           _modal = MainMenuModal(
-              offset + Offset(0, size.height + 8), onActionComplete);
+              offset + Offset(0, size!.height + 8), onActionComplete);
           break;
         case AddWidgetModal.id:
           _modal = AddWidgetModal(offset, onActionComplete);
