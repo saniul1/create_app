@@ -3,7 +3,7 @@ import 'dart:convert' show jsonDecode, jsonEncode;
 import 'models/node.dart';
 
 /// Defines the insertion mode adding a new [Node] to the [TreeView].
-enum InsertMode { prepend, append, insert, replace }
+enum InsertMode { prepend, append, insert, replace, changeParent }
 
 /// Defines the controller needed to display the [TreeView].
 ///
@@ -319,6 +319,15 @@ class TreeViewController {
           final children = _addChildrenFrom(_children[index ?? 0].key);
           _children.removeAt(index ?? 0);
           _children.insert(index ?? 0, newNode.copyWith(children: children));
+        } else if (mode == InsertMode.changeParent) {
+          final children = _addChildrenFrom(_children[index ?? 0].key);
+          final _child = _children[index ?? 0];
+          _children.removeAt(index ?? 0);
+          _children.insert(
+              index ?? 0,
+              newNode.copyWith(children: [
+                _child.copyWith(group: 'child', children: children)
+              ]));
         } else {
           _children.add(newNode);
         }

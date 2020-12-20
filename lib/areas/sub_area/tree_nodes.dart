@@ -90,12 +90,12 @@ class TreeNodes extends HookWidget {
                 handleModals(AddWidgetModal.id, addParentKey, (String type) {
               Map<String, dynamic>? model = getFlutterWidgetModelFromType(
                       uuid.v1(),
-                      'children',
+                      'child',
                       EnumToString.fromString(FlutterWidgetType.values, type))
                   ?.asMap;
               // Console.print(model?['data']['text']['value'].runtimeType)
               //     .show();
-              // context.read(treeViewController).addNode(key, model!);
+              context.read(treeViewController).changeParent(key, model!);
               _shadowKey.value = null;
               _currentModal.setModal(null);
             }));

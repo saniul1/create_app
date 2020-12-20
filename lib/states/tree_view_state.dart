@@ -83,6 +83,12 @@ class TreeViewNotifier extends ChangeNotifier {
     addNode(parent.key, map, InsertMode.replace, i);
   }
 
+  void changeParent(String key, Map<String, dynamic> map) {
+    final parent = _controller.getParent(key);
+    final i = getChildNodeIndex(key);
+    addNode(parent.key, map, InsertMode.changeParent, i);
+  }
+
   void addNode(String key, Map<String, dynamic> map,
       [InsertMode mode = InsertMode.insert, int? index]) {
     final node = Node.fromMap(map);
