@@ -16,6 +16,7 @@ import 'package:uuid/uuid.dart';
 import 'package:create_app/themes/tree_view_theme.dart';
 import 'package:create_app/states/tree_view_state.dart';
 import 'package:widget_models/widget_models.dart' hide InsertMode;
+import 'package:better_print/better_print.dart';
 
 class TreeNodes extends HookWidget {
   final addKey = GlobalKey();
@@ -31,22 +32,25 @@ class TreeNodes extends HookWidget {
     final _currentModal = useProvider(currentModalNotifier);
     final _isAddable = useState(false);
     final _shadowKey = useState<String?>(null);
-    void _showWidgetModelOption(String key, GlobalKey gKey,
+    void _selectWidgetModels(
+        String key, GlobalKey gKey, String group, ModalSubActions actions,
         [InsertMode mode = InsertMode.insert, int? index]) {
       _shadowKey.value = key;
-      _currentModal
-          .setModal(handleModals(AddWidgetModal.id, gKey, (String type) {
-        Map<String, dynamic>? model = getFlutterWidgetModelFromType(
-                uuid.v1(),
-                'children',
-                EnumToString.fromString(FlutterWidgetType.values, type))
-            ?.asMap;
-        // Console.print(model?['data']['text']['value'].runtimeType)
-        //     .show();
-        context.read(treeViewController).addNode(key, model!, mode, index);
-        _shadowKey.value = null;
-        _currentModal.setModal(null);
-      }));
+      _currentModal.setModal(
+          handleModals(AddWidgetModal.id, gKey, (String type) {
+            Map<String, dynamic>? model = getFlutterWidgetModelFromType(
+                    uuid.v1(),
+                    group,
+                    EnumToString.fromString(FlutterWidgetType.values, type))
+                ?.asMap;
+            // Console.print(model?['data']['text']['value'].runtimeType)
+            //     .show();
+            context.read(treeViewController).addNode(key, model!, mode, index);
+            _shadowKey.value = null;
+            _currentModal.setModal(null);
+          }),
+          key,
+          actions);
     }
 
     return TreeView(
@@ -79,73 +83,159 @@ class TreeNodes extends HookWidget {
         );
       },
       buildActionsWidgets: (key, size) {
-        return [
-          if (_isAddable.value)
-            ActionButton(addKey, Icons.add, size, () {
-              _showWidgetModelOption(key, addKey);
-            }),
-          ActionButton(addParentKey, Icons.add_to_photos, size, () {
-            _shadowKey.value = key;
-            _currentModal.setModal(
-                handleModals(AddWidgetModal.id, addParentKey, (String type) {
-              Map<String, dynamic>? model = getFlutterWidgetModelFromType(
-                      uuid.v1(),
-                      'child',
-                      EnumToString.fromString(FlutterWidgetType.values, type))
-                  ?.asMap;
-              // Console.print(model?['data']['text']['value'].runtimeType)
-              //     .show();
-              context.read(treeViewController).changeParent(key, model!);
-              _shadowKey.value = null;
-              _currentModal.setModal(null);
-            }));
-          }),
-          ActionButton(replaceKey, Icons.find_replace, size, () {
-            _shadowKey.value = key;
-            _currentModal.setModal(
-                handleModals(AddWidgetModal.id, replaceKey, (String type) {
-              Map<String, dynamic>? model = getFlutterWidgetModelFromType(
-                      uuid.v1(),
-                      'child',
-                      EnumToString.fromString(FlutterWidgetType.values, type))
-                  ?.asMap;
-              context.read(treeViewController).replaceNode(key, model!);
-              _shadowKey.value = null;
-              _currentModal.setModal(null);
-            }));
-          }),
-          ActionButton(deleteKey, Icons.delete, size, () {
-            _treeViewController.deleteNode(key);
-          }),
-          ActionButton(moreKey, Icons.more_vert, size, () {
-            _shadowKey.value = key;
-            _currentModal.setModal(handleModals(OptionsModal.id, moreKey,
-                (String opt) {
-              final i = context.read(treeViewController).getChildNodeIndex(key);
-              final parentKey = context
-                  .read(treeViewController)
-                  .controller
-                  .getParent(key)
-                  .key;
-              if (opt == 'Insert Above') {
-                _showWidgetModelOption(
-                    parentKey, moreKey, InsertMode.prepend, i);
-              } else if (opt == 'Insert below') {
-                _showWidgetModelOption(
-                    parentKey, moreKey, InsertMode.append, i);
-              } else if (opt == 'Insert at Start') {
-                _showWidgetModelOption(parentKey, moreKey, InsertMode.prepend);
-              } else if (opt == 'Insert at End') {
-                _showWidgetModelOption(parentKey, moreKey, InsertMode.append);
-              }
-            }, [
-              'Insert at Start',
-              'Insert Above',
-              'Insert below',
-              'Insert at End'
-            ]));
-          }),
-        ];
+        final _model =
+            context.read(appBuildController).controller.getModel(key);
+        return _model != null
+            ? [
+                if (_isAddable.value)
+                  Tooltip(
+                    message: 'Add Node',
+                    child: ActionButton(addKey, Icons.add, size, () {
+                      final groups = _model.childGroups;
+                      if (groups.length == 1)
+                        _selectWidgetModels(
+                          key,
+                          addKey,
+                          groups.first.name,
+                          ModalSubActions.addChild,
+                        );
+                      else {
+                        final ls = groups.map((e) => e.name).toList();
+                        ls.removeWhere((el) =>
+                            groups.where((g) => g.name == el).first.child !=
+                            null);
+                        _currentModal.setModal(
+                          handleModals(
+                              OptionsModal.id, addKey, (String opt) {}, ls),
+                          key,
+                        );
+                      }
+                    }),
+                  ),
+                Tooltip(
+                  message: 'Change Parent Node',
+                  child:
+                      ActionButton(addParentKey, Icons.add_to_photos, size, () {
+                    _shadowKey.value = key;
+                    _currentModal.setModal(
+                      handleModals(AddWidgetModal.id, addParentKey,
+                          (String type) {
+                        final model = getFlutterWidgetModelFromType(
+                            uuid.v1(),
+                            _model.parentGroup,
+                            EnumToString.fromString(
+                                FlutterWidgetType.values, type));
+                        // Console.print(model?['data']['text']['value'].runtimeType)
+                        //     .show();
+                        if (model != null && model.childGroups.length == 1)
+                          context.read(treeViewController).changeParent(
+                              key, model.asMap, model.childGroups.first.name);
+                        else
+                          Console.print('resolve!').show(); //? resolve
+                        _shadowKey.value = null;
+                        _currentModal.setModal(null);
+                      }),
+                      key,
+                      ModalSubActions.addParent,
+                    );
+                  }),
+                ),
+                Tooltip(
+                  message: 'Replace Node',
+                  child: ActionButton(replaceKey, Icons.find_replace, size, () {
+                    _shadowKey.value = key;
+                    _currentModal.setModal(
+                      handleModals(AddWidgetModal.id, replaceKey,
+                          (String type) {
+                        Map<String, dynamic>? model =
+                            getFlutterWidgetModelFromType(
+                                    uuid.v1(),
+                                    _model.parentGroup,
+                                    EnumToString.fromString(
+                                        FlutterWidgetType.values, type))
+                                ?.asMap;
+                        context
+                            .read(treeViewController)
+                            .replaceNode(key, model!);
+                        _shadowKey.value = null;
+                        _currentModal.setModal(null);
+                      }),
+                      key,
+                      ModalSubActions.replace,
+                    );
+                  }),
+                ),
+                Tooltip(
+                  message: 'Delete Node',
+                  child: ActionButton(deleteKey, Icons.delete, size, () {
+                    _treeViewController.deleteNode(key);
+                  }),
+                ),
+                Tooltip(
+                  message: 'More Options',
+                  child: ActionButton(moreKey, Icons.more_vert, size, () {
+                    _shadowKey.value = key;
+                    _currentModal.setModal(
+                      handleModals(OptionsModal.id, moreKey, (String opt) {
+                        if (opt == 'Delete All') {
+                          _treeViewController.deleteNode(key, true);
+                        } else if (opt == 'rename') {
+                        } else if (opt == 'copy') {
+                        } else {
+                          final i = context
+                              .read(treeViewController)
+                              .getChildNodeIndex(key);
+                          final parentKey = context
+                              .read(treeViewController)
+                              .controller
+                              .getParent(key)
+                              .key;
+                          if (opt == 'Insert Above') {
+                            _selectWidgetModels(
+                                parentKey,
+                                moreKey,
+                                'child',
+                                ModalSubActions.addChild,
+                                InsertMode.prepend,
+                                i);
+                          } else if (opt == 'Insert below') {
+                            _selectWidgetModels(parentKey, moreKey, 'child',
+                                ModalSubActions.addChild, InsertMode.append, i);
+                          } else if (opt == 'Insert at Start') {
+                            _selectWidgetModels(parentKey, moreKey, 'child',
+                                ModalSubActions.addChild, InsertMode.prepend);
+                          } else if (opt == 'Insert at End') {
+                            _selectWidgetModels(
+                              parentKey,
+                              moreKey,
+                              'child',
+                              ModalSubActions.addChild,
+                              InsertMode.append,
+                            );
+                          }
+                        }
+                        _shadowKey.value = null;
+                        _currentModal.setModal(null);
+                      }, [
+                        'Delete All',
+                        'rename',
+                        'copy',
+                        'paste replace',
+                        'paste child',
+                        'paste parent',
+                        'swap with child',
+                        'swap with parent',
+                        'Insert at Start',
+                        'Insert Above',
+                        'Insert below',
+                        'Insert at End'
+                      ]),
+                      key,
+                    );
+                  }),
+                ),
+              ]
+            : [];
       },
     );
   }

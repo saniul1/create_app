@@ -63,11 +63,59 @@ class TreeViewNotifier extends ChangeNotifier {
     _buildApps();
   }
 
-  void deleteNode(String key) {
-    _controller = TreeViewController(
-        children: _controller.deleteNode(key), selectedKey: _selectedKey);
+  void deleteNode(String key, [bool deleteAll = false]) {
+    final model = _ref.read(appBuildController).controller.getModel(key);
+    final isAttachable = _checkIfChildrenCanAttachToParent(key);
+    if (model != null && isAttachable) {
+      print(deleteAll);
+      // print(parent.childGroups.first.name);
+      _controller = TreeViewController(
+        children: _controller.deleteNode(key,
+            group: model.parentGroup, deleteChildren: deleteAll),
+        selectedKey: _selectedKey,
+      );
+    } else {
+      Console.print('resolve delete!').show();
+      // _controller = TreeViewController(
+      //     children: _controller.deleteNode(key), selectedKey: _selectedKey);
+    }
     _buildApps();
     notifyListeners();
+  }
+
+  bool _checkIfChildrenCanAttachToParent(String key) {
+    final modelController = _ref.read(appBuildController).controller;
+    final parent = modelController.getParent(key);
+    final model = modelController.getModel(key);
+    bool result = false;
+    if (parent != null && model != null) {
+      if (model.children.isNotEmpty) {
+        if (model.children.length == 1 ||
+            parent.childGroups.length == 1 &&
+                model.children.every((el) =>
+                    el.parentGroup == model.children.first.parentGroup &&
+                    el.parentGroup == parent.childGroups.first.name)) {
+          result = true;
+        } else {
+          final isMatched = model.children.every((el) =>
+              parent.childGroups.every((gr) => el.parentGroup == gr.name));
+          if (!isMatched) {
+            Console.print(
+                    'Children group type\'s can\'t match with parent. resolve()')
+                .show();
+          } else
+            parent.childGroups.forEach((gr) {
+              final _children = [...model.children];
+              _children.removeWhere((el) => el.parentGroup != gr.name);
+              if (gr.childCount >= _children.length)
+                result = true;
+              else {}
+            });
+        }
+      } else
+        return result = true;
+    }
+    return result;
   }
 
   int getChildNodeIndex(
@@ -83,19 +131,22 @@ class TreeViewNotifier extends ChangeNotifier {
     addNode(parent.key, map, InsertMode.replace, i);
   }
 
-  void changeParent(String key, Map<String, dynamic> map) {
+  void changeParent(String key, Map<String, dynamic> map,
+      [String group = 'child']) {
     final parent = _controller.getParent(key);
     final i = getChildNodeIndex(key);
-    addNode(parent.key, map, InsertMode.changeParent, i);
+    // resolve
+    addNode(parent.key, map, InsertMode.changeParent, i, group);
   }
 
   void addNode(String key, Map<String, dynamic> map,
-      [InsertMode mode = InsertMode.insert, int? index]) {
+      [InsertMode mode = InsertMode.insert, int? index, String? group]) {
     final node = Node.fromMap(map);
     // Console.print(node).show();
     _controller = TreeViewController(
         selectedKey: _selectedKey,
-        children: _controller.addNode(key, node, mode: mode, index: index));
+        children: _controller.addNode(key, node,
+            mode: mode, index: index, group: group));
     expandNode(key);
   }
 

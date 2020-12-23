@@ -156,6 +156,10 @@ abstract class ModelWidget {
         }
       }
     });
+    this
+        .childGroups
+        .removeWhere((el) => _newGroup.any((e) => e.name == el.name));
+    this.childGroups.addAll(_newGroup);
     return _newGroup;
   }
 

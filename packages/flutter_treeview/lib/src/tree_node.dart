@@ -120,12 +120,14 @@ class _TreeNodeState extends State<TreeNode>
     final icon = _treeView.buildNodeIcon(
         widget.node.group, Size(_theme.iconTheme.size, _theme.iconTheme.size));
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         GestureDetector(
           onTap: () => _handleExpand(),
           child: Container(width: 20, child: icon),
         ),
-        Expanded(
+        Tooltip(
+          message: widget.node.type,
           child: Text(
             widget.node.label,
             softWrap: false,
@@ -145,6 +147,21 @@ class _TreeNodeState extends State<TreeNode>
                         ? _theme.colorScheme.onPrimary
                         : _theme.colorScheme.onBackground,
                   ),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            child: Text(
+              widget.node.group ?? '',
+              softWrap: false,
+              overflow: TextOverflow.clip,
+              style: _theme.labelStyle.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: _theme.colorScheme.onBackground.withOpacity(0.6),
+              ),
+            ),
           ),
         ),
       ],

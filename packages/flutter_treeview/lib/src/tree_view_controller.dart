@@ -305,6 +305,7 @@ class TreeViewController {
     Node parent,
     InsertMode mode: InsertMode.append,
     int index,
+    String group,
   }) {
     List<Node> _children = parent == null ? this.children : parent.children;
     return _children.map((Node child) {
@@ -320,14 +321,12 @@ class TreeViewController {
           _children.removeAt(index ?? 0);
           _children.insert(index ?? 0, newNode.copyWith(children: children));
         } else if (mode == InsertMode.changeParent) {
-          final children = _addChildrenFrom(_children[index ?? 0].key);
           final _child = _children[index ?? 0];
           _children.removeAt(index ?? 0);
           _children.insert(
               index ?? 0,
-              newNode.copyWith(children: [
-                _child.copyWith(group: 'child', children: children)
-              ]));
+              newNode.copyWith(
+                  children: [_child.copyWith(group: group ?? _child.group)]));
         } else {
           _children.add(newNode);
         }
@@ -340,6 +339,7 @@ class TreeViewController {
             parent: child,
             mode: mode,
             index: index,
+            group: group,
           ),
         );
       }
@@ -388,8 +388,12 @@ class TreeViewController {
 
   /// Deletes an existing node identified by specified key. This method
   /// returns a new list with the specified node removed.
-  List<Node> deleteNode(String key,
-      {Node parent, bool deleteChildren = false}) {
+  List<Node> deleteNode(
+    String key, {
+    Node parent,
+    bool deleteChildren = false,
+    String group,
+  }) {
     List<Node> _children = parent == null ? this.children : parent.children;
     List<Node> _filteredChildren = [];
     Iterator iter = _children.iterator;
@@ -398,7 +402,8 @@ class TreeViewController {
       if (child.key != key) {
         if (child.isParent) {
           _filteredChildren.add(child.copyWith(
-            children: deleteNode(key, parent: child),
+            children: deleteNode(key,
+                parent: child, group: group, deleteChildren: deleteChildren),
           ));
         } else {
           _filteredChildren.add(child);
@@ -408,7 +413,9 @@ class TreeViewController {
           final children = getNode(key).children;
           children.forEach((child) {
             _filteredChildren.add(child.copyWith(
-              children: deleteNode(key, parent: child),
+              group: group ?? child.group,
+              children: deleteNode(key,
+                  parent: child, group: group, deleteChildren: deleteChildren),
             ));
           });
         }

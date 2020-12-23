@@ -38,8 +38,16 @@ class TextModel extends ModelWidget {
   //to sue both ex: '$count\!!\$count'
   String _resolveText(String text) {
     if (text.contains(r'$')) {
+      final chr = text.characters;
+      var spaces = '';
+      for (var c in chr) {
+        if (c == ' ')
+          spaces = '$spaces$c';
+        else
+          break;
+      }
       final list = text.split(" ");
-      text = "";
+      text = '';
       list.forEach((txt) {
         if (txt.contains(r'$')) {
           final tx = txt.split('\\');
@@ -49,7 +57,7 @@ class TextModel extends ModelWidget {
           });
           text = '$text $t';
         } else {
-          text = '$text $txt';
+          text = text == '' ? '$spaces$txt' : '$text $txt';
         }
       });
     }
