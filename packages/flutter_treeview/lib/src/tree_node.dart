@@ -288,11 +288,20 @@ class _TreeNodeState extends State<TreeNode>
                 ? null
                 : Container(
                     margin: EdgeInsets.only(left: _kIconSize / 2),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: widget.node.children.map((Node node) {
-                        return TreeNode(node: node);
-                      }).toList(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                        left: BorderSide(
+                          width: 1.0,
+                          color: _treeView.theme.colorScheme.primary,
+                        ),
+                      )),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: widget.node.children.map((Node node) {
+                          return TreeNode(node: node);
+                        }).toList(),
+                      ),
                     ),
                   ),
           )
