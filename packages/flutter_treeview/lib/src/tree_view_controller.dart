@@ -249,6 +249,21 @@ class TreeViewController {
     return _found;
   }
 
+  List<Node> reorderNode(String key, [isUp = true]) {
+    final parent = getParent(key);
+    final index = parent.children.indexWhere((element) => element.key == key);
+    if (index >= 0) {
+      final n = parent.children.removeAt(index);
+      if (isUp) {
+        parent.children.insert(index > 0 ? index - 1 : index, n);
+      } else {
+        parent.children
+            .insert(parent.children.length - 1 < index ? index + 1 : index, n);
+      }
+    }
+    return this.children;
+  }
+
   /// Expands a node and all of the node's ancestors so that the node is
   /// visible without the need to manually expand each node.
   List<Node> expandToNode(String key) {

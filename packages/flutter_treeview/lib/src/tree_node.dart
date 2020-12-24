@@ -292,7 +292,7 @@ class _TreeNodeState extends State<TreeNode>
                       decoration: BoxDecoration(
                           border: Border(
                         left: BorderSide(
-                          width: 1.0,
+                          width: 1.5,
                           color: _treeView.theme.colorScheme.primary,
                         ),
                       )),

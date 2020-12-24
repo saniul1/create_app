@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:create_app/_utils/handle_assets.dart';
+import 'package:create_app/modals/warning_dialog.dart';
 import 'package:create_app/models/app_view_model.dart';
 import 'package:create_app/states/app_builder_state.dart';
 import 'package:create_app/states/app_view_state.dart';
 import 'package:create_app/states/property_view_state.dart';
 import 'package:flutter/material.dart';
+import 'package:create_app/states/modal_states.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_treeview/tree_view.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -51,6 +53,24 @@ class TreeViewNotifier extends ChangeNotifier {
     );
   }
 
+  void moveUp(String key) {
+    _controller = TreeViewController(
+      children: _controller.reorderNode(key),
+      selectedKey: _selectedKey,
+    );
+    _buildApps();
+    notifyListeners();
+  }
+
+  void moveDown(String key) {
+    _controller = TreeViewController(
+      children: _controller.reorderNode(key, false),
+      selectedKey: _selectedKey,
+    );
+    _buildApps();
+    notifyListeners();
+  }
+
   void updateNodeData(Map<String, dynamic> data, value) {
     final keys = data.keys.first.split('.');
     final node = _controller.getNode(keys.first);
@@ -66,21 +86,28 @@ class TreeViewNotifier extends ChangeNotifier {
   void deleteNode(String key, [bool deleteAll = false]) {
     final model = _ref.read(appBuildController).controller.getModel(key);
     final isAttachable = _checkIfChildrenCanAttachToParent(key);
-    if (model != null && isAttachable) {
-      print(deleteAll);
+    if (model != null && (deleteAll || isAttachable)) {
       // print(parent.childGroups.first.name);
       _controller = TreeViewController(
         children: _controller.deleteNode(key,
             group: model.parentGroup, deleteChildren: deleteAll),
         selectedKey: _selectedKey,
       );
+      _buildApps();
+      notifyListeners();
     } else {
+      _ref.read(currentModalNotifier).setModal(WarningModal(
+              'Children can not be successfully attached to parent.\n Delete all children?',
+              () {
+            _controller = TreeViewController(
+              children: _controller.deleteNode(key, deleteChildren: true),
+              selectedKey: _selectedKey,
+            );
+            _buildApps();
+            notifyListeners();
+          }));
       Console.print('resolve delete!').show();
-      // _controller = TreeViewController(
-      //     children: _controller.deleteNode(key), selectedKey: _selectedKey);
     }
-    _buildApps();
-    notifyListeners();
   }
 
   bool _checkIfChildrenCanAttachToParent(String key) {
@@ -99,11 +126,7 @@ class TreeViewNotifier extends ChangeNotifier {
         } else {
           final isMatched = model.children.every((el) =>
               parent.childGroups.every((gr) => el.parentGroup == gr.name));
-          if (!isMatched) {
-            Console.print(
-                    'Children group type\'s can\'t match with parent. resolve()')
-                .show();
-          } else
+          if (isMatched)
             parent.childGroups.forEach((gr) {
               final _children = [...model.children];
               _children.removeWhere((el) => el.parentGroup != gr.name);

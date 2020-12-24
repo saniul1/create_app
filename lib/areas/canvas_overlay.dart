@@ -70,6 +70,7 @@ class CanvasOverlayArea extends HookWidget {
                             children: [
                               AppIconButton(
                                 icon: Foundation.zoom_out,
+                                info: 'zoom out',
                                 size: 20,
                                 onClick: () {
                                   zoom.state -= 0.1;
@@ -77,6 +78,7 @@ class CanvasOverlayArea extends HookWidget {
                               ),
                               AppIconButton(
                                 icon: Foundation.zoom_in,
+                                info: 'zoom in',
                                 size: 20,
                                 onClick: () {
                                   zoom.state += 0.1;
@@ -84,6 +86,7 @@ class CanvasOverlayArea extends HookWidget {
                               ),
                               AppIconButton(
                                 icon: Foundation.arrows_compress,
+                                info: 'zoom reset',
                                 size: 20,
                                 onClick: () {
                                   zoom.state = 1.0;
@@ -91,6 +94,7 @@ class CanvasOverlayArea extends HookWidget {
                               ),
                               AppIconButton(
                                 icon: Foundation.arrows_in,
+                                info: 'center canvas',
                                 size: 20,
                                 onClick: () {
                                   offset.state =
@@ -111,6 +115,7 @@ class CanvasOverlayArea extends HookWidget {
                           child: Row(children: [
                             AppIconButton(
                               icon: Foundation.graph_bar,
+                              info: 'vertical align',
                               size: 20,
                               onClick: () {
                                 appList.alignVertical();
@@ -119,6 +124,7 @@ class CanvasOverlayArea extends HookWidget {
                             ),
                             AppIconButton(
                               icon: Foundation.graph_horizontal,
+                              info: 'Horizontal align',
                               size: 20,
                               onClick: () {
                                 appList.alignHorizontal();
@@ -127,6 +133,7 @@ class CanvasOverlayArea extends HookWidget {
                             ),
                             AppIconButton(
                               icon: Foundation.eye,
+                              info: 'make center',
                               size: 20,
                               onClick: () {
                                 appList.makeCenter();

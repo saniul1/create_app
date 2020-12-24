@@ -42,6 +42,7 @@ class MenuBar extends HookWidget {
           children: [
             AppIconButton(
               key: _menuBtnKey,
+              info: 'main menu',
               icon: Entypo.menu,
               size: iconSize + 4,
               onClick: () {
@@ -51,6 +52,7 @@ class MenuBar extends HookWidget {
             ),
             AppIconButton(
               icon: Entypo.mouse_pointer,
+              info: 'select',
               size: iconSize,
               color: selectTool.state == ToolType.select
                   ? Theme.of(context).primaryColor
@@ -62,12 +64,26 @@ class MenuBar extends HookWidget {
                       : ToolType.select,
             ),
             AppIconButton(
+              icon: Entypo.level_up,
+              info: 'undo',
+              size: iconSize,
+              onClick: () {},
+            ),
+            AppIconButton(
+              icon: Entypo.level_down,
+              info: 'redo',
+              size: iconSize,
+              onClick: () {},
+            ),
+            AppIconButton(
               icon: Entypo.cog,
+              info: 'settings',
               size: iconSize,
               onClick: () {},
             ),
             AppIconButton(
               icon: Entypo.help,
+              info: 'help',
               size: iconSize,
               onClick: () {},
             ),

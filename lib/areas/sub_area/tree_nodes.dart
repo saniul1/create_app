@@ -105,8 +105,14 @@ class TreeNodes extends HookWidget {
                             groups.where((g) => g.name == el).first.child !=
                             null);
                         _currentModal.setModal(
-                          handleModals(
-                              OptionsModal.id, addKey, (String opt) {}, ls),
+                          handleModals(OptionsModal.id, addKey, (String opt) {
+                            _selectWidgetModels(
+                              key,
+                              addKey,
+                              opt,
+                              ModalSubActions.addChild,
+                            );
+                          }, ls),
                           key,
                         );
                       }
@@ -181,6 +187,10 @@ class TreeNodes extends HookWidget {
                           _treeViewController.deleteNode(key, true);
                         } else if (opt == 'rename') {
                         } else if (opt == 'copy') {
+                        } else if (opt == 'move up') {
+                          _treeViewController.moveUp(key);
+                        } else if (opt == 'move down') {
+                          _treeViewController.moveDown(key);
                         } else {
                           final i = context
                               .read(treeViewController)
@@ -225,6 +235,8 @@ class TreeNodes extends HookWidget {
                         'paste parent',
                         'swap with child',
                         'swap with parent',
+                        'move up',
+                        'move down',
                         'Insert at Start',
                         'Insert Above',
                         'Insert below',

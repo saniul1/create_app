@@ -1,60 +1,175 @@
 [
   {
     "key": "my_app",
-    "label": "Container",
-    "type": "Container",
-    "icon": {
-      "codePoint": 59232,
-      "fontFamily": "MaterialIcons",
-      "fontPackage": null,
-      "color": "blue"
-    },
-    "expanded": true,
+    "label": "My App",
+    "type": "CustomWidget",
+    "group": null,
     "data": {
-      "color": {
-        "label": "Color",
-        "value": "Colors.red",
-        "type": "color",
-        "inherit": {
-          "from": "Colors",
-          "parent": "material"
-        }
+      "count": {
+        "label": "Count",
+        "value": 0,
+        "type": "integer",
+        "inherit": null,
+        "isFinal": false
       }
     },
     "children": [
       {
-        "key": "center",
-        "label": "Center",
-        "type": "Center",
-        "icon": {
-          "codePoint": 59232,
-          "fontFamily": "MaterialIcons",
-          "fontPackage": null,
-          "color": "blue"
+        "key": "materialApp",
+        "label": "MaterialApp",
+        "type": "MaterialApp",
+        "group": "child",
+        "data": {
+          "debugShowCheckedModeBanner": {
+            "label": "debugShowCheckedModeBanner",
+            "value": false,
+            "type": "boolean",
+            "inherit": null,
+            "isFinal": true
+          }
         },
-        "expanded": true,
-        "data": {},
         "children": [
           {
-            "key": "text",
-            "label": "Text",
-            "type": "Text",
-            "icon": {
-              "codePoint": 59232,
-              "fontFamily": "MaterialIcons",
-              "fontPackage": null,
-              "color": "blue"
-            },
-            "expanded": true,
-            "data": {
-              "text": {
-                "label": "text",
-                "value": "Hello Worldsss!!!!",
-                "type": "string",
-                "inherit": null
+            "key": "materialScaffold",
+            "label": "MaterialScaffold",
+            "type": "MaterialScaffold",
+            "group": "home",
+            "data": {},
+            "children": [
+              {
+                "key": "container",
+                "label": "Container",
+                "type": "Container",
+                "group": "body",
+                "data": {
+                  "color": {
+                    "label": "Color",
+                    "value": "Colors.green",
+                    "type": "materialColor",
+                    "inherit": null,
+                    "isFinal": true
+                  }
+                },
+                "children": [
+                  {
+                    "key": "center",
+                    "label": "Center",
+                    "type": "Center",
+                    "group": "child",
+                    "data": {},
+                    "children": [
+                      {
+                        "key": "column",
+                        "label": "Column",
+                        "type": "Column",
+                        "group": "child",
+                        "data": {},
+                        "children": [
+                          {
+                            "key": "text",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "Hello World!!",
+                                "type": "string",
+                                "inherit": null,
+                                "isFinal": true
+                              }
+                            },
+                            "children": []
+                          },
+                          {
+                            "key": "text_count",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "Your count is $count\\.\\$count",
+                                "type": "string",
+                                "inherit": null,
+                                "isFinal": true
+                              },
+                              "count": {
+                                "label": "text",
+                                "value": "$count",
+                                "type": "string",
+                                "inherit": "my_app",
+                                "isFinal": true
+                              }
+                            },
+                            "children": []
+                          },
+                          {
+                            "key": "720d5a30-406e-11eb-b3a1-c156bc785670",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "Successfully aded.",
+                                "type": "String",
+                                "inherit": null,
+                                "isFinal": true
+                              }
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "key": "floatingActionButton",
+                "label": "FloatingActionButton",
+                "type": "MaterialFloatingActionButton",
+                "group": "floatingActionButton",
+                "data": {
+                  "onPressed": {
+                    "label": "onPressed",
+                    "value": [
+                      {
+                        "my_app": {
+                          "count": {
+                            "action": "addition",
+                            "value": 1,
+                            "condition": null
+                          }
+                        }
+                      }
+                    ],
+                    "type": "function",
+                    "inherit": null,
+                    "isFinal": true
+                  }
+                },
+                "children": [
+                  {
+                    "key": "icon",
+                    "label": "Icon",
+                    "type": "Icon",
+                    "group": "child",
+                    "data": {
+                      "icon": {
+                        "label": "Icon",
+                        "value": "add",
+                        "type": "icon",
+                        "inherit": null,
+                        "isFinal": true
+                      }
+                    },
+                    "children": []
+                  }
+                ]
               }
-            },
-            "children": []
+            ]
           }
         ]
       }
