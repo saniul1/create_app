@@ -22,13 +22,52 @@ class TreeViewNotifier extends ChangeNotifier {
   final ProviderReference _ref;
   TreeViewNotifier(ref) : _ref = ref;
   TreeViewController _controller = TreeViewController();
+  List<String> _treeHistory = [];
+  int _currentHistoryIndex = 0;
   String? _selectedKey;
+  bool get isUndoAble => _currentHistoryIndex != 0;
+  bool get isRedoAble => _currentHistoryIndex != _treeHistory.length - 1;
   String? get selectedKey => _selectedKey;
   TreeViewController get controller => _controller;
+
+  addToHistory(List<Node> children) {
+    if (_currentHistoryIndex != _treeHistory.length - 1)
+      _treeHistory.removeRange(_currentHistoryIndex + 1, _treeHistory.length);
+    _controller =
+        TreeViewController(children: children, selectedKey: this.selectedKey);
+    _treeHistory.add(_controller.toString());
+    if (_treeHistory.length > 200) _treeHistory.removeAt(0);
+    _currentHistoryIndex = _treeHistory.length - 1;
+    _buildApps();
+    notifyListeners();
+  }
+
+  undo() {
+    final index = _currentHistoryIndex > 0 ? _currentHistoryIndex - 1 : 0;
+    _currentHistoryIndex = index;
+    _controller = _controller.loadJSON(
+        json: _treeHistory[index], selectKey: this.selectedKey);
+    _buildApps();
+    notifyListeners();
+    // _ref.read(propertyViewController).notify();
+  }
+
+  redo() {
+    final index = _currentHistoryIndex == _treeHistory.length - 1
+        ? _treeHistory.length - 1
+        : _currentHistoryIndex + 1;
+    _currentHistoryIndex = index;
+    _controller = _controller.loadJSON(
+        json: _treeHistory[index], selectKey: this.selectedKey);
+    _buildApps();
+    notifyListeners();
+    // _ref.read(propertyViewController).notify();
+  }
 
   void loadTreeFromJson(String json) {
     _controller = _controller.loadJSON(json: json);
     selectNode(_controller.children.first.key);
+    _treeHistory.add(json);
     showApp();
     setPropertyView();
     notifyListeners();
@@ -54,21 +93,11 @@ class TreeViewNotifier extends ChangeNotifier {
   }
 
   void moveUp(String key) {
-    _controller = TreeViewController(
-      children: _controller.reorderNode(key),
-      selectedKey: _selectedKey,
-    );
-    _buildApps();
-    notifyListeners();
+    addToHistory(_controller.reorderNode(key));
   }
 
   void moveDown(String key) {
-    _controller = TreeViewController(
-      children: _controller.reorderNode(key, false),
-      selectedKey: _selectedKey,
-    );
-    _buildApps();
-    notifyListeners();
+    addToHistory(_controller.reorderNode(key, false));
   }
 
   void updateNodeData(Map<String, dynamic> data, value) {
@@ -76,11 +105,7 @@ class TreeViewNotifier extends ChangeNotifier {
     final node = _controller.getNode(keys.first);
     Console.print(node.data[keys.last]).show();
     node.data[keys.last]['value'] = value;
-    _controller = TreeViewController(
-      selectedKey: _selectedKey,
-      children: _controller.updateNode(keys.first, node),
-    );
-    _buildApps();
+    addToHistory(_controller.updateNode(keys.first, node));
   }
 
   void deleteNode(String key, [bool deleteAll = false]) {
@@ -88,23 +113,13 @@ class TreeViewNotifier extends ChangeNotifier {
     final isAttachable = _checkIfChildrenCanAttachToParent(key);
     if (model != null && (deleteAll || isAttachable)) {
       // print(parent.childGroups.first.name);
-      _controller = TreeViewController(
-        children: _controller.deleteNode(key,
-            group: model.parentGroup, deleteChildren: deleteAll),
-        selectedKey: _selectedKey,
-      );
-      _buildApps();
-      notifyListeners();
+      addToHistory(_controller.deleteNode(key,
+          group: model.parentGroup, deleteChildren: deleteAll));
     } else {
       _ref.read(currentModalNotifier).setModal(WarningModal(
               'Children can not be successfully attached to parent.\n Delete all children?',
               () {
-            _controller = TreeViewController(
-              children: _controller.deleteNode(key, deleteChildren: true),
-              selectedKey: _selectedKey,
-            );
-            _buildApps();
-            notifyListeners();
+            addToHistory(_controller.deleteNode(key, deleteChildren: true));
           }));
       Console.print('resolve delete!').show();
     }
@@ -174,10 +189,7 @@ class TreeViewNotifier extends ChangeNotifier {
   }
 
   void expandNode(key) {
-    _controller = TreeViewController(
-        selectedKey: _selectedKey, children: _controller.expandToNode(key));
-    _buildApps();
-    notifyListeners();
+    addToHistory(_controller.expandToNode(key));
   }
 
   void setPropertyView() {

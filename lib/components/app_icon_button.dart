@@ -31,9 +31,12 @@ class _AppIconButtonState extends State<AppIconButton> {
           highlightColor: Colors.transparent,
           customBorder: CircleBorder(),
           mouseCursor: SystemMouseCursors.basic,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(widget.icon, size: widget.size, color: widget.color),
+          child: Opacity(
+            opacity: widget.onClick != null ? 1 : 0.6,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(widget.icon, size: widget.size, color: widget.color),
+            ),
           ),
           onTap: widget.onClick,
         ),

@@ -55,10 +55,10 @@ class TreeViewController {
   ///   controller = controller.loadJSON(json: jsonString);
   /// });
   /// ```
-  TreeViewController loadJSON({String json: '[]'}) {
+  TreeViewController loadJSON({String json: '[]', String selectKey}) {
     List jsonList = jsonDecode(json);
     List<Map<String, dynamic>> list = List<Map<String, dynamic>>.from(jsonList);
-    return loadMap(list: list);
+    return loadMap(mapList: list, selectKey: selectKey);
   }
 
   /// Loads this controller with data from a Map.
@@ -69,12 +69,13 @@ class TreeViewController {
   ///   controller = controller.loadMap(map: dataMap);
   /// });
   /// ```
-  TreeViewController loadMap({List<Map<String, dynamic>> list: const []}) {
+  TreeViewController loadMap(
+      {List<Map<String, dynamic>> mapList: const [], String selectKey}) {
     List<Node> treeData =
-        list.map((Map<String, dynamic> item) => Node.fromMap(item)).toList();
+        mapList.map((Map<String, dynamic> item) => Node.fromMap(item)).toList();
     return TreeViewController(
       children: treeData,
-      selectedKey: this.selectedKey,
+      selectedKey: selectKey ?? this.selectedKey,
     );
   }
 
@@ -258,7 +259,7 @@ class TreeViewController {
         parent.children.insert(index > 0 ? index - 1 : index, n);
       } else {
         parent.children
-            .insert(parent.children.length - 1 < index ? index + 1 : index, n);
+            .insert(parent.children.length == index ? index : index + 1, n);
       }
     }
     return this.children;

@@ -28,6 +28,10 @@ class PropertyViewNotifier extends ChangeNotifier {
   PropertyViewController get controller => _controller;
   final uuid = Uuid();
 
+  void notify() {
+    notifyListeners();
+  }
+
   setPropertyView() {
     _node = _ref.read(treeViewController).controller.selectedNode;
     final ModelWidget? widget =

@@ -1,11 +1,13 @@
 import 'package:create_app/modals/handle_modals.dart';
 import 'package:create_app/modals/main_menu_modal.dart';
 import 'package:create_app/states/tools_state.dart';
+import 'package:create_app/states/tree_view_state.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_hooks/flutter_hooks.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_treeview/tree_view.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -22,6 +24,7 @@ class MenuBar extends HookWidget {
     final iconSize = context.read(iconButtonSize);
     final selectTool = useProvider(selectedTool);
     final _currentModal = useProvider(currentModalNotifier);
+    final treeController = useProvider(treeViewController);
     return Container(
       constraints: BoxConstraints(minWidth: 80),
       decoration: BoxDecoration(
@@ -67,13 +70,21 @@ class MenuBar extends HookWidget {
               icon: Entypo.level_up,
               info: 'undo',
               size: iconSize,
-              onClick: () {},
+              onClick: treeController.isUndoAble
+                  ? () {
+                      treeController.undo();
+                    }
+                  : null,
             ),
             AppIconButton(
               icon: Entypo.level_down,
               info: 'redo',
               size: iconSize,
-              onClick: () {},
+              onClick: treeController.isRedoAble
+                  ? () {
+                      treeController.redo();
+                    }
+                  : null,
             ),
             AppIconButton(
               icon: Entypo.cog,
