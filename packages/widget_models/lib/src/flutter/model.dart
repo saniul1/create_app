@@ -114,7 +114,7 @@ abstract class ModelWidget {
     return false;
   }
 
-  List<ChildGroup> resolveChildren(
+  void resolveChildren(
       Widget Function(Widget, String key) wrap,
       bool isSelectMode,
       void Function(String key, PropertyType type, dynamic args)
@@ -160,7 +160,6 @@ abstract class ModelWidget {
         .childGroups
         .removeWhere((el) => _newGroup.any((e) => e.name == el.name));
     this.childGroups.addAll(_newGroup);
-    return _newGroup;
   }
 
   ModelWidget copyWith({required List<ModelWidget> children}) {

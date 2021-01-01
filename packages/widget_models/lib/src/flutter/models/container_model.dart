@@ -36,8 +36,9 @@ class ContainerModel extends ModelWidget {
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
-    final groups = resolveChildren(wrap, isSelectMode, resolveParams);
-    final child = groups
+    resolveChildren(wrap, isSelectMode, resolveParams);
+    final child = this
+        .childGroups
         .where((group) => group.name == 'child')
         .toList()
         .firstOrNull

@@ -34,8 +34,9 @@ class ColumnModel extends ModelWidget {
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
-    final groups = resolveChildren(wrap, isSelectMode, resolveParams);
-    final children = groups
+    resolveChildren(wrap, isSelectMode, resolveParams);
+    final children = this
+        .childGroups
         .where((group) => group.name == 'children')
         .toList()
         .firstOrNull

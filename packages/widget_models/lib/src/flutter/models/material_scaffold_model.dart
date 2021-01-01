@@ -38,18 +38,21 @@ class MaterialScaffoldModel extends ModelWidget {
 
   @override
   Widget toWidget(wrap, isSelectMode, resolveParams) {
-    final groups = resolveChildren(wrap, isSelectMode, resolveParams);
-    final appBar = groups
+    resolveChildren(wrap, isSelectMode, resolveParams);
+    final appBar = this
+        .childGroups
         .where((group) => group.name == 'appBar')
         .toList()
         .firstOrNull
         ?.child;
-    final body = groups
+    final body = this
+        .childGroups
         .where((group) => group.name == 'body')
         .toList()
         .firstOrNull
         ?.child;
-    final float = groups
+    final float = this
+        .childGroups
         .where((group) => group.name == 'floatingActionButton')
         .toList()
         .firstOrNull
