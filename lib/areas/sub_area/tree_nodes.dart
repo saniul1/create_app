@@ -64,14 +64,17 @@ class TreeNodes extends HookWidget {
       onNodeTap: (key) => _treeViewController.selectNode(key),
       // onNodeDoubleTap: (key) => print(key),
       onHover: (String key) {
-        final model = context.read(appBuildController).controller.getModel(key);
+        final _node = _treeViewController.controller.getNode(key);
+        final model = getFlutterWidgetModelFromType(key, _node.group,
+            EnumToString.fromString(FlutterWidgetType.values, _node.type));
         if (model != null) {
           int i = 0;
           model.childGroups.forEach((e) {
             e.childCount < 0 ? i = -1 : i += e.childCount;
           });
-          _isAddable.value = i < 0 || model.children.length < i ? true : false;
+          _isAddable.value = i < 0 || _node.children.length < i ? true : false;
         } else {
+          final n = _treeViewController.controller.getNode(key);
           _isAddable.value = false;
         }
       },
@@ -83,8 +86,17 @@ class TreeNodes extends HookWidget {
         );
       },
       buildActionsWidgets: (key, size) {
-        final _model =
-            context.read(appBuildController).controller.getModel(key);
+        final _node = _treeViewController.controller.getNode(key);
+        final _model = getFlutterWidgetModelFromType(_node.key, _node.group,
+            EnumToString.fromString(FlutterWidgetType.values, _node.type));
+        if (_model != null)
+          _node.children.forEach((el) {
+            final _mdl = getFlutterWidgetModelFromType(el.key, el.group,
+                EnumToString.fromString(FlutterWidgetType.values, el.type));
+            if (_mdl != null) _model.addChild(_mdl);
+            _model.resolveChildren(
+                (_, key) => Container(), false, (key, type, args) {});
+          });
         return _model != null
             ? [
                 if (_isAddable.value)

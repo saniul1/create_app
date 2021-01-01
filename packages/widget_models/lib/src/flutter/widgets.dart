@@ -12,7 +12,7 @@ import './models/icon_model.dart';
 import './models/column_model.dart';
 
 ModelWidget? getFlutterWidgetModelFromType(
-    String key, String group, FlutterWidgetType type) {
+    String key, String? group, FlutterWidgetType type) {
   switch (type) {
     case FlutterWidgetType.Icon:
       return IconModel(key, group);

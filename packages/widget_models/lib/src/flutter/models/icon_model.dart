@@ -7,7 +7,7 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Icon] widget
 class IconModel extends ModelWidget {
-  IconModel(String key, String group) {
+  IconModel(String key, String? group) {
     this.key = key;
     this.globalKey = GlobalKey();
     this.parentGroup = group;

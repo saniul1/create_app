@@ -1,12 +1,18 @@
+import 'dart:ui';
+
+import 'package:create_app/_utils/handle_keys.dart';
 import 'package:create_app/areas/property_view.dart';
 import 'package:create_app/components/drag_vertical_line.dart';
 import 'package:create_app/components/draggable_area.dart';
 import 'package:create_app/components/draggable_target.dart';
+import 'package:create_app/modals/add_widget_modal.dart';
 import 'package:create_app/states/editor_view_states.dart';
+import 'package:create_app/states/modal_states.dart';
 import 'package:create_app/states/tree_view_state.dart';
 import 'package:create_app/types/enums.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:delayed_display/delayed_display.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,11 +22,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:create_app/areas/sub_area/tree_nodes.dart';
 
 import 'package:create_app/states/sizes.dart';
+import 'package:uuid/uuid.dart';
+import 'package:widget_models/widget_models.dart';
 
 class TreeViewArea extends HookWidget {
   static final id = 'tree-view-area';
   TreeViewArea({required this.key}) : super(key: key);
   final GlobalKey key;
+  final GlobalKey addKey = GlobalKey();
+  final uuid = Uuid();
   @override
   Widget build(BuildContext context) {
     final AsyncValue treeMap = useProvider(nodeMap);
@@ -71,6 +81,44 @@ class TreeViewArea extends HookWidget {
                                 width: width,
                                 title: 'Tree View',
                                 id: id,
+                                actions: [
+                                  IconButton(
+                                    key: addKey,
+                                    icon: Icon(Icons.add),
+                                    iconSize: 18,
+                                    visualDensity: VisualDensity.compact,
+                                    constraints: BoxConstraints(),
+                                    color: Colors.grey,
+                                    hoverColor: Colors.red,
+                                    onPressed: () {
+                                      context
+                                          .read(currentModalNotifier)
+                                          .setModal(
+                                            AddWidgetModal(
+                                              getPositionFromKey(addKey) ??
+                                                  Offset.zero,
+                                              (type) {
+                                                Map<String, dynamic>? model =
+                                                    getFlutterWidgetModelFromType(
+                                                            uuid.v1(),
+                                                            null,
+                                                            EnumToString.fromString(
+                                                                FlutterWidgetType
+                                                                    .values,
+                                                                type))
+                                                        ?.asMap;
+                                                context
+                                                    .read(treeViewController)
+                                                    .addNewRootParent(model!);
+                                                context
+                                                    .read(currentModalNotifier)
+                                                    .setModal(null);
+                                              },
+                                            ),
+                                          );
+                                    },
+                                  )
+                                ],
                               ),
                               if (value || treeController.children.isNotEmpty)
                                 Expanded(

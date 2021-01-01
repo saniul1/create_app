@@ -80,6 +80,11 @@ class TreeViewNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addNewRootParent(Map<String, dynamic> map) {
+    final node = Node.fromMap(map);
+    addToHistory([..._controller.children, node]);
+  }
+
   void showApp() {
     _ref.read(appViewList).adAll(
       [

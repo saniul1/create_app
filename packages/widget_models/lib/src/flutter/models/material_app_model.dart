@@ -8,7 +8,7 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Container] widget
 class MaterialAppModel extends ModelWidget {
-  MaterialAppModel(String key, String group) {
+  MaterialAppModel(String key, String? group) {
     this.key = key;
     this.globalKey = GlobalKey();
     this.parentGroup = group;

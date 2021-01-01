@@ -7,7 +7,7 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Container] widget
 class ContainerModel extends ModelWidget {
-  ContainerModel(String key, String group) {
+  ContainerModel(String key, String? group) {
     this.key = key;
     this.globalKey = GlobalKey();
     this.parentGroup = group;

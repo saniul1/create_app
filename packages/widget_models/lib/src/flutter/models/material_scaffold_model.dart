@@ -7,7 +7,7 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Container] widget
 class MaterialScaffoldModel extends ModelWidget {
-  MaterialScaffoldModel(String key, String group) {
+  MaterialScaffoldModel(String key, String? group) {
     this.key = key;
     this.globalKey = GlobalKey();
     this.parentGroup = group;

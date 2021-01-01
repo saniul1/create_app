@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class EditorLayoutDragArea extends StatelessWidget {
   const EditorLayoutDragArea({
@@ -6,11 +7,13 @@ class EditorLayoutDragArea extends StatelessWidget {
     required this.title,
     required this.id,
     required this.width,
+    this.actions = const [],
   }) : super(key: key);
 
   final String title;
   final String id;
   final double width;
+  final List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class EditorLayoutDragArea extends StatelessWidget {
       feedback: Container(
         width: width,
         color: Colors.grey.withOpacity(0.2),
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(8.0),
         child: Text(
           title,
           style: Theme.of(context)
@@ -35,7 +38,7 @@ class EditorLayoutDragArea extends StatelessWidget {
           children: [
             Container(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
               child: Text(
                 title,
                 style: Theme.of(context)
@@ -44,15 +47,24 @@ class EditorLayoutDragArea extends StatelessWidget {
                     ?.copyWith(color: Colors.grey.shade600),
               ),
             ),
-            Icon(
-              Icons.drag_handle,
-              color: Colors.grey.shade600,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: [
+                  ...actions,
+                  Icon(
+                    Entypo.copy,
+                    color: Colors.grey.shade500,
+                    size: 18,
+                  ),
+                ],
+              ),
             )
           ],
         ),
       ),
       childWhenDragging: SizedBox(
-        height: 60,
+        height: 32,
       ),
     );
   }

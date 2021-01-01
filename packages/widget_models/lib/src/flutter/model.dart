@@ -71,7 +71,7 @@ abstract class ModelWidget {
   bool get isParent => children.isNotEmpty;
 
   /// which property of parent it belongs to
-  late String parentGroup;
+  late String? parentGroup;
 
   /// How the widget fits into the tree
   /// [ParentType.End] is used for widgets that cannot have children

@@ -7,7 +7,7 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Column] widget
 class ColumnModel extends ModelWidget {
-  ColumnModel(String key, String group) {
+  ColumnModel(String key, String? group) {
     this.key = key;
     this.globalKey = GlobalKey();
     this.parentGroup = group;

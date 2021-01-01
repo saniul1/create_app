@@ -8,7 +8,7 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Container] widget
 class MaterialFloatingActionButtonModel extends ModelWidget {
-  MaterialFloatingActionButtonModel(String key, String group) {
+  MaterialFloatingActionButtonModel(String key, String? group) {
     this.key = key;
     this.globalKey = GlobalKey();
     this.parentGroup = group;

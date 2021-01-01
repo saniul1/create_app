@@ -7,7 +7,7 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Center] widget
 class CenterModel extends ModelWidget {
-  CenterModel(String key, String group) {
+  CenterModel(String key, String? group) {
     this.key = key;
     this.globalKey = GlobalKey();
     this.parentGroup = group;
