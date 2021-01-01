@@ -1,5 +1,7 @@
+import 'package:create_app/_utils/handle_keys.dart';
 import 'package:create_app/modals/add_widget_modal.dart';
 import 'package:create_app/modals/handle_modals.dart';
+import 'package:create_app/modals/name_option.dart';
 import 'package:create_app/modals/options_modal.dart';
 import 'package:create_app/states/app_builder_state.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -192,12 +194,18 @@ class TreeNodes extends HookWidget {
                 Tooltip(
                   message: 'More Options',
                   child: ActionButton(moreKey, Icons.more_vert, size, () {
+                    final off = getPositionFromKey(moreKey) ?? Offset.zero;
                     _shadowKey.value = key;
                     _currentModal.setModal(
                       handleModals(OptionsModal.id, moreKey, (String opt) {
                         if (opt == 'Delete All') {
                           _treeViewController.deleteNode(key, true);
                         } else if (opt == 'rename') {
+                          _currentModal.setModal((NameOptionModal(off, (name) {
+                            context.read(treeViewController).replaceNode(
+                                key, _model.changeName(name: name).asMap);
+                            context.read(currentModalNotifier).setModal(null);
+                          }, _node.label)));
                         } else if (opt == 'copy') {
                         } else if (opt == 'move up') {
                           _treeViewController.moveUp(key);
@@ -237,7 +245,7 @@ class TreeNodes extends HookWidget {
                           }
                         }
                         _shadowKey.value = null;
-                        _currentModal.setModal(null);
+                        // _currentModal.setModal(null);
                       }, [
                         'Delete All',
                         'rename',

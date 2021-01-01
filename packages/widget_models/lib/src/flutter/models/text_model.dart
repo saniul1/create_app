@@ -7,8 +7,9 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Text] widget
 class TextModel extends ModelWidget {
-  TextModel(String key, String? group) {
+  TextModel(String key, String? group, String? name) {
     this.key = key;
+    this.label = name;
     this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.Text;

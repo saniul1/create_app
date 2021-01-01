@@ -12,26 +12,27 @@ import './models/icon_model.dart';
 import './models/column_model.dart';
 
 ModelWidget? getFlutterWidgetModelFromType(
-    String key, String? group, FlutterWidgetType type) {
+    String key, String? group, FlutterWidgetType type,
+    [String? name]) {
   switch (type) {
     case FlutterWidgetType.Icon:
-      return IconModel(key, group);
+      return IconModel(key, group, name);
     case FlutterWidgetType.Text:
-      return TextModel(key, group);
+      return TextModel(key, group, name);
     case FlutterWidgetType.Center:
-      return CenterModel(key, group);
+      return CenterModel(key, group, name);
     case FlutterWidgetType.Column:
-      return ColumnModel(key, group);
+      return ColumnModel(key, group, name);
     case FlutterWidgetType.Container:
-      return ContainerModel(key, group);
+      return ContainerModel(key, group, name);
     case FlutterWidgetType.MaterialFloatingActionButton:
-      return MaterialFloatingActionButtonModel(key, group);
+      return MaterialFloatingActionButtonModel(key, group, name);
     case FlutterWidgetType.MaterialScaffold:
-      return MaterialScaffoldModel(key, group);
+      return MaterialScaffoldModel(key, group, name);
     case FlutterWidgetType.MaterialApp:
-      return MaterialAppModel(key, group);
+      return MaterialAppModel(key, group, name);
     case FlutterWidgetType.CustomWidget:
-      return CustomModel(key, group);
+      return CustomModel(key, group, name);
     default:
       return null;
   }

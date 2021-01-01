@@ -6,6 +6,7 @@ import 'package:create_app/components/drag_vertical_line.dart';
 import 'package:create_app/components/draggable_area.dart';
 import 'package:create_app/components/draggable_target.dart';
 import 'package:create_app/modals/add_widget_modal.dart';
+import 'package:create_app/modals/name_option.dart';
 import 'package:create_app/states/editor_view_states.dart';
 import 'package:create_app/states/modal_states.dart';
 import 'package:create_app/states/tree_view_state.dart';
@@ -94,18 +95,17 @@ class TreeViewArea extends HookWidget {
                                       context
                                           .read(currentModalNotifier)
                                           .setModal(
-                                            AddWidgetModal(
+                                            NameOptionModal(
                                               getPositionFromKey(addKey) ??
                                                   Offset.zero,
-                                              (type) {
+                                              (name) {
                                                 Map<String, dynamic>? model =
                                                     getFlutterWidgetModelFromType(
                                                             uuid.v1(),
                                                             null,
-                                                            EnumToString.fromString(
-                                                                FlutterWidgetType
-                                                                    .values,
-                                                                type))
+                                                            FlutterWidgetType
+                                                                .CustomWidget,
+                                                            name)
                                                         ?.asMap;
                                                 context
                                                     .read(treeViewController)

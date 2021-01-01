@@ -56,6 +56,8 @@ class ChildGroup {
 abstract class ModelWidget {
   late String key;
 
+  late String? label;
+
   GlobalKey? globalKey;
 
   /// Type of widget ([Text], [Center], [Column], etc)
@@ -162,8 +164,14 @@ abstract class ModelWidget {
     this.childGroups.addAll(_newGroup);
   }
 
-  ModelWidget copyWith({required List<ModelWidget> children}) {
-    this.children = children;
+  ModelWidget copyWith({ModelWidget? model, List<ModelWidget>? children}) {
+    this.children = children ?? [];
+    return this;
+  }
+
+  ModelWidget changeName({required String name}) {
+    print(key);
+    this.label = name;
     return this;
   }
 
@@ -200,7 +208,7 @@ abstract class ModelWidget {
   // "children": []
   Map<String, dynamic> get asMap => {
         "key": key,
-        "label": EnumToString.convertToString(type),
+        "label": label ?? EnumToString.convertToString(type),
         "type": EnumToString.convertToString(type),
         "group": parentGroup,
         "data": dataAsMap,

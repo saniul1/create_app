@@ -7,8 +7,9 @@ import '../types.dart';
 
 /// Provides a model for recreating the [Column] widget
 class ColumnModel extends ModelWidget {
-  ColumnModel(String key, String? group) {
+  ColumnModel(String key, String? group, String? name) {
     this.key = key;
+    this.label = name;
     this.globalKey = GlobalKey();
     this.parentGroup = group;
     this.type = FlutterWidgetType.Column;
