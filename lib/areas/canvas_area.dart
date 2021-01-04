@@ -217,7 +217,7 @@ class CanvasArea extends HookWidget {
 class SelectedBox extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final controller = useProvider(appBuildController).controller;
+    final controller = useProvider(appBuildController);
     final treeController = useProvider(treeViewController).controller;
     final key = controller.getModel(treeController.selectedKey)?.globalKey!;
     if (key != null) {

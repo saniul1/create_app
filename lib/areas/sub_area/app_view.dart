@@ -27,7 +27,7 @@ class AppView extends HookWidget {
     final node = context.read(appViewList).getNodeId(key.value);
     // print(build.controller.children.first.params);
     // print(build.controller.getNode(node)?.toCode());
-    return build.controller.getModel(node)?.toWidget(
+    return build.controllerById(key.value)?.getModel(node)?.toWidget(
             (child, key) => WidgetWrapper(id: key, child: child),
             currentTool.state == ToolType.select,
             build.resolveWidgetModelPropertyData) ??
@@ -110,11 +110,8 @@ class WidgetWrapper extends HookWidget {
             onHover: (value) {
               if (value)
                 Future.delayed(Duration(milliseconds: 0)).then((value) {
-                  final key = context
-                      .read(appBuildController)
-                      .controller
-                      .getModel(id)
-                      ?.globalKey;
+                  final key =
+                      context.read(appBuildController).getModel(id)?.globalKey;
                   if (key != null) {
                     context.read(selectedWidgetList).state = [];
                     final _pos = PosNSize(

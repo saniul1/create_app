@@ -20,7 +20,15 @@ class NameOptionModal extends HookWidget {
     return Transform.translate(
       offset: offset,
       child: Container(
-        color: Colors.white,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              blurRadius: 8.0,
+            ),
+          ],
+        ),
         constraints: BoxConstraints(maxWidth: 250),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),

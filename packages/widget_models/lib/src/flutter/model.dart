@@ -164,13 +164,14 @@ abstract class ModelWidget {
     this.childGroups.addAll(_newGroup);
   }
 
-  ModelWidget copyWith({ModelWidget? model, List<ModelWidget>? children}) {
-    this.children = children ?? [];
+  // ? possible mistake
+  ModelWidget copyWithChildren({required List<ModelWidget> children}) {
+    this.children = children;
     return this;
   }
 
-  ModelWidget changeName({required String name}) {
-    print(key);
+  ModelWidget coptWith({required ModelWidget model, String? name}) {
+    print(model.dataAsMap);
     this.label = name;
     return this;
   }

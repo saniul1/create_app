@@ -19,13 +19,24 @@ class AppViewListLayout with ChangeNotifier {
   final List<AppViewModel> _list = [];
   List<AppViewModel> get list => _list;
 
-  void adAll(List<AppViewModel> list) {
+  void addAll(List<AppViewModel> list) {
     _list.addAll(list);
     _ref.read(appBuildController).buildApps();
+    notifyListeners();
   }
 
   void add(AppViewModel app) {
     _list.add(app);
+    _ref.read(appBuildController).buildApps();
+    notifyListeners();
+  }
+
+  void remove(String node) {
+    _ref.read(appBuildController).removeController(
+        _list.firstWhere((element) => element.node == node).id);
+    _list.removeWhere((element) => element.node == node);
+    _ref.read(appBuildController).buildApps();
+    notifyListeners();
   }
 
   int getIndex(String id) {

@@ -86,7 +86,7 @@ class TreeViewNotifier extends ChangeNotifier {
   }
 
   void showApp() {
-    _ref.read(appViewList).adAll(
+    _ref.read(appViewList).addAll(
       [
         AppViewModel(
           id: 'app-2',
@@ -114,7 +114,7 @@ class TreeViewNotifier extends ChangeNotifier {
   }
 
   void deleteNode(String key, [bool deleteAll = false]) {
-    final model = _ref.read(appBuildController).controller.getModel(key);
+    final model = _ref.read(appBuildController).getModel(key);
     final isAttachable = _checkIfChildrenCanAttachToParent(key);
     if (model != null && (deleteAll || isAttachable)) {
       // print(parent.childGroups.first.name);
@@ -131,7 +131,9 @@ class TreeViewNotifier extends ChangeNotifier {
   }
 
   bool _checkIfChildrenCanAttachToParent(String key) {
-    final modelController = _ref.read(appBuildController).controller;
+    final modelController =
+        _ref.read(appBuildController).getControllerByModelId(key);
+    if (modelController == null) return false;
     final parent = modelController.getParent(key);
     final model = modelController.getModel(key);
     bool result = false;

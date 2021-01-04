@@ -191,7 +191,7 @@ class WidgetModelController {
       } else {
         // Console.print(key).show();
         if (child.isParent) {
-          return child.copyWith(
+          return child.copyWithChildren(
             children: updateModel(
               key,
               newModel,

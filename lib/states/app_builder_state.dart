@@ -17,15 +17,24 @@ final appBuildController = ChangeNotifierProvider<AppBuilderNotifier>(
 class AppBuilderNotifier extends ChangeNotifier {
   final ProviderReference _ref;
   AppBuilderNotifier(ref) : _ref = ref;
-  WidgetModelController _controller = WidgetModelController(inheritDataMap: {});
-  WidgetModelController get controller => _controller;
+  Map<String, WidgetModelController> _controllers = {};
+  WidgetModelController? controllerById(String id) {
+    return _controllers[id];
+  }
+
+  void removeController(String id) {
+    _controllers.removeWhere((key, value) => key == id);
+  }
 
   buildApps() {
     final tree = _ref.read(treeViewController).controller;
     _ref.read(appViewList).list.forEach((app) {
       Node? node = tree.getNode(app.node);
-      // ignore: unnecessary_null_comparison
-      _controller = _controller.loadMap(list: node != null ? [node.asMap] : []);
+      if (!_controllers.containsKey(app.id))
+        _controllers[app.id] = WidgetModelController(inheritDataMap: {});
+      _controllers[app.id] =
+          // ignore: unnecessary_null_comparison
+          _controllers[app.id]!.loadMap(list: node != null ? [node.asMap] : []);
     });
     notifyListeners();
   }
@@ -34,26 +43,57 @@ class AppBuilderNotifier extends ChangeNotifier {
       String key, PropertyType type, dynamic args) {
     if (args.runtimeType.toString() == 'List<dynamic>') {
       for (var arg in args) {
-        final map = Map<String, dynamic>.from(arg);
-        final parent = _controller.getModel(map.keys.first);
-        if (parent != null)
-          parent.modifiers[map.values.first.keys.first]
-                  [map.values.first.values.first['action']](
-              map.values.first.values.first['value'],
-              map.values.first.values.first['condition']);
-        // do it once by checking the hight parent
-        updateNodeData(map.keys.first);
+        _controllers.forEach((key, value) {
+          final map = Map<String, dynamic>.from(arg);
+          final parent = value.getModel(map.keys.first);
+          if (parent != null) {
+            parent.modifiers[map.values.first.keys.first]
+                    [map.values.first.values.first['action']](
+                map.values.first.values.first['value'],
+                map.values.first.values.first['condition']);
+            // do it once by checking the hight parent
+            updateNodeData(map.keys.first, key);
+          }
+        });
       }
     }
   }
 
-  void updateNodeData(String key) {
-    final node = _controller.getModel(key);
-    if (node != null)
-      _controller = WidgetModelController(
-        children: _controller.updateModel(key, node),
-        inheritDataMap: _controller.inheritDataMap,
-      );
+  ModelWidget? getModel(String id) {
+    for (final key in _controllers.keys) {
+      final model = _controllers[key]?.getModel(id);
+      if (model != null) return model;
+    }
+    return null;
+  }
+
+  WidgetModelController? getControllerByModelId(String id) {
+    for (final key in _controllers.keys) {
+      final model = _controllers[key]?.getModel(id);
+      if (model != null) return _controllers[key];
+    }
+    return null;
+  }
+
+  String? getIdByModelId(String id) {
+    for (final key in _controllers.keys) {
+      final model = _controllers[key]?.getModel(id);
+      if (model != null) return key;
+    }
+    return null;
+  }
+
+  void updateNodeData(String key, [String? id]) {
+    final controllerId = id ?? getIdByModelId(key);
+    final _controller = _controllers[controllerId];
+    if (_controller != null) {
+      final node = _controller.getModel(key);
+      if (node != null)
+        _controllers[controllerId!] = WidgetModelController(
+          children: _controller.updateModel(key, node),
+          inheritDataMap: _controller.inheritDataMap,
+        );
+    }
     // print(_controller.children.first.key);
     notifyListeners();
   }

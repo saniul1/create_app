@@ -3,7 +3,9 @@ import 'package:create_app/modals/add_widget_modal.dart';
 import 'package:create_app/modals/handle_modals.dart';
 import 'package:create_app/modals/name_option.dart';
 import 'package:create_app/modals/options_modal.dart';
+import 'package:create_app/models/app_view_model.dart';
 import 'package:create_app/states/app_builder_state.dart';
+import 'package:create_app/states/app_view_state.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -33,6 +35,7 @@ class TreeNodes extends HookWidget {
     final _treeViewTheme = useProvider(treeViewTheme);
     final _currentModal = useProvider(currentModalNotifier);
     final _isAddable = useState(false);
+    final _isAddedToCanvas = useState(false);
     final _shadowKey = useState<String?>(null);
     void _selectWidgetModels(
         String key, GlobalKey gKey, String group, ModalSubActions actions,
@@ -76,9 +79,12 @@ class TreeNodes extends HookWidget {
           });
           _isAddable.value = i < 0 || _node.children.length < i ? true : false;
         } else {
-          final n = _treeViewController.controller.getNode(key);
           _isAddable.value = false;
         }
+        _isAddedToCanvas.value = context
+            .read(appViewList)
+            .list
+            .any((element) => element.node == _node.key);
       },
       theme: _treeViewTheme.state,
       buildNodeIcon: (groupe, size) {
@@ -101,6 +107,34 @@ class TreeNodes extends HookWidget {
           });
         return _model != null
             ? [
+                if (_model.type == FlutterWidgetType.CustomWidget)
+                  Tooltip(
+                    message: _isAddedToCanvas.value
+                        ? 'Already in Canvas'
+                        : 'Show in Canvas',
+                    child: ActionButton(
+                      GlobalKey(),
+                      _isAddedToCanvas.value
+                          ? Icons.important_devices
+                          : Icons.devices_outlined,
+                      size,
+                      _isAddedToCanvas.value
+                          ? () {
+                              context.read(appViewList).remove(_node.key);
+                              _isAddedToCanvas.value = !_isAddedToCanvas.value;
+                            }
+                          : () {
+                              context.read(appViewList).add(
+                                    AppViewModel(
+                                      id: uuid.v1(),
+                                      offset: Offset(0, 0),
+                                      node: _node.key,
+                                    ),
+                                  );
+                              _isAddedToCanvas.value = !_isAddedToCanvas.value;
+                            },
+                    ),
+                  ),
                 if (_isAddable.value)
                   Tooltip(
                     message: 'Add Node',
@@ -198,12 +232,18 @@ class TreeNodes extends HookWidget {
                     _shadowKey.value = key;
                     _currentModal.setModal(
                       handleModals(OptionsModal.id, moreKey, (String opt) {
+                        var _reset = true;
                         if (opt == 'Delete All') {
                           _treeViewController.deleteNode(key, true);
                         } else if (opt == 'rename') {
+                          _reset = false;
                           _currentModal.setModal((NameOptionModal(off, (name) {
                             context.read(treeViewController).replaceNode(
-                                key, _model.changeName(name: name).asMap);
+                                key,
+                                _model
+                                    .coptWith(model: _model, name: name)
+                                    .asMap);
+                            _shadowKey.value = null;
                             context.read(currentModalNotifier).setModal(null);
                           }, _node.label)));
                         } else if (opt == 'copy') {
@@ -244,8 +284,10 @@ class TreeNodes extends HookWidget {
                             );
                           }
                         }
-                        _shadowKey.value = null;
-                        // _currentModal.setModal(null);
+                        if (_reset) {
+                          _shadowKey.value = null;
+                          _currentModal.setModal(null);
+                        }
                       }, [
                         'Delete All',
                         'rename',

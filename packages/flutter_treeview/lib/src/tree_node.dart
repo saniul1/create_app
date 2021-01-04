@@ -153,7 +153,7 @@ class _TreeNodeState extends State<TreeNode>
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 2.0),
             child: Text(
-              widget.node.group ?? '',
+              widget.node.group ?? 'root',
               softWrap: false,
               overflow: TextOverflow.clip,
               style: _theme.labelStyle.copyWith(

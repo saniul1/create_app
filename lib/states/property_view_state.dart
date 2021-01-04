@@ -35,7 +35,7 @@ class PropertyViewNotifier extends ChangeNotifier {
   setPropertyView() {
     _node = _ref.read(treeViewController).controller.selectedNode;
     final ModelWidget? widget =
-        _ref.read(appBuildController).controller.getModel(_node.key);
+        _ref.read(appBuildController).getModel(_node.key);
     if (widget != null) {
       final propertyList = widget.params.entries.map((data) {
         final types = widget.paramNameAndTypes.entries
