@@ -88,11 +88,11 @@ class TreeViewNotifier extends ChangeNotifier {
   void showApp() {
     _ref.read(appViewList).addAll(
       [
-        AppViewModel(
-          id: 'app-2',
-          offset: Offset(0, 0),
-          node: 'my_app',
-        ),
+        // AppViewModel(
+        //   id: 'app-2',
+        //   offset: Offset(0, 0),
+        //   node: 'my_app',
+        // ),
       ],
     );
   }

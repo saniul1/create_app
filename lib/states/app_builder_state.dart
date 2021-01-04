@@ -18,6 +18,7 @@ class AppBuilderNotifier extends ChangeNotifier {
   final ProviderReference _ref;
   AppBuilderNotifier(ref) : _ref = ref;
   Map<String, WidgetModelController> _controllers = {};
+  Map<String, WidgetModelController> _rootControllers = {};
   WidgetModelController? controllerById(String id) {
     return _controllers[id];
   }
@@ -26,7 +27,18 @@ class AppBuilderNotifier extends ChangeNotifier {
     _controllers.removeWhere((key, value) => key == id);
   }
 
+  buildRoots() {
+    final tree = _ref.read(treeViewController).controller;
+    final _ctrl = WidgetModelController(inheritDataMap: {});
+    tree.children.forEach((node) {
+      _rootControllers[node.key] =
+          // ignore: unnecessary_null_comparison
+          _ctrl.loadMap(list: node != null ? [node.asMap] : []);
+    });
+  }
+
   buildApps() {
+    buildRoots();
     final tree = _ref.read(treeViewController).controller;
     _ref.read(appViewList).list.forEach((app) {
       Node? node = tree.getNode(app.node);
@@ -57,6 +69,14 @@ class AppBuilderNotifier extends ChangeNotifier {
         });
       }
     }
+  }
+
+  ModelWidget? getModelFromRoots(String id) {
+    for (final key in _rootControllers.keys) {
+      final model = _rootControllers[key]?.getModel(id);
+      if (model != null) return model;
+    }
+    return null;
   }
 
   ModelWidget? getModel(String id) {
