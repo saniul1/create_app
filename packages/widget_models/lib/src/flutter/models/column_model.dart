@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_models/src/utils/code_utils.dart';
 import 'package:widget_models/src/property.dart';
@@ -27,8 +28,8 @@ class ColumnModel extends ModelWidget {
       "crossAxisAlignment": [PropertyType.crossAxisAlignment]
     };
     this.defaultParamsValues = {
-      "mainAxisAlignment": MainAxisAlignment.center,
-      "crossAxisAlignment": CrossAxisAlignment.center,
+      "mainAxisAlignment": 'start',
+      "crossAxisAlignment": 'center',
     };
     this.params = {};
   }
@@ -46,10 +47,12 @@ class ColumnModel extends ModelWidget {
       key: globalKey,
       mainAxisAlignment: params["mainAxisAlignment"] == null
           ? MainAxisAlignment.start
-          : params["mainAxisAlignment"],
+          : EnumToString.fromString(
+              MainAxisAlignment.values, params["mainAxisAlignment"]),
       crossAxisAlignment: params["crossAxisAlignment"] == null
           ? CrossAxisAlignment.start
-          : params["crossAxisAlignment"],
+          : EnumToString.fromString(
+              CrossAxisAlignment.values, params["crossAxisAlignment"]),
       children: children ?? [],
     );
   }

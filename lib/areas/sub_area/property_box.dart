@@ -25,6 +25,9 @@ class PropertyBox extends HookWidget {
       onPropertyActionComplete: (key, value) {
         _propertyViewController.updateValue(key, value);
       },
+      initializePropertyValue: (key) {
+        _propertyViewController.initializeValue(key);
+      },
       // onNodeDoubleTap: (key) => print(key),
       // theme: _propertyViewController.state,
     );

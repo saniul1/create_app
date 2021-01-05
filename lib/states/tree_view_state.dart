@@ -105,11 +105,19 @@ class TreeViewNotifier extends ChangeNotifier {
     addToHistory(_controller.reorderNode(key, false));
   }
 
+  void initializeNodeData(Map<String, dynamic> data) {
+    final keys = data.keys.first.split('.');
+    final node = _controller.getNode(keys.first);
+    node.data[keys.last] = data.values.first;
+    Console.print(node.data).show();
+    addToHistory(_controller.updateNode(keys.first, node));
+  }
+
   void updateNodeData(Map<String, dynamic> data, value) {
     final keys = data.keys.first.split('.');
     final node = _controller.getNode(keys.first);
-    Console.print(node.data[keys.last]).show();
     node.data[keys.last]['value'] = value;
+    Console.print(node.data[keys.last]).show();
     addToHistory(_controller.updateNode(keys.first, node));
   }
 

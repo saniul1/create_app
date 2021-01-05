@@ -1,4 +1,5 @@
 import 'dart:math' show pi;
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:property_view/src/property_view.dart';
 import 'package:property_view/src/property_view_theme.dart';
@@ -7,7 +8,9 @@ import 'package:widget_models/widget_models.dart';
 import 'package:better_print/better_print.dart';
 
 import 'models/property_box.dart';
+import 'widgets/int_field_property.dart';
 import 'widgets/property_bool.dart';
+import 'widgets/selection_proprty.dart';
 import 'widgets/text_field_property.dart';
 
 class PropertyBoxItem extends StatefulWidget {
@@ -78,6 +81,13 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
     if (call != null) call(widget.box.key, value);
   }
 
+  void _handleValueInitialize() {
+    PropertyView? _propertyView = PropertyView.of(context);
+    assert(_propertyView != null, 'PropertyView must exist in context');
+    final call = _propertyView?.initializePropertyValue;
+    if (call != null) call(widget.box.key);
+  }
+
   // void _handleActionSteps(dynamic value) {
   //   PropertyView _propertyView = PropertyView.of(context);
   //   assert(_propertyView != null, 'PropertyView must exist in context');
@@ -90,7 +100,7 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
   Widget build(BuildContext context) {
     PropertyView? _propertyView = PropertyView.of(context);
     assert(_propertyView != null, 'PropertyView must exist in context');
-    // Console.print(widget.box.acceptedTypes).show();
+    // Console.print(widget.box.type).show();
     Widget? box;
     switch (widget.box.type) {
       case PropertyType.string:
@@ -99,6 +109,7 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
           value: widget.box.value,
           onChanged: _handleValueChange,
         );
+
         break;
       case PropertyType.boolean:
         box = PropertyBoolWidget(
@@ -107,6 +118,65 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
           value: widget.box.value,
           onChanged: _handleValueChange,
         );
+        break;
+
+      case PropertyType.icon:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.double:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.integer:
+        box = IntFieldProperty(
+          label: widget.box.label,
+          value: widget.box.value,
+          onChanged: _handleValueChange,
+        );
+        break;
+      case PropertyType.mainAxisAlignment:
+        box = SelectOptionsProperty(
+          values: EnumToString.toList(MainAxisAlignment.values),
+          value: widget.box.value.toString(),
+          onChanged: (dynamic value) {
+            _handleValueChange(value);
+          },
+        );
+        break;
+      case PropertyType.crossAxisAlignment:
+        box = SelectOptionsProperty(
+          values: EnumToString.toList(CrossAxisAlignment.values),
+          value: widget.box.value.toString(),
+          onChanged: (dynamic value) {
+            _handleValueChange(value);
+          },
+        );
+        break;
+      case PropertyType.widget:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.color:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.materialColor:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.alignment:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.boxFit:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.scrollPhysics:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.axis:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.fontStyle:
+        // TODO: Handle this case.
+        break;
+      case PropertyType.function:
+        // TODO: Handle this case.
         break;
       // comment below two lines to check all types are implemented are not
       default:
@@ -118,7 +188,16 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [box ?? SizedBox()],
+          children: [
+            !widget.box.isInitialized
+                ? RaisedButton(
+                    child: Text('initialize'),
+                    onPressed: () {
+                      _handleValueInitialize();
+                    },
+                  )
+                : box ?? SizedBox()
+          ],
         ),
       ),
     );

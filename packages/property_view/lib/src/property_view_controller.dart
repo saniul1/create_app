@@ -49,6 +49,16 @@ class PropertyViewController {
     }).toList();
   }
 
+  List<PropertyBox> initializeValue(String key) {
+    return children.map((PropertyBox child) {
+      if (child.key == key) {
+        return child.copyWith(isInitialized: true);
+      } else {
+        return child;
+      }
+    }).toList();
+  }
+
   PropertyBox? getPropertyBox(String key) {
     PropertyBox? _property;
     Iterator iter = children.iterator;

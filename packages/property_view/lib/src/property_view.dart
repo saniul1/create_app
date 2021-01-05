@@ -32,6 +32,9 @@ class PropertyView extends InheritedWidget {
   /// The action to call after all property change happen in a particular property.
   final Function(String, dynamic) onPropertyActionComplete;
 
+  /// The action to call after all property change happen in a particular property.
+  final Function(String) initializePropertyValue;
+
   /// This action gets called on every step when changing a value.
   final Function(String, dynamic)? onEachActionStep;
 
@@ -79,6 +82,7 @@ class PropertyView extends InheritedWidget {
     Key? key,
     required this.controller,
     required this.onPropertyActionComplete,
+    required this.initializePropertyValue,
     this.onEachActionStep,
     this.physics,
     this.onExpansionChanged,

@@ -38,11 +38,16 @@ class PropertyViewNotifier extends ChangeNotifier {
         _ref.read(appBuildController).getModel(_node.key) ??
             _ref.read(appBuildController).getModelFromRoots(_node.key);
     if (widget != null) {
-      final propertyList = widget.params.entries.map((data) {
-        final types = widget.paramNameAndTypes.entries
-            .firstWhere((element) => element.key == data.key)
-            .value;
-        final type = widget.paramTypes[data.key] ?? types.first;
+      final propertyList = widget.paramNameAndTypes.entries.map((param) {
+        var _isInit = true;
+        final data = widget.params.entries
+            .firstWhere((element) => element.key == param.key, orElse: () {
+          _isInit = false;
+          return {param.key: widget.defaultParamsValues[param.key]}
+              .entries
+              .first;
+        });
+        final type = widget.paramTypes[data.key] ?? param.value.first;
         // Console.print('${data.key}: ${data.value}, type: $type').show();
         // Console.print(types).show();
         return PropertyBox(
@@ -50,12 +55,22 @@ class PropertyViewNotifier extends ChangeNotifier {
           label: data.key,
           value: data.value,
           type: type,
-          acceptedTypes: types,
+          acceptedTypes: param.value,
+          isInitialized: _isInit,
         );
       }).toList();
       _controller = PropertyViewController(children: propertyList);
       notifyListeners();
     }
+  }
+
+  initializeValue(String key) {
+    _controller = PropertyViewController(
+      children: _controller.initializeValue(key),
+    );
+    final Map<String, dynamic>? data = _controller.getPropertyBox(key)?.asMap;
+    if (data != null) _ref.read(treeViewController).initializeNodeData(data);
+    notifyListeners();
   }
 
   updateValue(String key, dynamic value) {

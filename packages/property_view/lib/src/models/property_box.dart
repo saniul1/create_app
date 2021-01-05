@@ -18,12 +18,15 @@ class PropertyBox<T> {
 
   final T value;
 
+  final bool isInitialized;
+
   PropertyBox({
     required this.key,
     required this.label,
     required this.value,
     required this.type,
     required this.acceptedTypes,
+    this.isInitialized = false,
   });
 
   /// Creates a copy of this object but with the given fields
@@ -35,6 +38,7 @@ class PropertyBox<T> {
     PropertyType? type,
     List<PropertyType>? acceptedTypes,
     List? actions,
+    bool? isInitialized,
   }) {
     // Console.print(this.acceptedTypes).show();
     return PropertyBox(
@@ -43,6 +47,7 @@ class PropertyBox<T> {
       value: value ?? this.value,
       type: type ?? this.type,
       acceptedTypes: acceptedTypes ?? this.acceptedTypes,
+      isInitialized: isInitialized ?? this.isInitialized,
     );
   }
 
