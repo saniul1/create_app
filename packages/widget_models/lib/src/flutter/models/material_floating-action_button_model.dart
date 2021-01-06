@@ -27,9 +27,11 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
     ];
     this.paramNameAndTypes = {
       'onPressed': [PropertyType.function],
+      'backgroundColor': [PropertyType.color]
     };
     this.defaultParamsValues = {
       'onPressed': null,
+      'backgroundColor': Colors.blue
     };
     this.params = {};
   }
@@ -55,6 +57,7 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
                       params["onPressed"]) // ? todo better func
                   : null,
           child: child,
+          backgroundColor: params["backgroundColor"],
         ),
         key);
   }

@@ -1,28 +1,20 @@
-name: property_view
+name: flex_color_picker_copy
 description: A new Flutter package project.
 version: 0.0.1
 author:
 homepage:
 
-publish_to: 'none'
-
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  enum_to_string: ^1.0.14
-  widget_models:
-    path: ../widget_models/
-  flex_color_picker_copy:
-    path: ../flex_color_picker_copy/
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  better_print:
-    path: ../better_print/
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

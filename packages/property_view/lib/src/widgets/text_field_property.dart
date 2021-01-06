@@ -12,21 +12,19 @@ class TextFieldProperty extends StatelessWidget {
   final Function(String) onChanged;
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: TextField(
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: label,
-          labelText: label,
-        ),
-        controller: TextEditingController(text: value),
-        onSubmitted: (value) {
-          onChanged(value);
-        },
-        onChanged: (value) {
-          // onChanged(value);
-        },
+    return TextField(
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: label,
+        labelText: label,
       ),
+      controller: TextEditingController(text: value),
+      onSubmitted: (value) {
+        onChanged(value);
+      },
+      onChanged: (value) {
+        // onChanged(value);
+      },
     );
   }
 }

@@ -19,7 +19,7 @@ class SelectOptionsProperty extends StatelessWidget {
       elevation: 16,
       underline: Container(
         height: 2,
-        color: Colors.deepPurpleAccent,
+        color: Colors.blue,
       ),
       onChanged: (String? newValue) {
         if (newValue != null) onChanged(newValue);

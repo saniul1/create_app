@@ -5,7 +5,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import '../utilities.dart';
 
-class PropertyBox<T> {
+class PropertyBox {
   /// The unique string that identifies this object.
   final String key;
 
@@ -16,7 +16,7 @@ class PropertyBox<T> {
 
   List<PropertyType> acceptedTypes;
 
-  final T value;
+  final dynamic value;
 
   final bool isInitialized;
 
@@ -34,13 +34,15 @@ class PropertyBox<T> {
   PropertyBox copyWith({
     String? key,
     String? label,
-    T? value,
+    dynamic? value,
     PropertyType? type,
     List<PropertyType>? acceptedTypes,
     List? actions,
     bool? isInitialized,
   }) {
     // Console.print(this.acceptedTypes).show();
+    if (value != null && this.value is Color && value is int)
+      value = Color(value);
     return PropertyBox(
       key: key ?? this.key,
       label: label ?? this.label,
@@ -56,7 +58,7 @@ class PropertyBox<T> {
     String _label = map['label'];
     PropertyType _type = map['type'];
     List<PropertyType> _acceptedTypes = map['acceptedTypes'];
-    T _value = map['value'];
+    dynamic _value = map['value'];
     return PropertyBox(
       key: _key,
       label: _label,
@@ -69,10 +71,11 @@ class PropertyBox<T> {
   /// Map representation of this object
   Map<String, dynamic> get asMap {
     // print(JsonEncoder().convert(value));
+    final val = value is Color ? value.value : value;
     Map<String, dynamic> _map = {
       key: {
         "label": label,
-        "value": value.toString(),
+        "value": val,
         "type": EnumToString.convertToString(type), //? todo
       }
     };

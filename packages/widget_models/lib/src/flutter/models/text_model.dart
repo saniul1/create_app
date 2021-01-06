@@ -24,7 +24,7 @@ class TextModel extends ModelWidget {
     };
     this.defaultParamsValues = {
       "text": "",
-      "fontSize": "14.0",
+      "fontSize": 14.0,
       "color": Colors.black,
       "fontStyle": FontStyle.normal
     };
@@ -72,9 +72,7 @@ class TextModel extends ModelWidget {
           params["text"] != null ? _resolveText(params["text"]) : "",
           key: globalKey,
           style: TextStyle(
-              fontSize: params["fontSize"] != null
-                  ? double.tryParse(params["fontSize"])
-                  : null,
+              fontSize: params["fontSize"] != null ? params["fontSize"] : null,
               color: params["color"] ?? Colors.black,
               fontStyle: params["fontStyle"] ?? FontStyle.normal),
         ),

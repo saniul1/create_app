@@ -1,6 +1,7 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:better_print/better_print.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:widget_models/src/property_helpers/property_modifiers.dart';
 import 'flutter/model.dart';
 import 'flutter/types.dart';
@@ -101,11 +102,8 @@ class WidgetModelController {
           widget.paramTypes[key] = type;
           var value;
           switch (type) {
-            case PropertyType.materialColor:
-              final name = values['value'].split('.').last;
-              final ColorInfo? info =
-                  colors.firstWhere((icon) => icon.name == name);
-              value = info?.color ?? null;
+            case PropertyType.color:
+              value = Color(values['value']);
               break;
             case PropertyType.icon:
               final name = values['value'].split('.').last;

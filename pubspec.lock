@@ -120,6 +120,13 @@ packages:
       relative: true
     source: path
     version: "2.0.0-nullsafety.0"
+  flex_color_picker_copy:
+    dependency: "direct main"
+    description:
+      path: "packages/flex_color_picker_copy"
+      relative: true
+    source: path
+    version: "0.0.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -131,7 +138,7 @@ packages:
       name: flutter_hooks
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.1"
+    version: "0.15.0"
   flutter_icons:
     dependency: "direct main"
     description:

@@ -8,7 +8,8 @@ import 'package:widget_models/widget_models.dart';
 import 'package:better_print/better_print.dart';
 
 import 'models/property_box.dart';
-import 'widgets/int_field_property.dart';
+import 'widgets/color_picker.dart';
+import 'widgets/number_field_property.dart';
 import 'widgets/property_bool.dart';
 import 'widgets/selection_proprty.dart';
 import 'widgets/text_field_property.dart';
@@ -124,13 +125,18 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
         // TODO: Handle this case.
         break;
       case PropertyType.double:
-        // TODO: Handle this case.
-        break;
-      case PropertyType.integer:
-        box = IntFieldProperty(
+        box = NumberFieldProperty(
           label: widget.box.label,
           value: widget.box.value,
           onChanged: _handleValueChange,
+        );
+        break;
+      case PropertyType.integer:
+        box = NumberFieldProperty(
+          label: widget.box.label,
+          value: widget.box.value,
+          onChanged: _handleValueChange,
+          isDouble: false,
         );
         break;
       case PropertyType.mainAxisAlignment:
@@ -155,10 +161,16 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
         // TODO: Handle this case.
         break;
       case PropertyType.color:
-        // TODO: Handle this case.
+        box = ColorPickerBox(
+          color: widget.box.value,
+          onChanged: _handleValueChange,
+        );
         break;
       case PropertyType.materialColor:
-        // TODO: Handle this case.
+        box = ColorPickerBox(
+          color: widget.box.value,
+          onChanged: _handleValueChange,
+        );
         break;
       case PropertyType.alignment:
         // TODO: Handle this case.
@@ -184,22 +196,27 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            !widget.box.isInitialized
-                ? RaisedButton(
-                    child: Text('initialize'),
-                    onPressed: () {
-                      _handleValueInitialize();
-                    },
-                  )
-                : box ?? SizedBox()
-          ],
-        ),
-      ),
+      child: !widget.box.isInitialized
+          ? RaisedButton(
+              child: Text('Add ${widget.box.label}'),
+              onPressed: () {
+                _handleValueInitialize();
+              },
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      widget.box.label,
+                    ),
+                  ],
+                ),
+                box ?? SizedBox(),
+              ],
+            ),
     );
   }
 }

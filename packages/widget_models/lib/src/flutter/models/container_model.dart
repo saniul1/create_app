@@ -25,7 +25,7 @@ class ContainerModel extends ModelWidget {
     this.paramNameAndTypes = {
       "width": [PropertyType.double],
       "height": [PropertyType.double],
-      "color": [PropertyType.color, PropertyType.materialColor],
+      "color": [PropertyType.color],
       "alignment": [PropertyType.alignment]
     };
     this.defaultParamsValues = {
