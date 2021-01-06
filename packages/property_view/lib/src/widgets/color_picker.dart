@@ -9,6 +9,7 @@ class ColorPickerBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColorPicker(
+      key: UniqueKey(),
       color: Color(color.value),
       onColorChanged: (Color color) => onChanged(color.value),
       pickersEnabled: {
