@@ -101,19 +101,20 @@ class WidgetModelController {
           // print('${element.key}: ${values['value']}');
           widget.paramTypes[key] = type;
           var value;
-          switch (type) {
-            case PropertyType.color:
-              value = Color(values['value']);
-              break;
-            case PropertyType.icon:
-              final name = values['value'].split('.').last;
-              final IconInfo? info =
-                  icons.firstWhere((icon) => icon.name == name);
-              value = info?.iconData ?? null;
-              break;
-            default:
-              value = values['value'];
-          }
+          if (values['value'] != null)
+            switch (type) {
+              case PropertyType.color:
+                value = Color(values['value']);
+                break;
+              case PropertyType.icon:
+                final name = values['value'].split('.').last;
+                final IconInfo? info =
+                    materialIconsList.firstWhere((icon) => icon.name == name);
+                value = info?.iconData ?? null;
+                break;
+              default:
+                value = values['value'];
+            }
           widget.params[element.key] = value;
           if (widget.type == FlutterWidgetType.CustomWidget) {
             if (!values['isFinal']) {

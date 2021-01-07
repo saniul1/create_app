@@ -21,7 +21,8 @@ class IconModel extends ModelWidget {
       "size": [PropertyType.double],
     };
     this.defaultParamsValues = {
-      "size": "20.0",
+      "icon": null,
+      "size": 20.0,
     };
     this.params = {};
   }
@@ -32,7 +33,7 @@ class IconModel extends ModelWidget {
         Icon(
           params["icon"] ?? null,
           key: globalKey,
-          size: params["size"] != null ? double.tryParse(params["size"]) : null,
+          size: params["size"] != null ? params["size"] : null,
         ),
         key);
   }

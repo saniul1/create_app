@@ -50,10 +50,17 @@ class PropertyViewNotifier extends ChangeNotifier {
         final type = widget.paramTypes[data.key] ?? param.value.first;
         // Console.print('${data.key}: ${data.value}, type: $type').show();
         // Console.print(types).show();
+        final value = data.value != null
+            ? type == PropertyType.icon
+                ? materialIconsList
+                    .firstWhere((e) => e.iconData == data.value)
+                    .name
+                : data.value
+            : null;
         return PropertyBox(
           key: '${widget.key}.${data.key}',
           label: data.key,
-          value: data.value,
+          value: value,
           type: type,
           acceptedTypes: param.value,
           isInitialized: _isInit,
@@ -78,6 +85,7 @@ class PropertyViewNotifier extends ChangeNotifier {
       children: _controller.updateDataValue(key, value),
     );
     final Map<String, dynamic>? data = _controller.getPropertyBox(key)?.asMap;
+    print(value);
     if (data != null)
       _ref.read(treeViewController).updateNodeData(
             data,

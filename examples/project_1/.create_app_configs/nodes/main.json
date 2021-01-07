@@ -1,1 +1,218 @@
-[{"key":"my_app","label":"My App","type":"CustomWidget","group":null,"data":{"count":{"label":"Count","value":2,"type":"integer","inherit":null,"isFinal":false}},"children":[{"key":"materialApp","label":"MaterialApp","type":"MaterialApp","group":"child","data":{"debugShowCheckedModeBanner":{"label":"debugShowCheckedModeBanner","value":false,"type":"boolean","inherit":null,"isFinal":true}},"children":[{"key":"materialScaffold","label":"MaterialScaffold","type":"MaterialScaffold","group":"home","data":{},"children":[{"key":"floatingActionButton","label":"FloatingActionButton","type":"MaterialFloatingActionButton","group":"floatingActionButton","data":{"onPressed":{"label":"onPressed","value":[{"my_app":{"count":{"action":"addition","value":1,"condition":null}}}],"type":"function","inherit":null,"isFinal":true},"backgroundColor":{"label":"backgroundColor","value":4280825235,"type":"color"}},"children":[{"key":"icon","label":"Icon","type":"Icon","group":"child","data":{"icon":{"label":"Icon","value":"add","type":"icon","inherit":null,"isFinal":true}},"children":[]}]},{"key":"container","label":"Container","type":"Container","group":"body","data":{"color":{"label":"Color","value":4293467747,"type":"color","inherit":null,"isFinal":true}},"children":[{"key":"center","label":"Center","type":"Center","group":"child","data":{},"children":[{"key":"column","label":"Column","type":"Column","group":"child","data":{"mainAxisAlignment":{"label":"mainAxisAlignment","value":"center","type":"mainAxisAlignment"},"crossAxisAlignment":{"label":"crossAxisAlignment","value":"start","type":"crossAxisAlignment"}},"children":[{"key":"720d5a30-406e-11eb-b3a1-c156bc785670","label":"Text","type":"Text","group":"children","data":{"text":{"label":"text","value":"Successfully added","type":"String"},"fontSize":{"label":"fontSize","value":19.0,"type":"double"},"color":{"label":"color","value":4294961979,"type":"color"}},"children":[]},{"key":"text","label":"Text","type":"Text","group":"children","data":{"text":{"label":"text","value":"Hello World!!","type":"string","inherit":null,"isFinal":true},"color":{"label":"color","value":4294961979,"type":"color"}},"children":[]},{"key":"text_count","label":"Text","type":"Text","group":"children","data":{"text":{"label":"text","value":"Your count is $count","type":"string","inherit":null,"isFinal":true},"count":{"label":"text","value":"$count","type":"string","inherit":"my_app","isFinal":true},"color":{"label":"color","value":4294967295,"type":"color"}},"children":[]}]}]}]}]}]}]},{"key":"86e23ae0-4e77-11eb-a6f5-b9b215547ccc","label":"Test App","type":"CustomWidget","group":null,"data":{},"children":[]}]
+[
+  {
+    "key": "my_app",
+    "label": "My App",
+    "type": "CustomWidget",
+    "group": null,
+    "data": {
+      "count": {
+        "label": "Count",
+        "value": 2,
+        "type": "integer",
+        "inherit": null,
+        "isFinal": false
+      }
+    },
+    "children": [
+      {
+        "key": "materialApp",
+        "label": "MaterialApp",
+        "type": "MaterialApp",
+        "group": "child",
+        "data": {
+          "debugShowCheckedModeBanner": {
+            "label": "debugShowCheckedModeBanner",
+            "value": false,
+            "type": "boolean",
+            "inherit": null,
+            "isFinal": true
+          }
+        },
+        "children": [
+          {
+            "key": "materialScaffold",
+            "label": "MaterialScaffold",
+            "type": "MaterialScaffold",
+            "group": "home",
+            "data": {},
+            "children": [
+              {
+                "key": "floatingActionButton",
+                "label": "FloatingActionButton",
+                "type": "MaterialFloatingActionButton",
+                "group": "floatingActionButton",
+                "data": {
+                  "onPressed": {
+                    "label": "onPressed",
+                    "value": [
+                      {
+                        "my_app": {
+                          "count": {
+                            "action": "addition",
+                            "value": 1,
+                            "condition": null
+                          }
+                        }
+                      }
+                    ],
+                    "type": "function",
+                    "inherit": null,
+                    "isFinal": true
+                  },
+                  "backgroundColor": {
+                    "label": "backgroundColor",
+                    "value": 4280825235,
+                    "type": "color"
+                  }
+                },
+                "children": [
+                  {
+                    "key": "icon",
+                    "label": "Icon",
+                    "type": "Icon",
+                    "group": "child",
+                    "data": {
+                      "size": {
+                        "label": "size",
+                        "value": 24.0,
+                        "type": "double"
+                      }
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "key": "container",
+                "label": "Container",
+                "type": "Container",
+                "group": "body",
+                "data": {
+                  "color": {
+                    "label": "Color",
+                    "value": 4278228616,
+                    "type": "color",
+                    "inherit": null,
+                    "isFinal": true
+                  }
+                },
+                "children": [
+                  {
+                    "key": "center",
+                    "label": "Center",
+                    "type": "Center",
+                    "group": "child",
+                    "data": {},
+                    "children": [
+                      {
+                        "key": "column",
+                        "label": "Column",
+                        "type": "Column",
+                        "group": "child",
+                        "data": {
+                          "mainAxisAlignment": {
+                            "label": "mainAxisAlignment",
+                            "value": "center",
+                            "type": "mainAxisAlignment"
+                          },
+                          "crossAxisAlignment": {
+                            "label": "crossAxisAlignment",
+                            "value": "start",
+                            "type": "crossAxisAlignment"
+                          }
+                        },
+                        "children": [
+                          {
+                            "key": "720d5a30-406e-11eb-b3a1-c156bc785670",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "Successfully added",
+                                "type": "String"
+                              },
+                              "fontSize": {
+                                "label": "fontSize",
+                                "value": 19.0,
+                                "type": "double"
+                              },
+                              "color": {
+                                "label": "color",
+                                "value": 4294961979,
+                                "type": "color"
+                              }
+                            },
+                            "children": []
+                          },
+                          {
+                            "key": "text",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "Hello World!!",
+                                "type": "string",
+                                "inherit": null,
+                                "isFinal": true
+                              },
+                              "color": {
+                                "label": "color",
+                                "value": 4294961979,
+                                "type": "color"
+                              }
+                            },
+                            "children": []
+                          },
+                          {
+                            "key": "text_count",
+                            "label": "Text",
+                            "type": "Text",
+                            "group": "children",
+                            "data": {
+                              "text": {
+                                "label": "text",
+                                "value": "Your count is $count",
+                                "type": "string",
+                                "inherit": null,
+                                "isFinal": true
+                              },
+                              "count": {
+                                "label": "text",
+                                "value": "$count",
+                                "type": "string",
+                                "inherit": "my_app",
+                                "isFinal": true
+                              },
+                              "color": {
+                                "label": "color",
+                                "value": 4294967295,
+                                "type": "color"
+                              }
+                            },
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "86e23ae0-4e77-11eb-a6f5-b9b215547ccc",
+    "label": "Test App",
+    "type": "CustomWidget",
+    "group": null,
+    "data": {},
+    "children": []
+  }
+]

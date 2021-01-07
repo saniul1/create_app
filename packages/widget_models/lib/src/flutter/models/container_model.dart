@@ -31,6 +31,7 @@ class ContainerModel extends ModelWidget {
     this.defaultParamsValues = {
       "height": null,
       "width": null,
+      "color": Colors.transparent,
     };
     this.params = {};
   }
@@ -48,11 +49,8 @@ class ContainerModel extends ModelWidget {
         Container(
           key: globalKey,
           child: child,
-          width:
-              params["width"] != null ? double.tryParse(params["width"]) : null,
-          height: params["height"] != null
-              ? double.tryParse(params["height"])
-              : null,
+          width: params["width"] != null ? params["width"] : null,
+          height: params["height"] != null ? params["height"] : null,
           alignment: params["alignment"],
           decoration: BoxDecoration(
             color: params["color"],

@@ -42,7 +42,7 @@ class PropertyViewController {
   List<PropertyBox> updateDataValue(String key, dynamic value) {
     return children.map((PropertyBox child) {
       if (child.key == key) {
-        return child.copyWith(value: value);
+        return child.copyWithValue(value);
       } else {
         return child;
       }

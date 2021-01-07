@@ -42,8 +42,6 @@ dependencies:
     path: packages/property_view/
   widget_models:
     path: packages/widget_models/
-  flex_color_picker_copy:
-    path: packages/flex_color_picker_copy/
 
 dev_dependencies:
   flutter_test:

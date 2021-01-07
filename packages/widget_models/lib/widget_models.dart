@@ -5,3 +5,4 @@ export 'src/controller.dart';
 export 'src/flutter/types.dart';
 export 'src/flutter/model.dart';
 export 'src/flutter/widgets.dart';
+export 'src/property_helpers/icons_helper.dart';

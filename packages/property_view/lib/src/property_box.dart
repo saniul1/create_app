@@ -122,7 +122,17 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
         break;
 
       case PropertyType.icon:
-        // TODO: Handle this case.
+        // materialIconsList.map((e) => e.name).toList()
+        // print(widget.box.value);
+        box = SelectOptionsProperty(
+          values: ['none', ...materialIconsList.map((e) => e.name).toList()],
+          valueIcons: Map.fromIterable(materialIconsList,
+              key: (e) => e.name, value: (e) => e.iconData),
+          value: widget.box.value == null ? 'none' : widget.box.value,
+          onChanged: (dynamic value) {
+            _handleValueChange(value == 'none' ? null : value);
+          },
+        );
         break;
       case PropertyType.double:
         box = NumberFieldProperty(
@@ -162,12 +172,7 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
         break;
       case PropertyType.color:
         box = ColorPickerBox(
-          color: widget.box.value,
-          onChanged: _handleValueChange,
-        );
-        break;
-      case PropertyType.materialColor:
-        box = ColorPickerBox(
+          key: ValueKey('${widget.box.key}'),
           color: widget.box.value,
           onChanged: _handleValueChange,
         );
@@ -204,6 +209,7 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
               },
             )
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [

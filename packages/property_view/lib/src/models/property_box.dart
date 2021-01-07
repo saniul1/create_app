@@ -53,6 +53,22 @@ class PropertyBox {
     );
   }
 
+  PropertyBox copyWithValue(
+    dynamic value,
+  ) {
+    // Console.print(this.acceptedTypes).show();
+    if (value != null && this.value is Color && value is int)
+      value = Color(value);
+    return PropertyBox(
+      key: this.key,
+      label: this.label,
+      value: value,
+      type: this.type,
+      acceptedTypes: this.acceptedTypes,
+      isInitialized: this.isInitialized,
+    );
+  }
+
   factory PropertyBox.fromMap(Map<String, dynamic> map) {
     String _key = map['key'];
     String _label = map['label'];
