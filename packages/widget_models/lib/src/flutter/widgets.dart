@@ -10,6 +10,9 @@ import './models/material_scaffold_model.dart';
 import './models/material_floating-action_button_model.dart';
 import './models/icon_model.dart';
 import './models/column_model.dart';
+import './models/row_model.dart';
+import './models/stack_model.dart';
+import './models/align_model.dart';
 
 ModelWidget? getFlutterWidgetModelFromType(
     String key, String? group, FlutterWidgetType type,
@@ -21,8 +24,14 @@ ModelWidget? getFlutterWidgetModelFromType(
       return TextModel(key, group, name);
     case FlutterWidgetType.Center:
       return CenterModel(key, group, name);
+    case FlutterWidgetType.Align:
+      return AlignModel(key, group, name);
     case FlutterWidgetType.Column:
       return ColumnModel(key, group, name);
+    case FlutterWidgetType.Row:
+      return RowModel(key, group, name);
+    case FlutterWidgetType.Stack:
+      return StackModel(key, group, name);
     case FlutterWidgetType.Container:
       return ContainerModel(key, group, name);
     case FlutterWidgetType.MaterialFloatingActionButton:

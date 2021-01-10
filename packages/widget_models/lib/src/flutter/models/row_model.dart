@@ -7,15 +7,15 @@ import '../model.dart';
 import '../types.dart';
 
 /// Provides a model for recreating the [Column] widget
-class ColumnModel extends ModelWidget {
-  ColumnModel(String key, String? group, String? name) {
+class RowModel extends ModelWidget {
+  RowModel(String key, String? group, String? name) {
     this.key = key;
     this.label = name;
     this.globalKey = GlobalKey();
     this.parentGroup = group;
-    this.type = FlutterWidgetType.Column;
+    this.type = FlutterWidgetType.Row;
     this.parentType = ParentType.MultipleChildren;
-    this.widgetType = Column();
+    this.widgetType = Row();
     this.childGroups = [
       ChildGroup(
         childCount: -1,
@@ -45,7 +45,7 @@ class ColumnModel extends ModelWidget {
         .toList()
         .firstOrNull
         ?.child;
-    return Column(
+    return Row(
       key: globalKey,
       mainAxisAlignment: params["mainAxisAlignment"] == null
           ? MainAxisAlignment.start

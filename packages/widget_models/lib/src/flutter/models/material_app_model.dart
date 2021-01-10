@@ -27,7 +27,7 @@ class MaterialAppModel extends ModelWidget {
       "debugShowCheckedModeBanner": [PropertyType.boolean],
     };
     this.defaultParamsValues = {
-      "debugShowCheckedModeBanner": false,
+      "debugShowCheckedModeBanner": true,
     };
     this.params = {};
   }

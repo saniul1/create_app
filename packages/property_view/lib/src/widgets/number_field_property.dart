@@ -11,7 +11,7 @@ class NumberFieldProperty extends StatelessWidget {
   }) : super(key: key);
   final String? label;
   final num value;
-  final Function(num) onChanged;
+  final Function(num?) onChanged;
   final bool isDouble;
   @override
   Widget build(BuildContext context) {
@@ -26,9 +26,9 @@ class NumberFieldProperty extends StatelessWidget {
       controller: TextEditingController(text: value.toString()),
       onSubmitted: (value) {
         if (isDouble)
-          onChanged(double.tryParse(value) ?? 0);
+          onChanged(double.tryParse(value) ?? null);
         else
-          onChanged(int.tryParse(value) ?? 0);
+          onChanged(int.tryParse(value) ?? null);
       },
       onChanged: (value) {
         // onChanged(value);

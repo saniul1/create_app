@@ -30,7 +30,7 @@ class FileStorage extends ChangeNotifier {
     final json = await File(
             '${_directory?.path}/$createAppFolderName/nodes/$selectedFileName')
         .readAsString();
-    _ref.read(treeViewController).loadTreeFromJson(json);
+    _ref.read(treeViewController).loadTreesFromJson(json);
   }
 
   Future<void> saveCurrentFile() async {

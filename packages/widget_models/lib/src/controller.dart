@@ -112,6 +112,38 @@ class WidgetModelController {
                     materialIconsList.firstWhere((icon) => icon.name == name);
                 value = info?.iconData ?? null;
                 break;
+              case PropertyType.alignment:
+                switch (values['value']) {
+                  case 'topLeft':
+                    value = Alignment.topLeft;
+                    break;
+                  case 'topCenter':
+                    value = Alignment.topCenter;
+                    break;
+                  case 'topRight':
+                    value = Alignment.topRight;
+                    break;
+                  case 'centerLeft':
+                    value = Alignment.centerLeft;
+                    break;
+                  case 'center':
+                    value = Alignment.center;
+                    break;
+                  case 'centerRight':
+                    value = Alignment.centerRight;
+                    break;
+                  case 'bottomLeft':
+                    value = Alignment.bottomLeft;
+                    break;
+                  case 'bottomCenter':
+                    value = Alignment.bottomCenter;
+                    break;
+                  case 'bottomRight':
+                    value = Alignment.bottomRight;
+                    break;
+                  default:
+                }
+                break;
               default:
                 value = values['value'];
             }

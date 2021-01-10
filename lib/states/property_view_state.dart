@@ -85,7 +85,6 @@ class PropertyViewNotifier extends ChangeNotifier {
       children: _controller.updateDataValue(key, value),
     );
     final Map<String, dynamic>? data = _controller.getPropertyBox(key)?.asMap;
-    print(value);
     if (data != null)
       _ref.read(treeViewController).updateNodeData(
             data,

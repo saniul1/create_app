@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 /// This is the private State class that goes with MyStatefulWidget.
 class SelectOptionsProperty extends StatelessWidget {
   SelectOptionsProperty({
+    Key? key,
     required this.values,
     this.valueIcons = const {},
     required this.value,
     required this.onChanged,
-  });
+  }) : super(key: key);
   final List<String> values;
   final Map<String, IconData> valueIcons;
   final String value;
@@ -40,7 +41,13 @@ class SelectOptionsProperty extends StatelessWidget {
                     size: 16,
                   ),
                 ),
-              Text(value),
+              Flexible(
+                fit: FlexFit.loose,
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
         );

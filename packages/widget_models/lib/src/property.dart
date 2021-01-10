@@ -6,6 +6,7 @@ enum PropertyType {
   string,
   mainAxisAlignment,
   crossAxisAlignment,
+  mainAxisSize,
   widget,
   color,
   materialColor,

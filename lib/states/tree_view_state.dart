@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:create_app/_utils/handle_assets.dart';
 import 'package:create_app/modals/warning_dialog.dart';
@@ -21,14 +22,47 @@ final treeViewController =
 class TreeViewNotifier extends ChangeNotifier {
   final ProviderReference _ref;
   TreeViewNotifier(ref) : _ref = ref;
+  final Map<String, TreeViewController> _trees = {};
+  final Map<String, Map> _treesHistory = {};
+  late String _activeTree;
   TreeViewController _controller = TreeViewController();
   List<String> _treeHistory = [];
   int _currentHistoryIndex = 0;
   String? _selectedKey;
+  String get activeTree => _activeTree;
   bool get isUndoAble => _currentHistoryIndex != 0;
   bool get isRedoAble => _currentHistoryIndex != _treeHistory.length - 1;
   String? get selectedKey => _selectedKey;
   TreeViewController get controller => _controller;
+
+  addToTrees(String? name, TreeViewController? controller) {
+    if (name == null) name = 'name${_trees.length + 1}';
+    if (controller != null) _controller = controller;
+    _trees['name'] = _controller;
+  }
+
+  switchTree(String name) {
+    _treesHistory[_activeTree] = {
+      "index": _currentHistoryIndex,
+      "selectedNode": _selectedKey,
+      "history": _treeHistory
+    };
+    if (_trees.containsKey(name)) _controller = _trees[name]!;
+    _activeTree = name;
+    if (_treesHistory.containsKey(name)) {
+      selectNode(_treesHistory[name]!["selectedNode"] ??
+          _controller.children.first.key);
+      _currentHistoryIndex = _treesHistory[name]!["index"];
+      _treeHistory = _treesHistory[name]!["history"];
+    } else {
+      selectNode(_controller.children.first.key);
+      _currentHistoryIndex = 0;
+      _treeHistory = [];
+    }
+    showApp();
+    setPropertyView();
+    notifyListeners();
+  }
 
   addToHistory(List<Node> children) {
     if (_currentHistoryIndex != _treeHistory.length - 1)
@@ -62,6 +96,23 @@ class TreeViewNotifier extends ChangeNotifier {
     _buildApps();
     notifyListeners();
     // _ref.read(propertyViewController).notify();
+  }
+
+  void loadTreesFromJson(String json) {
+    final jsonMap = jsonDecode(json);
+    if (jsonMap["trees"].keys.contains(jsonMap["activeTree"]))
+      _activeTree = jsonMap["activeTree"];
+    else
+      _activeTree = jsonMap["trees"].keys.first;
+    jsonMap["trees"].keys.forEach(
+          (key) => _trees[key] =
+              getControllerFromJson(jsonEncode(jsonMap["trees"][key])),
+        );
+    switchTree(_activeTree);
+  }
+
+  TreeViewController getControllerFromJson(String json) {
+    return _controller.loadJSON(json: json);
   }
 
   void loadTreeFromJson(String json) {

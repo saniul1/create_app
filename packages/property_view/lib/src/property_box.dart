@@ -167,12 +167,41 @@ class _PropertyBoxItemState extends State<PropertyBoxItem>
           },
         );
         break;
+      case PropertyType.mainAxisSize:
+        box = SelectOptionsProperty(
+          values: EnumToString.toList(MainAxisSize.values),
+          value: widget.box.value.toString(),
+          onChanged: (dynamic value) {
+            _handleValueChange(value);
+          },
+        );
+        break;
+      case PropertyType.alignment:
+        box = SelectOptionsProperty(
+          key: ValueKey('${widget.box.key}-${widget.box.label}'),
+          values: [
+            'topLeft',
+            'topCenter',
+            'topRight',
+            'centerLeft',
+            'center',
+            'centerRight',
+            'bottomLeft',
+            'bottomCenter',
+            'bottomRight',
+          ],
+          value: widget.box.value.toString().split('.').last,
+          onChanged: (dynamic value) {
+            _handleValueChange(value);
+          },
+        );
+        break;
       case PropertyType.widget:
         // TODO: Handle this case.
         break;
       case PropertyType.color:
         box = ColorPickerBox(
-          key: ValueKey('${widget.box.key}'),
+          key: ValueKey('${widget.box.key}-${widget.box.label}'),
           color: widget.box.value,
           onChanged: _handleValueChange,
         );

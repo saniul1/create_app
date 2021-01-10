@@ -63,7 +63,7 @@ class AppBuilderNotifier extends ChangeNotifier {
                     [map.values.first.values.first['action']](
                 map.values.first.values.first['value'],
                 map.values.first.values.first['condition']);
-            // do it once by checking the hight parent
+            // do it once by checking the high parent
             updateNodeData(map.keys.first, key);
           }
         });

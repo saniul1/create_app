@@ -42,20 +42,20 @@ class TreeNodes extends HookWidget {
         [InsertMode mode = InsertMode.insert, int? index]) {
       _shadowKey.value = key;
       _currentModal.setModal(
-          handleModals(AddWidgetModal.id, gKey, (String type) {
-            Map<String, dynamic>? model = getFlutterWidgetModelFromType(
-                    uuid.v1(),
-                    group,
-                    EnumToString.fromString(FlutterWidgetType.values, type))
-                ?.asMap;
-            // Console.print(model?['data']['text']['value'].runtimeType)
-            //     .show();
-            context.read(treeViewController).addNode(key, model!, mode, index);
-            _shadowKey.value = null;
-            _currentModal.setModal(null);
-          }),
-          key,
-          actions);
+        handleModals(AddWidgetModal.id, gKey, (String type) {
+          Map<String, dynamic>? model = getFlutterWidgetModelFromType(
+                  uuid.v1(),
+                  group,
+                  EnumToString.fromString(FlutterWidgetType.values, type))
+              ?.asMap;
+          // Console.print(model).show();
+          context.read(treeViewController).addNode(key, model!, mode, index);
+          _shadowKey.value = null;
+          _currentModal.setModal(null);
+        }),
+        key,
+        actions,
+      );
     }
 
     return TreeView(

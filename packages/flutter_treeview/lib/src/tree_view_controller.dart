@@ -58,7 +58,7 @@ class TreeViewController {
   TreeViewController loadJSON({String json: '[]', String selectKey}) {
     List jsonList = jsonDecode(json);
     List<Map<String, dynamic>> list = List<Map<String, dynamic>>.from(jsonList);
-    return loadMap(mapList: list, selectKey: selectKey);
+    return loadMap(map: list, selectKey: selectKey);
   }
 
   /// Loads this controller with data from a Map.
@@ -70,9 +70,9 @@ class TreeViewController {
   /// });
   /// ```
   TreeViewController loadMap(
-      {List<Map<String, dynamic>> mapList: const [], String selectKey}) {
+      {List<Map<String, dynamic>> map: const [], String selectKey}) {
     List<Node> treeData =
-        mapList.map((Map<String, dynamic> item) => Node.fromMap(item)).toList();
+        map.map((Map<String, dynamic> item) => Node.fromMap(item)).toList();
     return TreeViewController(
       children: treeData,
       selectedKey: selectKey ?? this.selectedKey,

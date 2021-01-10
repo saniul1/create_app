@@ -19,10 +19,12 @@ class IconModel extends ModelWidget {
     this.paramNameAndTypes = {
       "icon": [PropertyType.icon],
       "size": [PropertyType.double],
+      "color": [PropertyType.color],
     };
     this.defaultParamsValues = {
       "icon": null,
       "size": 20.0,
+      "color": Colors.black,
     };
     this.params = {};
   }
@@ -34,6 +36,7 @@ class IconModel extends ModelWidget {
           params["icon"] ?? null,
           key: globalKey,
           size: params["size"] != null ? params["size"] : null,
+          color: params["color"],
         ),
         key);
   }

@@ -7,15 +7,15 @@ import '../model.dart';
 import '../types.dart';
 
 /// Provides a model for recreating the [Column] widget
-class ColumnModel extends ModelWidget {
-  ColumnModel(String key, String? group, String? name) {
+class StackModel extends ModelWidget {
+  StackModel(String key, String? group, String? name) {
     this.key = key;
     this.label = name;
     this.globalKey = GlobalKey();
     this.parentGroup = group;
-    this.type = FlutterWidgetType.Column;
+    this.type = FlutterWidgetType.Stack;
     this.parentType = ParentType.MultipleChildren;
-    this.widgetType = Column();
+    this.widgetType = Stack();
     this.childGroups = [
       ChildGroup(
         childCount: -1,
@@ -23,16 +23,8 @@ class ColumnModel extends ModelWidget {
         name: 'children',
       )
     ];
-    this.paramNameAndTypes = {
-      "mainAxisAlignment": [PropertyType.mainAxisAlignment],
-      "crossAxisAlignment": [PropertyType.crossAxisAlignment],
-      "mainAxisSize": [PropertyType.mainAxisSize]
-    };
-    this.defaultParamsValues = {
-      "mainAxisAlignment": 'start',
-      "crossAxisAlignment": 'center',
-      "mainAxisSize": 'max',
-    };
+    this.paramNameAndTypes = {};
+    this.defaultParamsValues = {};
     this.params = {};
   }
 
@@ -45,20 +37,8 @@ class ColumnModel extends ModelWidget {
         .toList()
         .firstOrNull
         ?.child;
-    return Column(
+    return Stack(
       key: globalKey,
-      mainAxisAlignment: params["mainAxisAlignment"] == null
-          ? MainAxisAlignment.start
-          : EnumToString.fromString(
-              MainAxisAlignment.values, params["mainAxisAlignment"]),
-      crossAxisAlignment: params["crossAxisAlignment"] == null
-          ? CrossAxisAlignment.start
-          : EnumToString.fromString(
-              CrossAxisAlignment.values, params["crossAxisAlignment"]),
-      mainAxisSize: params["mainAxisSize"] == null
-          ? MainAxisSize.max
-          : EnumToString.fromString(
-              MainAxisSize.values, params["mainAxisSize"]),
       children: children ?? [],
     );
   }
