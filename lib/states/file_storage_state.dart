@@ -34,10 +34,14 @@ class FileStorage extends ChangeNotifier {
   }
 
   Future<void> saveCurrentFile() async {
-    final contents = _ref.read(treeViewController).controller.toString();
+    // final contents = _ref.read(treeViewController).controller.toString();
+    final contents = {
+      "activeTree": _ref.read(treeViewController).selectedKey,
+      "trees": _ref.read(treeViewController).treesAsMap(),
+    };
     await File(
             '${_directory?.path}/$createAppFolderName/nodes/$selectedFileName')
-        .writeAsString(contents);
+        .writeAsString(jsonEncode(contents));
   }
 
   Future<bool> loadPubSpec() async {

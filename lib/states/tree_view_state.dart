@@ -36,7 +36,7 @@ class TreeViewNotifier extends ChangeNotifier {
   TreeViewController get controller => _controller;
 
   addToTrees(String? name, TreeViewController? controller) {
-    if (name == null) name = 'name${_trees.length + 1}';
+    if (name == null) name = 'tree ${_trees.length + 1}';
     if (controller != null) _controller = controller;
     _trees['name'] = _controller;
   }
@@ -65,7 +65,8 @@ class TreeViewNotifier extends ChangeNotifier {
   }
 
   addToHistory(List<Node> children) {
-    if (_currentHistoryIndex != _treeHistory.length - 1)
+    if (_treeHistory.length != 0 &&
+        _currentHistoryIndex != _treeHistory.length - 1)
       _treeHistory.removeRange(_currentHistoryIndex + 1, _treeHistory.length);
     _controller =
         TreeViewController(children: children, selectedKey: this.selectedKey);
@@ -260,6 +261,14 @@ class TreeViewNotifier extends ChangeNotifier {
 
   void setPropertyView() {
     _ref.read(propertyViewController).setPropertyView();
+  }
+
+  Map treesAsMap() {
+    final Map map = {};
+    _trees.forEach((key, value) {
+      map[key] = value.asMap;
+    });
+    return map;
   }
 
   _buildApps() {

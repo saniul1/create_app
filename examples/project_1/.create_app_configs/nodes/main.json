@@ -1,5 +1,5 @@
 {
-  "activeTree": "asd",
+  "activeTree": "my_app",
   "trees": {
     "tree 1": [
       {
@@ -10,7 +10,7 @@
         "data": {
           "count": {
             "label": "Count",
-            "value": 2,
+            "value": 1,
             "type": "integer",
             "inherit": null,
             "isFinal": false
