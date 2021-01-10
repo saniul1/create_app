@@ -113,53 +113,61 @@ class CanvasArea extends HookWidget {
                     ),
                   ),
                   ...appList.list.map(
-                    (widget) => Center(
-                      child: Transform.scale(
-                        scale: zoom.state,
-                        child: Transform.translate(
-                          offset: offset.state + widget.offset,
-                          child: MouseRegion(
-                            onEnter: (_) {
-                              if (currentTool.state == ToolType.select)
-                                selectedAppId.value = widget.id;
-                            },
-                            child: GestureDetector(
-                              onTapDown: (_) {
-                                if (currentTool.state == ToolType.select) {
-                                  if (!_selectedApps.state.contains(widget.id))
-                                    _selectedApps.state = [
-                                      ..._selectedApps.state,
-                                      widget.id
-                                    ];
-                                  else
-                                    _selectedApps.state
-                                        .removeWhere((id) => id == widget.id);
-                                  _selectedApps.state = _selectedApps.state;
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: currentTool.state == ToolType.select
-                                      ? Border.all(
-                                          width: 2,
-                                          color: _selectedApps.state
-                                                  .contains(widget.id)
-                                              ? Colors.blue
-                                              : Colors.grey.shade400,
-                                        )
-                                      : null,
-                                ),
-                                width: 380,
-                                height: 620,
-                                child: ClipRect(
-                                  child: AppView(key: ValueKey(widget.id)),
+                    (widget) => widget.tree !=
+                            context.read(treeViewController).activeTree
+                        ? SizedBox()
+                        : Center(
+                            child: Transform.scale(
+                              scale: zoom.state,
+                              child: Transform.translate(
+                                offset: offset.state + widget.offset,
+                                child: MouseRegion(
+                                  onEnter: (_) {
+                                    if (currentTool.state == ToolType.select)
+                                      selectedAppId.value = widget.id;
+                                  },
+                                  child: GestureDetector(
+                                    onTapDown: (_) {
+                                      if (currentTool.state ==
+                                          ToolType.select) {
+                                        if (!_selectedApps.state
+                                            .contains(widget.id))
+                                          _selectedApps.state = [
+                                            ..._selectedApps.state,
+                                            widget.id
+                                          ];
+                                        else
+                                          _selectedApps.state.removeWhere(
+                                              (id) => id == widget.id);
+                                        _selectedApps.state =
+                                            _selectedApps.state;
+                                      }
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border:
+                                            currentTool.state == ToolType.select
+                                                ? Border.all(
+                                                    width: 2,
+                                                    color: _selectedApps.state
+                                                            .contains(widget.id)
+                                                        ? Colors.blue
+                                                        : Colors.grey.shade400,
+                                                  )
+                                                : null,
+                                      ),
+                                      width: widget.width ?? 380,
+                                      height: widget.height ?? 620,
+                                      child: ClipRect(
+                                        child:
+                                            AppView(key: ValueKey(widget.id)),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
                   ),
                   if (currentTool.state == ToolType.select)
                     Stack(

@@ -45,6 +45,7 @@ class PropertyViewArea extends HookWidget {
               child: Column(
                 children: [
                   EditorLayoutDragArea(
+                    onTap: (_) {},
                     width: width,
                     title: 'Property Editor',
                     id: id,

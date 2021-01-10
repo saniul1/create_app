@@ -39,7 +39,7 @@ class TreeViewArea extends HookWidget {
     useEffect(() {
       return;
     }, const []);
-    final treeController = useProvider(treeViewController).controller;
+    final treeController = useProvider(treeViewController);
     final _editorLayout = useProvider(editorLayout);
     final treeIndex = _editorLayout.getIndex(id);
     final propertyIndex = _editorLayout.getIndex(PropertyViewArea.id);
@@ -79,8 +79,12 @@ class TreeViewArea extends HookWidget {
                         : Column(
                             children: [
                               EditorLayoutDragArea(
+                                onTap: (String name) {
+                                  treeController.switchTree(name);
+                                },
                                 width: width,
-                                title: 'Tree View',
+                                title: treeController.activeTree,
+                                titleOption: treeController.trees.keys.toList(),
                                 id: id,
                                 actions: [
                                   IconButton(
@@ -120,7 +124,8 @@ class TreeViewArea extends HookWidget {
                                   )
                                 ],
                               ),
-                              if (value || treeController.children.isNotEmpty)
+                              if (value ||
+                                  treeController.controller.children.isNotEmpty)
                                 Expanded(
                                   child: Container(
                                     child: TreeNodes(),

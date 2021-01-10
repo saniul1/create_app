@@ -129,6 +129,7 @@ class TreeNodes extends HookWidget {
                                       id: uuid.v1(),
                                       offset: Offset(0, 0),
                                       node: _node.key,
+                                      tree: _treeViewController.activeTree,
                                     ),
                                   );
                               _isAddedToCanvas.value = !_isAddedToCanvas.value;

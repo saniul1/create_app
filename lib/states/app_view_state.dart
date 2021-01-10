@@ -31,6 +31,11 @@ class AppViewListLayout with ChangeNotifier {
     notifyListeners();
   }
 
+  void rebuild() {
+    _ref.read(appBuildController).buildApps();
+    notifyListeners();
+  }
+
   void remove(String node) {
     _ref.read(appBuildController).removeController(
         _list.firstWhere((element) => element.node == node).id);
@@ -93,6 +98,10 @@ class AppViewListLayout with ChangeNotifier {
       element.offset -= distanceFromCenter!;
     });
     notifyListeners();
+  }
+
+  List<Map> get asMap {
+    return _list.map((child) => child.asMap).toList();
   }
 
   void updateOffsetBy(String id, Offset offset) {

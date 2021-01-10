@@ -33,6 +33,7 @@ class TreeViewNotifier extends ChangeNotifier {
   bool get isUndoAble => _currentHistoryIndex != 0;
   bool get isRedoAble => _currentHistoryIndex != _treeHistory.length - 1;
   String? get selectedKey => _selectedKey;
+  Map<String, TreeViewController> get trees => _trees;
   TreeViewController get controller => _controller;
 
   addToTrees(String? name, TreeViewController? controller) {
@@ -41,7 +42,7 @@ class TreeViewNotifier extends ChangeNotifier {
     _trees['name'] = _controller;
   }
 
-  switchTree(String name) {
+  switchTree(String name, [bool rebuild = true]) {
     _treesHistory[_activeTree] = {
       "index": _currentHistoryIndex,
       "selectedNode": _selectedKey,
@@ -59,9 +60,9 @@ class TreeViewNotifier extends ChangeNotifier {
       _currentHistoryIndex = 0;
       _treeHistory = [];
     }
-    showApp();
     setPropertyView();
     notifyListeners();
+    if (rebuild) _ref.read(appViewList).rebuild();
   }
 
   addToHistory(List<Node> children) {
@@ -99,6 +100,21 @@ class TreeViewNotifier extends ChangeNotifier {
     // _ref.read(propertyViewController).notify();
   }
 
+  void showApp(List viewList) {
+    final views = viewList
+        .map(
+          (e) => AppViewModel(
+            id: e["key"],
+            label: e["label"],
+            offset: Offset(e["offset"]["x"], e["offset"]["y"]),
+            node: e["node"],
+            tree: e["tree"],
+          ),
+        )
+        .toList();
+    _ref.read(appViewList).addAll(views);
+  }
+
   void loadTreesFromJson(String json) {
     final jsonMap = jsonDecode(json);
     if (jsonMap["trees"].keys.contains(jsonMap["activeTree"]))
@@ -109,7 +125,8 @@ class TreeViewNotifier extends ChangeNotifier {
           (key) => _trees[key] =
               getControllerFromJson(jsonEncode(jsonMap["trees"][key])),
         );
-    switchTree(_activeTree);
+    switchTree(_activeTree, false);
+    showApp(jsonMap["views"]);
   }
 
   TreeViewController getControllerFromJson(String json) {
@@ -120,7 +137,6 @@ class TreeViewNotifier extends ChangeNotifier {
     _controller = _controller.loadJSON(json: json);
     selectNode(_controller.children.first.key);
     _treeHistory.add(json);
-    showApp();
     setPropertyView();
     notifyListeners();
   }
@@ -135,18 +151,6 @@ class TreeViewNotifier extends ChangeNotifier {
   void addNewRootParent(Map<String, dynamic> map) {
     final node = Node.fromMap(map);
     addToHistory([..._controller.children, node]);
-  }
-
-  void showApp() {
-    _ref.read(appViewList).addAll(
-      [
-        // AppViewModel(
-        //   id: 'app-2',
-        //   offset: Offset(0, 0),
-        //   node: 'my_app',
-        // ),
-      ],
-    );
   }
 
   void moveUp(String key) {

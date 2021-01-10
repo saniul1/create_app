@@ -1,5 +1,31 @@
 {
-  "activeTree": "my_app",
+  "activeTree": "tree 2",
+  "views": [
+    {
+      "key": "c726cdf0-5345-11eb-9d2c-ff6e94af17e8",
+      "label": null,
+      "node": "my_app",
+      "tree": "tree 1",
+      "width": null,
+      "height": null,
+      "offset": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "key": "646a5b40-5346-11eb-b288-8dbd0c94bf9a",
+      "label": null,
+      "node": "86e23ae0-4e77-11eb-a6f5-b9b215547ccc",
+      "tree": "tree 2",
+      "width": null,
+      "height": null,
+      "offset": {
+        "x": 193.0,
+        "y": 25.0
+      }
+    }
+  ],
   "trees": {
     "tree 1": [
       {
@@ -214,7 +240,9 @@
             ]
           }
         ]
-      },
+      }
+    ],
+    "tree 2": [
       {
         "key": "86e23ae0-4e77-11eb-a6f5-b9b215547ccc",
         "label": "Test App",
