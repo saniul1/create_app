@@ -51,9 +51,12 @@ class TreeViewNotifier extends ChangeNotifier {
     if (_trees.containsKey(name)) _controller = _trees[name]!;
     _activeTree = name;
     if (_treesHistory.containsKey(name)) {
-      selectNode(_treesHistory[name]!["selectedNode"]);
+      selectNode(_treesHistory[name]!["selectedNode"] ??
+          _controller.children.first.key);
       _currentHistoryIndex = _treesHistory[name]!["index"];
-      _treeHistory = _treesHistory[name]!["history"];
+      _treeHistory = !_treesHistory[name]!["history"].isEmpty
+          ? _treesHistory[name]!["history"]
+          : [_controller.toString()];
     } else {
       selectNode(_controller.children.first.key);
       _treeHistory = [_controller.toString()];
@@ -282,7 +285,7 @@ class TreeViewNotifier extends ChangeNotifier {
 }
 
 final nodeMap = FutureProvider<bool?>((ref) async {
-  final result = await ref.read(fileStorage).tryLastOpened();
-  if (result) await ref.read(fileStorage).loadCurrentFile();
-  return result;
+  // final result = await ref.read(fileStorage).tryLastOpened();
+  await ref.read(fileStorage).loadCurrentFile();
+  return true;
 });
