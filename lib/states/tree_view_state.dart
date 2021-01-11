@@ -51,14 +51,13 @@ class TreeViewNotifier extends ChangeNotifier {
     if (_trees.containsKey(name)) _controller = _trees[name]!;
     _activeTree = name;
     if (_treesHistory.containsKey(name)) {
-      selectNode(_treesHistory[name]!["selectedNode"] ??
-          _controller.children.first.key);
+      selectNode(_treesHistory[name]!["selectedNode"]);
       _currentHistoryIndex = _treesHistory[name]!["index"];
       _treeHistory = _treesHistory[name]!["history"];
     } else {
       selectNode(_controller.children.first.key);
+      _treeHistory = [_controller.toString()];
       _currentHistoryIndex = 0;
-      _treeHistory = [];
     }
     setPropertyView();
     notifyListeners();
@@ -122,9 +121,11 @@ class TreeViewNotifier extends ChangeNotifier {
     else
       _activeTree = jsonMap["trees"].keys.first;
     jsonMap["trees"].keys.forEach(
-          (key) => _trees[key] =
-              getControllerFromJson(jsonEncode(jsonMap["trees"][key])),
-        );
+      (key) {
+        final j = jsonEncode(jsonMap["trees"][key]);
+        _trees[key] = getControllerFromJson(j);
+      },
+    );
     switchTree(_activeTree, false);
     showApp(jsonMap["views"]);
   }
