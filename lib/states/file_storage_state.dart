@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:create_app/states/app_view_state.dart';
+import 'package:create_app/states/editor_view_states.dart';
 import 'package:create_app/states/preferences_state.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:create_app/_utils/handle_assets.dart';
@@ -38,12 +39,13 @@ class FileStorage extends ChangeNotifier {
   Future<void> saveCurrentFile() async {
     // final contents = _ref.read(treeViewController).controller.toString();
     final contents = {
+      "editorLayout": _ref.read(editorLayout).map,
       "activeTree": _ref.read(treeViewController).activeTree,
       "views": _ref.read(appViewList).asMap,
       "trees": _ref.read(treeViewController).treesAsMap(),
     };
     await File(
-            '${_directory?.path}/$createAppFolderName/nodes/$selectedFileName')
+            "O:/create/app/examples/project_1/.create_app_configs/nodes/main.json")
         .writeAsString(jsonEncode(contents));
   }
 

@@ -1,4 +1,12 @@
 {
+  "editorLayout": {
+    "tree-view-area": {
+      "canvas-overlay-area": "1"
+    },
+    "property-view-area": {
+      "canvas-overlay-area": "0"
+    }
+  },
   "activeTree": "tree 2",
   "views": [
     {
@@ -302,7 +310,7 @@
                     "data": {
                       "color": {
                         "label": "color",
-                        "value": 4294198070,
+                        "value": 4284955319,
                         "type": "color"
                       },
                       "width": {

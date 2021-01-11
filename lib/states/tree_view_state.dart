@@ -5,6 +5,7 @@ import 'package:create_app/modals/warning_dialog.dart';
 import 'package:create_app/models/app_view_model.dart';
 import 'package:create_app/states/app_builder_state.dart';
 import 'package:create_app/states/app_view_state.dart';
+import 'package:create_app/states/editor_view_states.dart';
 import 'package:create_app/states/property_view_state.dart';
 import 'package:flutter/material.dart';
 import 'package:create_app/states/modal_states.dart';
@@ -87,6 +88,7 @@ class TreeViewNotifier extends ChangeNotifier {
         json: _treeHistory[index], selectKey: this.selectedKey);
     _buildApps();
     notifyListeners();
+    setPropertyView();
     // _ref.read(propertyViewController).notify();
   }
 
@@ -119,6 +121,7 @@ class TreeViewNotifier extends ChangeNotifier {
 
   void loadTreesFromJson(String json) {
     final jsonMap = jsonDecode(json);
+    _ref.read(editorLayout).fromMap((Map.from(jsonMap["editorLayout"])));
     if (jsonMap["trees"].keys.contains(jsonMap["activeTree"]))
       _activeTree = jsonMap["activeTree"];
     else

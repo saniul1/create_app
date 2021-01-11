@@ -12,6 +12,7 @@ final editorLayout = ChangeNotifierProvider((ref) => EditorLayout());
 
 class EditorLayout with ChangeNotifier {
   final List<WidgetWrapper> _list = [];
+  final Map map = {};
   bool _isChanged = false;
   List<WidgetWrapper> get list => _list;
   bool get isChanged => _isChanged;
@@ -22,6 +23,15 @@ class EditorLayout with ChangeNotifier {
 
   int getIndex(String id) {
     return _list.indexWhere((element) => element.id == id);
+  }
+
+  void fromMap(Map map) {
+    print(_list.length);
+    map.keys.forEach((k) {
+      map[k].keys.forEach((j) {
+        updateLayout(k, j, int.parse(map[k][j]));
+      });
+    });
   }
 
   void updateLayout(String moveId, String posId, int i) {
@@ -40,6 +50,7 @@ class EditorLayout with ChangeNotifier {
             ? _list.length - 1
             : newIndex;
     // print('$moveIndex, $dependIndex, $newIndex');
+    map['$moveId'] = {'$posId': '$newIndex'};
     _isChanged = moveIndex != newIndex;
     _list.insert(newIndex, _list.removeAt(moveIndex));
     notifyListeners();
