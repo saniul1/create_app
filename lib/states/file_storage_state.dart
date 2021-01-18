@@ -31,7 +31,7 @@ class FileStorage extends ChangeNotifier {
   Future<void> loadCurrentFile() async {
     // print('${_directory?.path}/$createAppFolderName\\nodes\\$selectedFileName');
     final json = await File(
-            "O:/create/app/examples/project_1/.create_app_configs/nodes/main.json")
+            "O:/create/create_app/examples/project_1/.create_app_configs/nodes/main.json")
         .readAsString();
     _ref.read(treeViewController).loadTreesFromJson(json);
   }
@@ -45,7 +45,7 @@ class FileStorage extends ChangeNotifier {
       "trees": _ref.read(treeViewController).treesAsMap(),
     };
     await File(
-            "O:/create/app/examples/project_1/.create_app_configs/nodes/main.json")
+            "O:/create/create_app/examples/project_1/.create_app_configs/nodes/main.json")
         .writeAsString(jsonEncode(contents));
   }
 

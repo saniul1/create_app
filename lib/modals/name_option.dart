@@ -11,7 +11,7 @@ class NameOptionModal extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      controller.text = text;
+      controller.text = text ?? '';
       controller.selection =
           TextSelection(baseOffset: 0, extentOffset: controller.text.length);
       focusNode.requestFocus();
