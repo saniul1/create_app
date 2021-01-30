@@ -18,7 +18,8 @@ class AppBuilderNotifier extends ChangeNotifier {
   final ProviderReference _ref;
   AppBuilderNotifier(ref) : _ref = ref;
   Map<String, WidgetModelController> _controllers = {};
-  Map<String, WidgetModelController> _rootControllers = {};
+  WidgetModelController _rootController = WidgetModelController();
+  WidgetModelController get rootController => _rootController;
   WidgetModelController? controllerById(String id) {
     return _controllers[id];
   }
@@ -27,23 +28,13 @@ class AppBuilderNotifier extends ChangeNotifier {
     _controllers.removeWhere((key, value) => key == id);
   }
 
-  buildRoots() {
-    final tree = _ref.read(treeViewController).controller;
-    final _ctrl = WidgetModelController(inheritDataMap: {});
-    tree.children.forEach((node) {
-      _rootControllers[node.key] =
-          // ignore: unnecessary_null_comparison
-          _ctrl.loadMap(list: node != null ? [node.asMap] : []);
-    });
-  }
-
   buildApps() {
-    buildRoots();
     final tree = _ref.read(treeViewController).controller;
+    _rootController = _rootController.loadMap(list: tree.asMap);
     _ref.read(appViewList).list.forEach((app) {
       Node? node = tree.getNode(app.node);
       if (!_controllers.containsKey(app.id))
-        _controllers[app.id] = WidgetModelController(inheritDataMap: {});
+        _controllers[app.id] = WidgetModelController();
       _controllers[app.id] =
           // ignore: unnecessary_null_comparison
           _controllers[app.id]!.loadMap(list: node != null ? [node.asMap] : []);
@@ -69,14 +60,6 @@ class AppBuilderNotifier extends ChangeNotifier {
         });
       }
     }
-  }
-
-  ModelWidget? getModelFromRoots(String id) {
-    for (final key in _rootControllers.keys) {
-      final model = _rootControllers[key]?.getModel(id);
-      if (model != null) return model;
-    }
-    return null;
   }
 
   ModelWidget? getModel(String id) {
@@ -111,7 +94,6 @@ class AppBuilderNotifier extends ChangeNotifier {
       if (node != null)
         _controllers[controllerId!] = WidgetModelController(
           children: _controller.updateModel(key, node),
-          inheritDataMap: _controller.inheritDataMap,
         );
     }
     // print(_controller.children.first.key);

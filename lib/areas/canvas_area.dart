@@ -37,10 +37,12 @@ class CanvasArea extends HookWidget {
       return;
     }, const []);
     return Container(
-                      color: Colors.grey.shade200,
-
+      color: Colors.grey.shade200,
       child: Stack(
-        children: [AppList(),ToolsArea()],
+        children: [
+          AppList(),
+          // ToolsArea(),
+        ],
       ),
     );
   }
@@ -75,6 +77,7 @@ class ToolsArea extends HookWidget {
       helpLabel: "Go to Second Page",
       child: KeyShortCuts(
         child: Listener(
+          behavior: HitTestBehavior.translucent,
           onPointerMove: currentTool.state == ToolType.select
               ? (event) {
                   mousePos.state = event.position;
@@ -106,6 +109,7 @@ class ToolsArea extends HookWidget {
                 }
               : null,
           child: MouseRegion(
+            opaque: false,
             cursor: currentTool.state == ToolType.select
                 ? SystemMouseCursors.none
                 : SystemMouseCursors.basic,
@@ -114,66 +118,51 @@ class ToolsArea extends HookWidget {
                 mousePos.state = event.position + event.delta;
             },
             onExit: (_) => mousePos.state = Offset.zero,
-            child: GestureDetector(
-              onTap: () {
-                _selectedApps.state = [];
-              },
-              child: Stack(
-                children: [
-                  MouseRegion(
-                    onEnter: (_) {
-                      if (currentTool.state == ToolType.select)
-                        selectedAppId.value = null;
-                    },
-                    child: Container(
-                      // color: Colors.grey.shade200,
-                    ),
-                  ),
-                  if (currentTool.state == ToolType.select)
-                    Stack(
-                      children: [
-                        // SelectedBox(),
-                        ...list.state
-                            .map(
-                              (e) => Transform.translate(
-                                offset: e.offset != null
-                                    ? e.offset! - Offset(0, Editor.paddingTop)
-                                    : Offset.zero,
-                                child: Container(
-                                  width: e.size?.width,
-                                  height: e.size?.height,
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    border: Border.all(
-                                        width: 1, color: Colors.deepOrange),
+            child: Stack(
+              children: [
+                if (currentTool.state == ToolType.select)
+                  Stack(
+                    children: [
+                      // SelectedBox(),
+                      ...list.state
+                          .map(
+                            (e) => Transform.translate(
+                              offset: e.offset != null
+                                  ? e.offset! - Offset(0, Editor.paddingTop)
+                                  : Offset.zero,
+                              child: Container(
+                                width: e.size?.width,
+                                height: e.size?.height,
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.deepOrange,
                                   ),
                                 ),
                               ),
-                            )
-                            .toList()
-                      ],
-                    ),
-                  if (currentTool.state == ToolType.select &&
-                      mousePos.state != Offset.zero)
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      child: Transform.translate(
-                        offset: mousePos.state - Offset(6, 32),
-                        child: BlendMask(
-                          opacity: 1.0,
-                          blendMode: BlendMode.multiply,
-                          child: CustomPaint(
-                            painter: MousePointer(color: Colors.blue),
-                            child: SizedBox(
-                              width: 16,
-                              height: 26,
                             ),
-                          ),
+                          )
+                          .toList()
+                    ],
+                  ),
+                if (currentTool.state == ToolType.select &&
+                    mousePos.state != Offset.zero)
+                  Transform.translate(
+                    offset: mousePos.state - Offset(6, 32),
+                    child: BlendMask(
+                      opacity: 1.0,
+                      blendMode: BlendMode.multiply,
+                      child: CustomPaint(
+                        painter: MousePointer(color: Colors.blue),
+                        child: SizedBox(
+                          width: 16,
+                          height: 26,
                         ),
                       ),
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
         ),
@@ -201,11 +190,13 @@ class AppList extends HookWidget {
                   child: Transform.translate(
                     offset: offset.state + widget.offset,
                     child: MouseRegion(
+                      opaque: false,
                       onEnter: (_) {
                         if (currentTool.state == ToolType.select)
                           selectedAppId.value = widget.id;
                       },
                       child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTapDown: (_) {
                           if (currentTool.state == ToolType.select) {
                             if (!_selectedApps.state.contains(widget.id))

@@ -92,7 +92,7 @@ abstract class ModelWidget {
 
   Map<String, dynamic> defaultParamsValues = {};
 
-  Map inheritData = {};
+  Map<String, dynamic> inheritData = {};
 
   Map modifiers = {};
 
@@ -184,7 +184,6 @@ abstract class ModelWidget {
   //     "label": "text",
   //     "value": "Hello World!!",
   //     "type": "string",
-  //     "inherit": null,
   //     "isFinal": true
   // }
   Map get dataAsMap {
@@ -194,7 +193,6 @@ abstract class ModelWidget {
         "label": key,
         "value": value,
         "type": value.runtimeType.toString(),
-        "inherit": inheritData.keys.contains(key) ? key : null,
         "isFinal": !modifiers.keys.contains(key),
       };
     });

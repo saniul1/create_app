@@ -37,7 +37,7 @@ class CustomModel extends ModelWidget {
         .firstOrNull
         ?.child;
     return wrap(
-        Container(
+        SizedBox(
           key: globalKey,
           child: child,
         ),

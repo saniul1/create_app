@@ -20,24 +20,16 @@ enum InsertMode {
 class WidgetModelController {
   /// The data for the [TreeView].
   final List<ModelWidget> children;
-  final Map<String, Map<String, String>> inheritDataMap;
 
   WidgetModelController({
     this.children: const [],
-    required this.inheritDataMap,
   });
-
-  // {key:{inheritTo: inheritFrom}}
-  final Map<String, Map<String, String>> _inheritDataMap = {};
 
   /// Creates a copy of this controller but with the given fields
   /// replaced with the new values.
-  WidgetModelController copyWith(
-      {List<ModelWidget>? children,
-      Map<String, Map<String, String>>? inheritDataMap}) {
+  WidgetModelController copyWith({List<ModelWidget>? children}) {
     return WidgetModelController(
       children: children ?? this.children,
-      inheritDataMap: inheritDataMap ?? this.inheritDataMap,
     );
   }
 
@@ -54,19 +46,17 @@ class WidgetModelController {
   WidgetModelController loadMap({List<Map<String, dynamic>> list: const []}) {
     List<ModelWidget> widgetTreeData =
         list.map((Map<String, dynamic> item) => _fromMap(item)!).toList();
-    _resolveInheritData(widgetTreeData, _inheritDataMap);
+    _resolveInheritData(widgetTreeData);
     return WidgetModelController(
       children: widgetTreeData,
-      inheritDataMap: _inheritDataMap,
     );
   }
 
-  _resolveInheritData(List<ModelWidget> widgetTreeData,
-      Map<String, Map<String, String>> inheritMap) {
-    inheritMap.forEach((key, inherit) {
-      final to = getModel(key, children: widgetTreeData);
-      final from = getModel(inherit.values.first, children: widgetTreeData);
-      to?.inheritData[inherit.keys.first] = from?.params[inherit.keys.first];
+  _resolveInheritData(List<ModelWidget> children,
+      [Map<String, dynamic>? params]) {
+    children.forEach((element) {
+      element.inheritData = params ?? {};
+      _resolveInheritData(element.children, params ?? element.params);
     });
   }
 
@@ -154,9 +144,6 @@ class WidgetModelController {
             }
           }
         }
-        if (values['inherit'] != null) {
-          _inheritDataMap[map['key']] = {key: values['inherit']};
-        }
       });
     });
     // widget.paramNameAndTypes.forEach((key, value) {});
@@ -233,7 +220,7 @@ class WidgetModelController {
         return child;
       }
     }).toList();
-    _resolveInheritData(widgetTreeData, inheritDataMap);
+    _resolveInheritData(children);
     return widgetTreeData;
   }
 }

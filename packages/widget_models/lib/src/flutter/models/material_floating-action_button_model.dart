@@ -48,8 +48,8 @@ class MaterialFloatingActionButtonModel extends ModelWidget {
     return wrap(
         FloatingActionButton(
           key: globalKey,
-          mouseCursor:
-              isSelectMode ? SystemMouseCursors.none : SystemMouseCursors.basic,
+          mouseCursor: SystemMouseCursors.basic,
+          //     isSelectMode ? SystemMouseCursors.none : SystemMouseCursors.basic,
           onPressed: isSelectMode
               ? null
               : params["onPressed"] != null
